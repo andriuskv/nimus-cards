@@ -1,0 +1,44 @@
+{
+  "name": "Flashcards",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dist": "rm -rf dist && mkdir dist && cp -R src/index.html dist",
+    "webpack": "webpack --progress --colors --config src/webpack.config.js",
+    "postcss": "postcss -u autoprefixer -r dist/main.css",
+    "scss": "node-sass --source-map-embed src/scss/index.scss dist/main.css && npm run postcss",
+    "watch:js": "npm run webpack -- --watch",
+    "watch:scss": "onchange 'src/scss/*.scss' -i -- npm run scss",
+    "watch": "npm run watch:js & npm run watch:scss",
+    "server": "live-server dist",
+    "start": "npm run dist && npm run server & npm run watch",
+    "build:css": "npm run scss && csso ./dist/main.css ./dist/main.css",
+    "build:js": "npm run webpack -- --env.prod",
+    "build": "npm run dist && npm run build:css && npm run build:js"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.22.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-router": "^3.0.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.7.2",
+    "babel-core": "^6.22.1",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-transform-class-properties": "^6.22.0",
+    "babel-preset-env": "^1.1.8",
+    "babel-preset-latest": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "csso": "^2.3.1",
+    "eslint": "^3.15.0",
+    "eslint-plugin-react": "^6.9.0",
+    "live-server": "^1.2.0",
+    "node-sass": "^4.5.0",
+    "onchange": "^3.2.1",
+    "postcss-cli": "^2.6.0",
+    "webpack": "^2.2.1"
+  }
+}

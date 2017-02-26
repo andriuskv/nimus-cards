@@ -1,0 +1,41 @@
+.header {
+    height: 56px;
+    background-color: $bg-color2;
+    box-shadow: 0 1px 2px 0 $shadow-color;
+}
+
+.header-nav {
+    height: inherit;
+    max-width: 1060px;
+    margin: 0 auto;
+}
+
+.header-nav-items {
+    display: flex;
+    height: inherit;
+}
+
+.header-nav-item {
+    height: inherit;
+    transition: 0.2s all;
+
+    &:hover {
+        background-color: $bg-color1;
+    }
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    height: inherit;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-bottom: 4px solid transparent;
+    font-size: 0.875em;
+    color: $alt-text-color;
+
+    &.active {
+        border-bottom-color: $highlight-color;
+        color: $text-color;
+    }
+}

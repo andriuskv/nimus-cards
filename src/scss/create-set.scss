@@ -1,0 +1,46 @@
+$message-bg-color: #f8a89e;
+
+.create-title-input {
+    width: 100%;
+}
+
+.create-cards {
+    margin-bottom: 8px;
+    border-bottom: 1px solid $border-color;
+}
+
+.create-card, .create-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.create-side {
+    position: relative;
+    display: block;
+    width: calc(50% - 4px);
+    margin-bottom: 8px;
+}
+
+.create-side-input {
+    resize: none;
+    display: block;
+    width: 100%;
+    height: 320px;
+}
+
+.create-side-message {
+    position: absolute;
+    right: 1px;
+    bottom: 1px;
+    left: 1px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    background-color: $message-bg-color;
+    text-align: center;
+}
+
+.create-message {
+    margin-right: 8px;
+    padding: 4px 8px;
+    background-color: $message-bg-color;
+}

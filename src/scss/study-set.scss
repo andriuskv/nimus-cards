@@ -1,0 +1,43 @@
+.study-card {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $border-color;
+}
+
+.study-side-container {
+    width: calc(50% - 4px);
+}
+
+.study-side {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    height: 320px;
+    padding: 8px;
+    background-color: $bg-color1;
+    overflow: auto;
+}
+
+.study-side-content {
+    margin-top: 0;
+    margin-bottom: 0;
+    white-space: pre-line;
+}
+
+.study-footer {
+    display: flex;
+    align-items: center;
+    height: 32px;
+}
+
+.study-reveal-btn {
+    width: 100%;
+    height: calc(100% - 20px);
+}
+
+.study-progress {
+    margin-right: auto;
+    color: $alt-text-color;
+}

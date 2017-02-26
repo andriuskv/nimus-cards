@@ -1,0 +1,52 @@
+.set-list-message {
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 12px;
+}
+
+.set-list {
+    margin-bottom: 8px;
+}
+
+.list-item {
+    padding: 12px 8px;
+    margin-bottom: 8px;
+    border: 1px solid $border-color;
+    background-color: $bg-color2;
+}
+
+.list-item-title {
+    color: $highlight-color;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.set-card-count {
+    margin-top: 4px;
+    font-size: 12px;
+    color: $alt-text-color;
+}
+
+.list-item-btn-container {
+    display: flex;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid $border-color;
+}
+
+.list-item-btn {
+    display: flex;
+    align-items: center;
+
+    &:first-of-type {
+        margin-right: 4px;
+    }
+}
+
+.set-list-footer {
+    display: flex;
+    padding-top: 8px;
+    border-top: 1px solid $border-color;
+}

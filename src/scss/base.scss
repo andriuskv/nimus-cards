@@ -1,0 +1,72 @@
+*, *:after, *:before {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: $bg-color1;
+    color: $text-color;
+    font-size: 16px;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.app {
+    height: 100%;
+}
+
+.main {
+    position: relative;
+    min-height: calc(100% - 88px);
+    max-width: 1060px;
+    margin: 16px auto;
+    padding: 8px;
+    background-color: $bg-color2;
+    box-shadow: 0 0 2px 0 $shadow-color;
+}
+
+.container {
+    width: 100%;
+    padding: 8px;
+    background-color: #fafaf0;
+    box-shadow: 0 0 2px 0 $shadow-color;
+}
+
+.container-title {
+    margin-top: 0;
+    margin-bottom: 8px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.input {
+    @include input-styles;
+}
+
+.btn {
+    @include btn-styles;
+}
+
+.btn-icon {
+    @include btn-styles(2px 4px, transparent);
+}
+
+.icon {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
