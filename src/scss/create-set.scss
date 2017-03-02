@@ -5,14 +5,30 @@ $message-bg-color: #f8a89e;
     width: calc(50% - 38px);
     margin-left: 34px;
     margin-bottom: 8px;
+
+    @include card-breakpoint {
+        width: calc(100% - 68px);
+    }
 }
 
 .create-title-input {
     width: 100%;
 }
 
+.create-list-item {
+    display: flex;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $border-color;
+}
+
 .create-card {
-    position: relative;
+    flex-grow: 1;
+    display: flex;
+
+    @include card-breakpoint {
+        flex-direction: column;
+    }
 }
 
 .create-card-index, .create-card-btns {
@@ -39,13 +55,23 @@ $message-bg-color: #f8a89e;
         margin-right: 8px;
     }
 
+    @include card-breakpoint {
+        &:first-of-type {
+            margin-right: 0;
+            margin-bottom: 8px;
+        }
+    }
 }
 
 .create-side-input {
     resize: none;
     display: block;
     width: 100%;
-    height: 320px;
+    height: 300px;
+
+    @include card-breakpoint {
+        height: 160px;
+    }
 }
 
 .create-side-message {

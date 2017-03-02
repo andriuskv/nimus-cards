@@ -1,15 +1,39 @@
+.study-card {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $border-color;
+
+    @include card-breakpoint {
+        flex-direction: column;
+    }
+}
+
 .study-side-container {
     width: calc(50% - 4px);
+
+    @include card-breakpoint {
+        width: 100%;
+
+        &:first-of-type {
+            margin-bottom: 8px;
+        }
+    }
 }
 
 .study-side {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    height: 320px;
+    height: 300px;
     padding: 8px;
     background-color: $bg-color1;
     overflow: auto;
+
+    @include card-breakpoint {
+        height: 160px;
+    }
 }
 
 .study-side-content {
@@ -27,6 +51,10 @@
 .study-reveal-btn {
     width: 100%;
     height: calc(100% - 20px);
+
+    @include card-breakpoint {
+        height: 160px;
+    }
 }
 
 .study-progress {
