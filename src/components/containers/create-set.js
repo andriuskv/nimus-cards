@@ -22,20 +22,15 @@ export default class CreateSetContainer extends React.Component {
     }
 
     getSet(state = {}) {
-        const card = {
-            front: "",
-            back: ""
-        };
-        const set = Object.assign({
+        return Object.assign({
             id: getRandomString(),
             title: "",
-            cards: []
+            cards: [{
+                id: getRandomString(),
+                front: "",
+                back: ""
+            }]
         }, state);
-
-        if (!set.cards.length) {
-            set.cards.push(card);
-        }
-        return set;
     }
 
     handleSubmit = event => {
@@ -67,6 +62,7 @@ export default class CreateSetContainer extends React.Component {
         const set = Object.assign({}, this.state.set);
 
         set.cards.push({
+            id: getRandomString(),
             front: "",
             back: ""
         });
@@ -90,12 +86,22 @@ export default class CreateSetContainer extends React.Component {
         this.setState({ set });
     }
 
+    removeCard = index => {
+        const set = Object.assign({}, this.state.set);
+
+        if (set.cards.length > 1) {
+            set.cards.splice(index, 1);
+            this.setState({ set });
+        }
+    }
+
     render() {
         return <CreateSet
             set={this.state.set}
             message={this.state.message}
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
-            getNewCard={this.getNewCard} />;
+            getNewCard={this.getNewCard}
+            removeCard = {this.removeCard} />;
     }
 }
