@@ -1,24 +1,44 @@
 $message-bg-color: #f8a89e;
 
+.create-title-input-container {
+    display: block;
+    width: calc(50% - 38px);
+    margin-left: 34px;
+    margin-bottom: 8px;
+}
+
 .create-title-input {
     width: 100%;
 }
 
-.create-cards {
-    margin-bottom: 8px;
-    border-bottom: 1px solid $border-color;
+.create-card {
+    position: relative;
 }
 
-.create-card, .create-footer {
-    display: flex;
-    justify-content: space-between;
+.create-card-index, .create-card-btns {
+    width: 26px;
+    margin-top: 20px;
+}
+
+.create-card-index {
+    margin-right: 8px;
+    color: $alt-text-color;
+    font-size: 12px;
+    text-align: right;
+}
+
+.create-card-btns {
+    margin-left: 8px;
 }
 
 .create-side {
     position: relative;
-    display: block;
-    width: calc(50% - 4px);
-    margin-bottom: 8px;
+    flex-grow: 1;
+
+    &:first-of-type {
+        margin-right: 8px;
+    }
+
 }
 
 .create-side-input {
@@ -30,9 +50,9 @@ $message-bg-color: #f8a89e;
 
 .create-side-message {
     position: absolute;
-    right: 1px;
-    bottom: 1px;
-    left: 1px;
+    right: 0;
+    bottom: 0;
+    left: 0;
     padding-top: 4px;
     padding-bottom: 4px;
     background-color: $message-bg-color;
@@ -43,4 +63,9 @@ $message-bg-color: #f8a89e;
     margin-right: 8px;
     padding: 4px 8px;
     background-color: $message-bg-color;
+}
+
+.create-footer {
+    display: flex;
+    justify-content: space-between;
 }
