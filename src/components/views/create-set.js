@@ -5,12 +5,14 @@ import CardSide from "./create-card-side";
 export default function CreateSet({ set, message, handleSubmit, handleChange, getNewCard, removeCard }) {
     function getCardList() {
         return set.cards.map((card, index) => (
-            <li className="card create-card" key={card.id}>
+            <li className="create-list-item" key={card.id}>
                 <div className="create-card-index">{index + 1}</div>
-                <CardSide index={index} side="front" content={card.front}
-                    hasError={!card.front && card.back} />
-                <CardSide index={index} side="back" content={card.back}
-                    hasError={!card.back && card.front} />
+                <div className="create-card">
+                    <CardSide index={index} side="front" content={card.front}
+                        hasError={!card.front && card.back} />
+                    <CardSide index={index} side="back" content={card.back}
+                        hasError={!card.back && card.front} />
+                </div>
                 <div className="create-card-btns">
                     <button type="button" className="btn-icon" title="Remove card"
                         onClick={() => removeCard(index)}>
