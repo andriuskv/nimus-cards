@@ -3,6 +3,17 @@ import Container from "./container";
 import CardSide from "./study-card-side";
 
 export default function StudySet({ setTitle, card, cardCount, revealBack, getNextCard, getSideElement }) {
+    function getFooterBtns() {
+        if (card.back) {
+            return (
+                <div>
+                    <button className="btn study-footer-btn" onClick={() => getNextCard(0)}>I was wrong</button>
+                    <button className="btn study-footer-btn" onClick={() => getNextCard(1)}>I got it right</button>
+                </div>
+            );
+        }
+    }
+
     return (
         <Container title={setTitle}>
             <div className="container">
@@ -14,7 +25,7 @@ export default function StudySet({ setTitle, card, cardCount, revealBack, getNex
                 </div>
                 <div className="study-footer">
                     <span className="study-progress">progress: {card.index + 1}/{cardCount}</span>
-                    {card.revealed && <button className="btn" onClick={getNextCard}>Next card</button>}
+                    {getFooterBtns()}
                 </div>
             </div>
         </Container>

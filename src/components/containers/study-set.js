@@ -1,5 +1,6 @@
 import React from "react";
 import StudySet from "../views/study-set";
+import StudySetScore from "../views/study-set-score";
 
 export default class StudySetContainer extends React.Component {
     constructor(props) {
@@ -10,6 +11,10 @@ export default class StudySetContainer extends React.Component {
         this.state = {
             front: "",
             back: ""
+        };
+        this.score = {
+            right: 0,
+            wrong: 0
         };
         this.sideElement = {};
     }
@@ -43,11 +48,8 @@ export default class StudySetContainer extends React.Component {
     }
 
     revealBack = () => {
-        const index = this.state.index;
-
         this.setState({
-            back: this.cards[this.state.index].back,
-            revealed: index !== this.cards.length - 1
+            back: this.cards[this.state.index].back
         });
     }
 
@@ -55,8 +57,7 @@ export default class StudySetContainer extends React.Component {
         return {
             index,
             front: this.cards[index].front,
-            back: "",
-            revealed: false
+            back: ""
         };
     }
 
@@ -78,13 +79,42 @@ export default class StudySetContainer extends React.Component {
 
     }
 
-    getNextCard = () => {
-        const card = this.getCard(this.state.index + 1);
+    updateScore(answer) {
+        if (answer) {
+            this.score.right += 1;
+        }
+        else {
+            this.score.wrong += 1;
+        }
+    }
 
-        this.setState(card);
+    getNextCard = answer => {
+        const index = this.state.index + 1;
+
+        this.updateScore(answer);
+
+        if (index === this.cards.length) {
+            this.setState(prevState => Object.assign(prevState, { last: true }));
+        }
+        else {
+            const card = this.getCard(index);
+
+            this.setState(card);
+        }
+    }
+
+    closeScore = () => {
+        this.props.router.push("flashcards");
     }
 
     render() {
+        if (this.state.last) {
+            return <StudySetScore
+                setTitle={this.setTitle}
+                cardCount={this.cards.length}
+                score={this.score}
+                closeScore={this.closeScore} />;
+        }
         return <StudySet
             setTitle={this.setTitle}
             card={this.state}

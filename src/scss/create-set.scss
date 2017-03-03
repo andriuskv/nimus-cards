@@ -1,5 +1,3 @@
-$message-bg-color: #f8a89e;
-
 .create-title-input-container {
     display: block;
     width: calc(50% - 38px);
@@ -81,14 +79,14 @@ $message-bg-color: #f8a89e;
     left: 0;
     padding-top: 4px;
     padding-bottom: 4px;
-    background-color: $message-bg-color;
+    background-color: $danger-color;
     text-align: center;
 }
 
 .create-message {
     margin-right: 8px;
     padding: 4px 8px;
-    background-color: $message-bg-color;
+    background-color: $danger-color;
 }
 
 .create-footer {

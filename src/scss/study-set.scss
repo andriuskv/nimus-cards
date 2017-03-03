@@ -61,3 +61,47 @@
     margin-right: auto;
     color: $alt-text-color;
 }
+
+.study-footer-btn {
+    background-color: $success-color;
+
+    &:first-of-type {
+        margin-right: 8px;
+        background-color: $danger-color;
+    }
+}
+
+.set-score-container {
+    max-width: 400px;
+    padding: 8px;
+    border: 1px solid $border-color;
+    margin: 0 auto;
+    background-color: $bg-color2;
+    text-align: center;
+}
+
+.set-score-title {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    font-weight: normal;
+    font-size: 18px;
+}
+
+.set-score-in-percent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100px;
+    padding: 8px;
+    border: 1px solid $border-color;
+    margin: 0 auto;
+    background-color: $bg-color3;
+    font-size: 48px;
+}
+
+.set-score-in-words {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
