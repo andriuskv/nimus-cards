@@ -1,4 +1,5 @@
 import React from "react";
+import Container from "../views/container";
 import StudySet from "../views/study-set";
 import StudySetScore from "../views/study-set-score";
 
@@ -14,7 +15,8 @@ export default class StudySetContainer extends React.Component {
         };
         this.score = {
             right: 0,
-            wrong: 0
+            wrong: 0,
+            total: 0
         };
         this.sideElement = {};
     }
@@ -86,6 +88,7 @@ export default class StudySetContainer extends React.Component {
         else {
             this.score.wrong += 1;
         }
+        this.score.total = this.score.right + this.score.wrong;
     }
 
     getNextCard = answer => {
@@ -103,24 +106,27 @@ export default class StudySetContainer extends React.Component {
         }
     }
 
-    closeScore = () => {
+    closeScoreboard = () => {
         this.props.router.push("flashcards");
     }
 
     render() {
-        if (this.state.last) {
-            return <StudySetScore
-                setTitle={this.setTitle}
-                cardCount={this.cards.length}
-                score={this.score}
-                closeScore={this.closeScore} />;
-        }
-        return <StudySet
-            setTitle={this.setTitle}
-            card={this.state}
-            cardCount={this.cards.length}
-            revealBack={this.revealBack}
-            getSideElement={this.getSideElement}
-            getNextCard={this.getNextCard} />;
+        return (
+            <Container title={this.setTitle}>
+                <div className="container">
+                    {this.state.last ?
+                        <StudySetScore
+                            score={this.score}
+                            closeScoreboard={this.closeScoreboard} /> :
+                        <StudySet
+                            card={this.state}
+                            cardCount={this.cards.length}
+                            revealBack={this.revealBack}
+                            getSideElement={this.getSideElement}
+                            getNextCard={this.getNextCard} />
+                    }
+                </div>
+            </Container>
+        );
     }
 }

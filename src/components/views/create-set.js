@@ -3,8 +3,8 @@ import Container from "./container";
 import CardSide from "./create-card-side";
 
 export default function CreateSet({ set, message, handleSubmit, handleChange, getNewCard, removeCard }) {
-    function getCardList() {
-        return set.cards.map((card, index) => (
+    function renderListItem(card, index) {
+        return (
             <li className="create-list-item" key={card.id}>
                 <div className="create-card-index">{index + 1}</div>
                 <div className="create-card">
@@ -23,7 +23,7 @@ export default function CreateSet({ set, message, handleSubmit, handleChange, ge
                     </button>
                 </div>
             </li>
-        ));
+        );
     }
 
     return (
@@ -34,7 +34,7 @@ export default function CreateSet({ set, message, handleSubmit, handleChange, ge
                     <input id="title" className="input create-title-input" name="title"
                         defaultValue={set.title} required />
                 </label>
-                <ul>{getCardList()}</ul>
+                <ul>{set.cards.map(renderListItem)}</ul>
                 <div className="create-footer">
                     <button type="button" className="btn" onClick={getNewCard}>New Card</button>
                     <div>
