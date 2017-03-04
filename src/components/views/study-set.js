@@ -18,7 +18,7 @@ export default function StudySet({ card, cardCount, revealBack, getNextCard, get
                 <CardSide side="back" content={card.back} getSideElement={getSideElement} revealBack={revealBack}/>
             </div>
             <div className="study-footer">
-                <span className="study-progress">progress: {card.index + 1}/{cardCount}</span>
+                <span className="study-progress">Progress: {card.index + 1}/{cardCount}</span>
                 {card.back && renderFooterBtns()}
             </div>
         </div>
