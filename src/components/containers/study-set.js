@@ -13,11 +13,7 @@ export default class StudySetContainer extends React.Component {
             front: "",
             back: ""
         };
-        this.score = {
-            right: 0,
-            wrong: 0,
-            total: 0
-        };
+        this.score = this.resetScore();
         this.sideElement = {};
     }
 
@@ -56,9 +52,12 @@ export default class StudySetContainer extends React.Component {
     }
 
     getCard(index = 0) {
+        const card = this.cards[index];
+
         return {
             index,
-            front: this.cards[index].front,
+            id: card.id,
+            front: card.front,
             back: ""
         };
     }
@@ -87,8 +86,18 @@ export default class StudySetContainer extends React.Component {
         }
         else {
             this.score.wrong += 1;
+            this.score.incorrectIds.push(this.state.id);
         }
         this.score.total = this.score.right + this.score.wrong;
+    }
+
+    resetScore() {
+        return Object.assign({}, {
+            right: 0,
+            wrong: 0,
+            total: 0,
+            incorrectIds: []
+        });
     }
 
     getNextCard = answer => {
@@ -106,8 +115,17 @@ export default class StudySetContainer extends React.Component {
         }
     }
 
-    closeScoreboard = () => {
-        this.props.router.push("flashcards");
+    initNextRound = () => {
+        const cards = this.cards.reduce((cards, card) => {
+            if (this.score.incorrectIds.includes(card.id)) {
+                cards.push(card);
+            }
+            return cards;
+        }, []);
+
+        this.score = this.resetScore();
+        this.cards = this.shuffleArray(cards);
+        this.setState(Object.assign({ last: false }, this.getCard()));
     }
 
     render() {
@@ -117,7 +135,7 @@ export default class StudySetContainer extends React.Component {
                     {this.state.last ?
                         <StudySetScore
                             score={this.score}
-                            closeScoreboard={this.closeScoreboard} /> :
+                            initNextRound={this.initNextRound} /> :
                         <StudySet
                             card={this.state}
                             cardCount={this.cards.length}
