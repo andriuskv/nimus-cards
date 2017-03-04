@@ -1,33 +1,26 @@
 import React from "react";
-import Container from "./container";
 import CardSide from "./study-card-side";
 
-export default function StudySet({ setTitle, card, cardCount, revealBack, getNextCard, getSideElement }) {
-    function getFooterBtns() {
-        if (card.back) {
-            return (
-                <div>
-                    <button className="btn study-footer-btn" onClick={() => getNextCard(0)}>I was wrong</button>
-                    <button className="btn study-footer-btn" onClick={() => getNextCard(1)}>I got it right</button>
-                </div>
-            );
-        }
+export default function StudySet({ card, cardCount, revealBack, getNextCard, getSideElement }) {
+    function renderFooterBtns() {
+        return (
+            <div>
+                <button className="btn study-footer-btn" onClick={() => getNextCard(0)}>I Was Wrong</button>
+                <button className="btn study-footer-btn" onClick={() => getNextCard(1)}>I Got It Right</button>
+            </div>
+        );
     }
 
     return (
-        <Container title={setTitle}>
-            <div className="container">
-                <div className="study-card">
-                    <CardSide side="front" content={card.front} getSideElement={getSideElement} />
-                    <CardSide side="back" content={card.back} getSideElement={getSideElement}>
-                        {!card.back && <button className="btn study-reveal-btn" onClick={revealBack}>Reveal</button>}
-                    </CardSide>
-                </div>
-                <div className="study-footer">
-                    <span className="study-progress">progress: {card.index + 1}/{cardCount}</span>
-                    {getFooterBtns()}
-                </div>
+        <div>
+            <div className="study-card">
+                <CardSide side="front" content={card.front} getSideElement={getSideElement} />
+                <CardSide side="back" content={card.back} getSideElement={getSideElement} revealBack={revealBack}/>
             </div>
-        </Container>
+            <div className="study-footer">
+                <span className="study-progress">progress: {card.index + 1}/{cardCount}</span>
+                {card.back && renderFooterBtns()}
+            </div>
+        </div>
     );
 }
