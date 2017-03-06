@@ -23,17 +23,21 @@
 }
 
 .study-side {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
     height: 300px;
-    padding: 8px;
     background-color: $bg-color1;
-    overflow: auto;
 
     @include card-breakpoint {
         height: 160px;
     }
+}
+
+.study-side-content-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    height: 100%;
+    padding: 8px;
+    overflow: auto;
 }
 
 .study-side-content {
@@ -50,11 +54,7 @@
 
 .study-reveal-btn {
     width: 100%;
-    height: calc(100% - 20px);
-
-    @include card-breakpoint {
-        height: 160px;
-    }
+    height: 100%;
 }
 
 .study-progress {
@@ -104,6 +104,11 @@
     margin-top: 16px;
     margin-bottom: 16px;
     font-size: 14px;
+}
+
+.set-score-btn-container {
+    display: flex;
+    justify-content: center;
 }
 
 .set-score-btn {
