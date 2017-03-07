@@ -1,0 +1,24 @@
+.settings-item:not(:last-of-type) {
+    margin-bottom: 16px;
+}
+
+.settings-label {
+    display: flex;
+}
+
+.settings-checkbox {
+    margin-right: 4px;
+}
+
+.settings-input {
+    width: 40px;
+    margin-right: 4px;
+    margin-left: 4px;
+    text-align: center;
+}
+
+.settings-message {
+    margin-top: 4px;
+    font-size: 14px;
+    color: $danger-color;
+}

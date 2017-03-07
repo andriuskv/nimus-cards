@@ -8,6 +8,7 @@ import Home from "./components/views/home";
 import ListSetsContainer from "./components/containers/list-sets";
 import CreateSetContainer from "./components/containers/create-set";
 import StudySetContainer from "./components/containers/study-set";
+import SettingsContainer from "./components/containers/settings";
 
 render(
     <Router history={hashHistory}>
@@ -16,6 +17,7 @@ render(
             <Route path="flashcards" component={ListSetsContainer}></Route>
             <Route path="flashcards/create" component={CreateSetContainer}></Route>
             <Route path="flashcards/set/:id" component={StudySetContainer}></Route>
+            <Route path="settings" component={SettingsContainer}></Route>
         </Route>
         <Route path="*" component={App}></Route>
     </Router>
