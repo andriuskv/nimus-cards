@@ -70,3 +70,21 @@ ul {
     height: 16px;
     fill: currentColor;
 }
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    background-color: $bg-color1;
+}
+
+.checkbox-input {
+    display: none;
+
+    &:checked + .checkbox:after {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        content: "\2713";
+        color: $highlight-color;
+    }
+}

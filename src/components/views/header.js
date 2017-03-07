@@ -15,6 +15,9 @@ export default function Header() {
                     <li className="header-nav-item">
                         <Link to="flashcards" className="header-link" activeClassName="active">Flashcards</Link>
                     </li>
+                    <li className="header-nav-item">
+                        <Link to="settings" className="header-link" activeClassName="active">Settings</Link>
+                    </li>
                 </ul>
             </nav>
         </header>

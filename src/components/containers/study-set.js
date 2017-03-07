@@ -1,4 +1,5 @@
 import React from "react";
+import { getSettings } from "../../services/settings";
 import Container from "../views/container";
 import StudySet from "../views/study-set";
 import StudySetScore from "../views/study-set-score";
@@ -24,12 +25,34 @@ export default class StudySetContainer extends React.Component {
 
         if (set) {
             this.setTitle = set.title;
-            this.cards = this.shuffleArray(set.cards);
+            this.cards = this.getCards(set.cards);
             this.setState(this.getCard());
         }
         else {
             this.props.router.replace("flashcards");
         }
+    }
+
+    componentDidUpdate() {
+        Object.keys(this.sideElement).forEach(side => {
+            const element = this.sideElement[side];
+            const maxHeight = element.clientHeight;
+            const height = element.firstElementChild.clientHeight;
+
+            element.style.paddingTop = height < maxHeight ? `${(maxHeight - height) / 2}px` : "8px";
+        });
+
+    }
+
+    getCards(setCards) {
+        const settings = getSettings();
+        const cardCount = parseInt(settings.cardCount.value, 10);
+        let cards = settings.randomize.value ? this.shuffleArray(setCards) : setCards;
+
+        if (cardCount) {
+            cards = cards.slice(0, 10);
+        }
+        return cards;
     }
 
     shuffleArray(array) {
@@ -67,17 +90,6 @@ export default class StudySetContainer extends React.Component {
             return;
         }
         this.sideElement[name] = element;
-    }
-
-    componentDidUpdate() {
-        Object.keys(this.sideElement).forEach(side => {
-            const element = this.sideElement[side];
-            const maxHeight = element.clientHeight;
-            const height = element.firstElementChild.clientHeight;
-
-            element.style.paddingTop = height < maxHeight ? `${(maxHeight - height) / 2}px` : "8px";
-        });
-
     }
 
     updateScore(answer) {
