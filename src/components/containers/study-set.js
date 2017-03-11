@@ -151,6 +151,7 @@ export default class StudySetContainer extends React.Component {
                         <StudySet
                             card={this.state}
                             cardCount={this.cards.length}
+                            score={this.score}
                             revealBack={this.revealBack}
                             getSideElement={this.getSideElement}
                             getNextCard={this.getNextCard} />

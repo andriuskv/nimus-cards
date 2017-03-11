@@ -1,7 +1,8 @@
 import React from "react";
 import CardSide from "./study-card-side";
+import StudyScoreBar from "./study-score-bar";
 
-export default function StudySet({ card, cardCount, revealBack, getNextCard, getSideElement }) {
+export default function StudySet({ card, cardCount, score, revealBack, getNextCard, getSideElement }) {
     function renderFooterBtns() {
         return (
             <div>
@@ -13,6 +14,9 @@ export default function StudySet({ card, cardCount, revealBack, getNextCard, get
 
     return (
         <div>
+            <div className="study-header">
+                <StudyScoreBar score={score} />
+            </div>
             <div className="study-card">
                 <CardSide side="front" content={card.front} getSideElement={getSideElement} />
                 <CardSide side="back" content={card.back} getSideElement={getSideElement} revealBack={revealBack}/>

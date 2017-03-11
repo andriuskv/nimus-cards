@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
+import StudyScoreBar from "./study-score-bar";
 
 export default function StudySetScore({ score, initNextRound }) {
     function renderNextRoundBtn() {
@@ -9,7 +10,12 @@ export default function StudySetScore({ score, initNextRound }) {
     return (
         <div className="set-score-container">
             <h3 className="set-score-title">Round results</h3>
-            <div className="set-score-in-percent">{Math.round(score.right / score.total * 100)}%</div>
+            <div className="set-score-in-percent">
+                <span>{Math.round(score.right / score.total * 100)}%</span>
+                <div className="set-score-bar-container">
+                    <StudyScoreBar score={score} />
+                </div>
+            </div>
             <div className="set-score-in-words">{score.right} out of {score.total} correct</div>
             <div className="set-score-btn-container">
                 {score.right !== score.total && renderNextRoundBtn()}
