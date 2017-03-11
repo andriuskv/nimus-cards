@@ -1,3 +1,32 @@
+.study-header {
+    height: 25px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $border-color;
+}
+
+.study-score-bar {
+    height: 16px;
+    font-size: 14px;
+    color: $alt-text-color;
+}
+
+.study-score-right-bar, .study-score-wrong-bar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 50%;
+}
+
+.study-score-right-bar {
+    background-color: $success-color;
+}
+
+.study-score-wrong-bar {
+    background-color: $danger-color;
+}
+
 .study-card {
     display: flex;
     justify-content: space-between;
@@ -88,6 +117,7 @@
 }
 
 .set-score-in-percent {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -98,6 +128,13 @@
     margin: 0 auto;
     background-color: $bg-color3;
     font-size: 48px;
+}
+
+.set-score-bar-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .set-score-in-words {
