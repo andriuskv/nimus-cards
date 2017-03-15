@@ -5,6 +5,9 @@ function getDefault() {
         },
         cardCount: {
             value: ""
+        },
+        studyMode: {
+            value: "standard"
         }
     };
 }

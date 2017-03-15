@@ -3132,7 +3132,7 @@ react-dom@^15.4.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
-react-router-dom:
+react-router-dom@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-4.0.0.tgz#4fa4418e14b8cfc5bcc0bdea0c4083fb8c2aef10"
   dependencies:

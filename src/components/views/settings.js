@@ -6,10 +6,36 @@ export default function Settings({ settings, handleChange }) {
         <Container title="Settings">
             <div className="container" onChange={handleChange}>
                 <div className="settings-item">
-                    <label htmlFor="setting-checkbox-1" className="settings-label">
-                        <input type="checkbox" id="setting-checkbox-1" className="checkbox-input"
+                    <div className="settings-item-title">Study mode</div>
+                    <div>
+                        <label className="settings-label settings-radio-label">
+                            <input type="radio" name="study-mode"
+                                className="radio-input"
+                                data-name="studyMode"
+                                data-study-mode="standard"
+                                defaultChecked={settings.studyMode.value === "standard"}
+                            />
+                            <div className="radio settings-radio"></div>
+                            <span>Standard</span>
+                        </label>
+                        <label className="settings-label settings-radio-label">
+                            <input type="radio" name="study-mode"
+                                className="radio-input"
+                                data-name="studyMode"
+                                data-study-mode="leitner"
+                                defaultChecked={settings.studyMode.value === "leitner"}
+                            />
+                            <div className="radio settings-radio"></div>
+                            <span>Leitner’s System</span>
+                        </label>
+                    </div>
+                </div>
+                <div className="settings-item">
+                    <label className="settings-label">
+                        <input type="checkbox" className="checkbox-input"
                             data-name="randomize"
-                            defaultChecked={settings.randomize.value} />
+                            defaultChecked={settings.randomize.value}
+                        />
                         <div className="checkbox settings-checkbox"></div>
                         <span>Randomize cards</span>
                     </label>

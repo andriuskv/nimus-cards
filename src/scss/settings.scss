@@ -1,12 +1,18 @@
 .settings-item:not(:last-of-type) {
-    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $border-color;
+    margin-bottom: 8px;
+}
+
+.settings-item-title {
+    font-weight: bold;
 }
 
 .settings-label {
     display: flex;
 }
 
-.settings-checkbox {
+.settings-checkbox, .settings-radio {
     margin-right: 4px;
 }
 
@@ -21,4 +27,8 @@
     margin-top: 4px;
     font-size: 14px;
     color: $danger-color;
+}
+
+.settings-radio-label {
+    margin-top: 4px;
 }
