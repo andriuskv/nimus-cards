@@ -10,12 +10,6 @@ export default class ListSetsContainer extends React.Component {
         };
     }
 
-    componentDidMount() {
-        if (this.props.location.key) {
-            this.props.router.replace(this.props.location.pathname);
-        }
-    }
-
     saveSets(sets) {
         localStorage.setItem("sets", JSON.stringify(sets));
     }
@@ -38,7 +32,7 @@ export default class ListSetsContainer extends React.Component {
     }
 
     editSet = set => {
-        this.props.router.push({
+        this.props.history.push({
             pathname: "/flashcards/create",
             state: set
         });

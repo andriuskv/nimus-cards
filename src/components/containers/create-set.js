@@ -15,12 +15,6 @@ export default class CreateSetContainer extends React.Component {
         this.messageTimeout = 0;
     }
 
-    componentDidMount() {
-        if (this.props.location.key) {
-            this.props.router.replace(this.props.location.pathname);
-        }
-    }
-
     getSet(state = {}) {
         return Object.assign({
             id: getRandomString(),
@@ -51,7 +45,7 @@ export default class CreateSetContainer extends React.Component {
                 }, 3200);
                 return;
             }
-            this.props.router.push({
+            this.props.history.push({
                 pathname: "/flashcards",
                 state: set
             });

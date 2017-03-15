@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import StudyScoreBar from "./study-score-bar";
 
 export default function StudySetScore({ score, initNextRound }) {
@@ -19,7 +19,7 @@ export default function StudySetScore({ score, initNextRound }) {
             <div className="set-score-in-words">{score.right} out of {score.total} correct</div>
             <div className="set-score-btn-container">
                 {score.right !== score.total && renderNextRoundBtn()}
-                <Link to="flashcards" className="btn">Close</Link>
+                <Link to="/flashcards" className="btn">Close</Link>
             </div>
         </div>
     );
