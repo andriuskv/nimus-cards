@@ -19,7 +19,7 @@ export default class StudySetContainer extends React.Component {
     }
 
     componentDidMount() {
-        const setId = this.props.routeParams.id;
+        const setId = this.props.match.params.id;
         const sets = JSON.parse(localStorage.getItem("sets")) || [];
         const set = sets.find(set => set.id === setId);
 
@@ -29,7 +29,7 @@ export default class StudySetContainer extends React.Component {
             this.setState(this.getCard());
         }
         else {
-            this.props.router.replace("flashcards");
+            this.props.history.replace("/flashcards");
         }
     }
 
