@@ -14,7 +14,7 @@ export default class StudySetContainer extends React.Component {
             front: "",
             back: ""
         };
-        this.score = this.resetScore();
+        this.score = null;
         this.sideElement = {};
     }
 
@@ -24,9 +24,7 @@ export default class StudySetContainer extends React.Component {
         const set = sets.find(set => set.id === setId);
 
         if (set) {
-            this.setTitle = set.title;
-            this.cards = this.getCards(set.cards);
-            this.setState(this.getCard());
+            this.initSet(set);
         }
         else {
             this.props.history.replace("/flashcards");
@@ -41,11 +39,23 @@ export default class StudySetContainer extends React.Component {
 
             element.style.paddingTop = height < maxHeight ? `${(maxHeight - height) / 2}px` : "8px";
         });
-
     }
 
-    getCards(setCards) {
+    initSet(set) {
         const settings = getSettings();
+
+        this.mode = settings.studyMode.value;
+        this.setTitle = set.title;
+        this.cards = this.getCards(set.cards, settings);
+        this.score = this.initScore(this.cards);
+        this.setState(this.getCard());
+
+        if (this.mode === "leitner") {
+            this.initialCards = [].concat(this.cards);
+        }
+    }
+
+    getCards(setCards, settings) {
         const cardCount = parseInt(settings.cardCount.value, 10);
         let cards = settings.randomize.value ? this.shuffleArray(setCards) : setCards;
 
@@ -75,12 +85,12 @@ export default class StudySetContainer extends React.Component {
     }
 
     getCard(index = 0) {
-        const card = this.cards[index];
+        const { id, front } = this.cards[index];
 
         return {
             index,
-            id: card.id,
-            front: card.front,
+            id,
+            front,
             back: ""
         };
     }
@@ -147,11 +157,13 @@ export default class StudySetContainer extends React.Component {
                     {this.state.last ?
                         <StudySetScore
                             score={this.score}
+                            mode={this.mode}
                             initNextRound={this.initNextRound} /> :
                         <StudySet
                             card={this.state}
                             cardCount={this.cards.length}
                             score={this.score}
+                            mode={this.mode}
                             revealBack={this.revealBack}
                             getSideElement={this.getSideElement}
                             getNextCard={this.getNextCard} />

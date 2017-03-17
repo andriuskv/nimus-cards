@@ -1,21 +1,25 @@
 .study-header {
-    height: 25px;
     margin-bottom: 8px;
     padding-bottom: 8px;
     border-bottom: 1px solid $border-color;
 }
 
-.study-score-bar {
-    height: 16px;
+.study-score-bar-name-container, .study-score-bar {
     font-size: 14px;
     color: $alt-text-color;
 }
 
-.study-score-right-bar, .study-score-wrong-bar {
+.study-score-bar-name-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.study-score-bar {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: 16px;
     width: 50%;
 }
 
@@ -25,6 +29,36 @@
 
 .study-score-wrong-bar {
     background-color: $danger-color;
+}
+
+.study-score-table {
+    display: flex;
+    font-size: 14px;
+    color: $alt-text-color;
+}
+
+.study-score-table-cell {
+    width: calc((100% - 80px) / 5);
+    padding-top: 2px;
+    padding-bottom: 2px;
+    text-align: center;
+
+    &:first-of-type {
+        width: 80px;
+        text-align: left;
+    }
+
+    &:not(:last-of-type) {
+        border-right: 2px solid $border-color;
+    }
+
+    &.active {
+        background-color: $bg-color1;
+    }
+}
+
+.study-score-table-cell-name {
+    margin-bottom: 8px;
 }
 
 .study-card {
@@ -121,7 +155,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 60%;
     height: 100px;
     padding: 8px;
     border: 1px solid $border-color;
@@ -130,17 +164,29 @@
     font-size: 48px;
 }
 
-.set-score-bar-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+.set-score-bars {
+    width: 60%;
+    margin: 8px auto;
+    text-align: left;
 }
 
-.set-score-in-words {
-    margin-top: 16px;
-    margin-bottom: 16px;
+.set-score-bar-container {
+    display: flex;
+
+    &:first-of-type {
+        margin-bottom: 4px;
+    }
+}
+
+.set-score-bar-name {
+    width: 46px;
+    margin-right: 8px;
     font-size: 14px;
+    text-align: right;
+}
+
+.set-score-bar {
+    flex-grow: 1;
 }
 
 .set-score-btn-container {
