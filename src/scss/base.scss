@@ -71,20 +71,39 @@ ul {
     fill: currentColor;
 }
 
-.checkbox {
+.checkbox::after {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 18px;
     height: 18px;
+    content: "";
     background-color: $bg-color1;
+    color: $highlight-color;
 }
 
 .checkbox-input {
     display: none;
 
     &:checked + .checkbox:after {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         content: "\2713";
-        color: $highlight-color;
+    }
+}
+
+.radio::after {
+    display: block;
+    content: "";
+    width: 16px;
+    height: 16px;
+    border: 4px solid $bg-color1;
+    border-radius: 50%;
+    background-color: $bg-color1;
+}
+
+.radio-input {
+    display: none;
+
+    &:checked + .radio::after {
+        background-color: $highlight-color;
     }
 }

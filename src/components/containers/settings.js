@@ -31,8 +31,10 @@ export default class SettingsContainer extends React.Component {
                 setting.value = target.value.trim();
                 setting.invalid = setting.value && !/^[0-9]+$/g.test(setting.value);
                 break;
+            case "radio":
+                setting.value = target.getAttribute("data-study-mode");
+                break;
         }
-
         this.updateSetting(settingName, setting);
     }
 

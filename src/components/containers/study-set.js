@@ -10,11 +10,12 @@ export default class StudySetContainer extends React.Component {
 
         this.setTitle = "";
         this.cards = [];
+        this.initialCards = [];
         this.state = {
             front: "",
             back: ""
         };
-        this.score = this.resetScore();
+        this.score = null;
         this.sideElement = {};
     }
 
@@ -24,9 +25,7 @@ export default class StudySetContainer extends React.Component {
         const set = sets.find(set => set.id === setId);
 
         if (set) {
-            this.setTitle = set.title;
-            this.cards = this.getCards(set.cards);
-            this.setState(this.getCard());
+            this.initSet(set);
         }
         else {
             this.props.history.replace("/flashcards");
@@ -41,11 +40,23 @@ export default class StudySetContainer extends React.Component {
 
             element.style.paddingTop = height < maxHeight ? `${(maxHeight - height) / 2}px` : "8px";
         });
-
     }
 
-    getCards(setCards) {
+    initSet(set) {
         const settings = getSettings();
+
+        this.mode = settings.studyMode.value;
+        this.setTitle = set.title;
+        this.cards = this.getCards(set.cards, settings);
+        this.score = this.initScore(this.mode, this.cards);
+        this.setState(this.getCard());
+
+        if (this.mode === "leitner") {
+            this.initialCards = [].concat(this.cards);
+        }
+    }
+
+    getCards(setCards, settings) {
         const cardCount = parseInt(settings.cardCount.value, 10);
         let cards = settings.randomize.value ? this.shuffleArray(setCards) : setCards;
 
@@ -75,12 +86,12 @@ export default class StudySetContainer extends React.Component {
     }
 
     getCard(index = 0) {
-        const card = this.cards[index];
+        const { id, front } = this.cards[index];
 
         return {
             index,
-            id: card.id,
-            front: card.front,
+            id,
+            front,
             back: ""
         };
     }
@@ -92,42 +103,96 @@ export default class StudySetContainer extends React.Component {
         this.sideElement[name] = element;
     }
 
-    updateScore(answer) {
-        if (answer) {
-            this.score.right += 1;
+    updateStandardScore(score, answer) {
+        if (!answer) {
+            score.incorrectIds.push(this.state.id);
         }
-        else {
-            this.score.wrong += 1;
-            this.score.incorrectIds.push(this.state.id);
-        }
-        this.score.total = this.score.right + this.score.wrong;
+        return score;
     }
 
-    resetScore() {
-        return Object.assign({}, {
+    updateLeitnerScore(score, answer) {
+        let levelNum = score.currentLevel;
+
+        if (answer) {
+            levelNum += 1;
+        }
+        else {
+            if (!levelNum) {
+                return score;
+            }
+            levelNum -= 1;
+        }
+        const currentLevel = score.levels[score.currentLevel];
+        const index = currentLevel.find(id => id === this.state.id);
+        const [id] = currentLevel.splice(index, 1);
+
+        if (levelNum < score.levels.length) {
+            score.levels[levelNum].push(id);
+        }
+        return score;
+    }
+
+    updateScore(answer, mode, score) {
+        if (answer) {
+            score.right += 1;
+        }
+        else {
+            score.wrong += 1;
+        }
+        score.total = score.right + score.wrong;
+
+        if (mode === "standard") {
+            return this.updateStandardScore(score, answer);
+        }
+        return this.updateLeitnerScore(score, answer);
+    }
+
+    resetScoreCounter(score) {
+        return Object.assign(score, {
             right: 0,
             wrong: 0,
-            total: 0,
-            incorrectIds: []
+            total: 0
         });
+    }
+
+    initStandardScore(score) {
+        return this.resetScoreCounter(score || {
+            incorrectIds: [],
+            currentLevel: 0
+        });
+    }
+
+    initLeitnerScore(cards) {
+        const cardIds = cards.map(card => card.id);
+
+        return this.resetScoreCounter({
+            levels: cards && [cardIds, [], [], [], []],
+            currentLevel: 0
+        });
+    }
+
+    initScore(mode, cards) {
+        if (mode === "standard") {
+            return this.initStandardScore();
+        }
+        return this.initLeitnerScore(cards);
     }
 
     getNextCard = answer => {
         const index = this.state.index + 1;
 
-        this.updateScore(answer);
+        this.score = this.updateScore(answer, this.mode, this.score);
 
         if (index === this.cards.length) {
             this.setState(prevState => Object.assign(prevState, { last: true }));
         }
         else {
-            const card = this.getCard(index);
-
-            this.setState(card);
+            this.setState(this.getCard(index));
         }
     }
 
-    initNextRound = () => {
+
+    initNextStandardRound = () => {
         const cards = this.cards.reduce((cards, card) => {
             if (this.score.incorrectIds.includes(card.id)) {
                 cards.push(card);
@@ -135,7 +200,39 @@ export default class StudySetContainer extends React.Component {
             return cards;
         }, []);
 
-        this.score = this.resetScore();
+        this.score.currentLevel += 1;
+        this.score = this.initStandardScore(this.score);
+        this.cards = this.shuffleArray(cards);
+        this.setState(Object.assign({ last: false }, this.getCard()));
+    }
+
+    initNextLeitnerLevel = () => {
+        let levelNum = this.score.currentLevel;
+        let cardIds = [];
+        const pastLevels = this.score.levels.slice(0, levelNum + 1);
+
+        this.score = this.resetScoreCounter(this.score);
+
+        for (let i = 0; i < pastLevels.length; i += 1) {
+            if (pastLevels[i].length) {
+                levelNum = i;
+                cardIds = pastLevels[levelNum];
+                break;
+            }
+        }
+
+        if (!cardIds.length) {
+            levelNum += 1;
+            cardIds = this.score.levels[levelNum];
+        }
+        this.score.currentLevel = levelNum;
+        const cards = this.initialCards.reduce((cards, card) => {
+            if (cardIds.includes(card.id)) {
+                cards.push(card);
+            }
+            return cards;
+        }, []);
+
         this.cards = this.shuffleArray(cards);
         this.setState(Object.assign({ last: false }, this.getCard()));
     }
@@ -147,11 +244,15 @@ export default class StudySetContainer extends React.Component {
                     {this.state.last ?
                         <StudySetScore
                             score={this.score}
-                            initNextRound={this.initNextRound} /> :
+                            mode={this.mode}
+                            cardCount={this.initialCards.length}
+                            initNextStandardRound={this.initNextStandardRound}
+                            initNextLeitnerLevel={this.initNextLeitnerLevel} /> :
                         <StudySet
                             card={this.state}
                             cardCount={this.cards.length}
                             score={this.score}
+                            mode={this.mode}
                             revealBack={this.revealBack}
                             getSideElement={this.getSideElement}
                             getNextCard={this.getNextCard} />
