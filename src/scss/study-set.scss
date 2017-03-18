@@ -19,7 +19,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 16px;
+    height: 100%;
     width: 50%;
 }
 
@@ -187,6 +187,7 @@
 
 .set-score-bar {
     flex-grow: 1;
+    background-color: $bg-color1;
 }
 
 .set-score-btn-container {
