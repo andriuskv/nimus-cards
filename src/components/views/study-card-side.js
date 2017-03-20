@@ -3,8 +3,10 @@ import React from "react";
 export default function CardSide({ side, content, getSideElement, revealBack }) {
     function renderSide(side, content) {
         return (
-            <div className="study-side-content-container" ref={elem => getSideElement(elem, side)}>
-                <p className="study-side-content">{content}</p>
+            <div className="study-side">
+                <div className="study-side-content-container" ref={elem => getSideElement(elem, side)}>
+                    <p className="study-side-content">{content}</p>
+                </div>
             </div>
         );
     }
@@ -12,12 +14,10 @@ export default function CardSide({ side, content, getSideElement, revealBack }) 
     return (
         <div className="study-side-container">
             <div className="side-name">{side}</div>
-            <div className="study-side">
                 {content ?
                     renderSide(side, content) :
-                    <button className="btn study-reveal-btn" onClick={revealBack}>Reveal</button>
+                    <button className="btn study-side study-reveal-btn" onClick={revealBack}>Reveal</button>
                 }
-            </div>
         </div>
     );
 }
