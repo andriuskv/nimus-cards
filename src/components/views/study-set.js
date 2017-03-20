@@ -13,13 +13,13 @@ export default function StudySet({ card, cardCount, score, mode, revealBack, get
     }
 
     return (
-        <div>
+        <div className="study-container">
             <StudySetHeader score={score} mode={mode} />
             <div className="study-card">
                 <CardSide side="front" content={card.front} getSideElement={getSideElement} />
                 <CardSide side="back" content={card.back} getSideElement={getSideElement} revealBack={revealBack}/>
             </div>
-            <div className="study-footer">
+            <div className="container-footer study-footer">
                 <span className="study-progress">Progress: {card.index + 1}/{cardCount}</span>
                 {card.back && renderFooterBtns()}
             </div>

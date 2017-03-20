@@ -1,11 +1,7 @@
 .set-list-message {
     text-align: center;
-    margin-top: 4px;
+    margin-top: auto;
     margin-bottom: 12px;
-}
-
-.set-list {
-    margin-bottom: 8px;
 }
 
 .list-item {
@@ -43,10 +39,4 @@
     &:first-of-type {
         margin-right: 4px;
     }
-}
-
-.set-list-footer {
-    display: flex;
-    padding-top: 8px;
-    border-top: 1px solid $border-color;
 }

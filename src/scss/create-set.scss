@@ -15,9 +15,12 @@
 
 .create-list-item {
     display: flex;
-    margin-bottom: 8px;
     padding-bottom: 8px;
-    border-bottom: 1px solid $border-color;
+
+    &:not(:last-of-type) {
+        border-bottom: 1px solid $border-color;
+        margin-bottom: 8px;
+    }
 }
 
 .create-card {
@@ -90,6 +93,5 @@
 }
 
 .create-footer {
-    display: flex;
     justify-content: space-between;
 }
