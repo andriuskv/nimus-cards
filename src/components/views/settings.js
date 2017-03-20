@@ -26,7 +26,7 @@ export default function Settings({ settings, handleChange }) {
                                 defaultChecked={settings.studyMode.value === "leitner"}
                             />
                             <div className="radio settings-radio"></div>
-                            <span>Leitner’s System</span>
+                            <span>Leitner system</span>
                         </label>
                     </div>
                 </div>
