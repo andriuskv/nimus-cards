@@ -46,14 +46,18 @@ export default class StudySetContainer extends React.Component {
         const settings = getSettings();
 
         this.mode = settings.studyMode.value;
+        this.randomizeCards = settings.randomize.value;
         this.setTitle = set.title;
         this.cards = this.getCards(set.cards, settings);
-        this.score = this.initScore(this.mode, this.cards);
-        this.setState(this.getCard());
 
-        if (this.mode === "leitner") {
-            this.initialCards = [].concat(this.cards);
+        if (this.mode === "standard") {
+            this.score = this.initStandardScore();
         }
+        else {
+            this.initialCards = [].concat(this.cards);
+            this.score = this.initLeitnerScore(this.cards);
+        }
+        this.setState(this.getCard());
     }
 
     getCards(setCards, settings) {
@@ -61,7 +65,7 @@ export default class StudySetContainer extends React.Component {
         let cards = settings.randomize.value ? this.shuffleArray(setCards) : setCards;
 
         if (cardCount) {
-            cards = cards.slice(0, 10);
+            cards = cards.slice(0, cardCount);
         }
         return cards;
     }
@@ -123,12 +127,10 @@ export default class StudySetContainer extends React.Component {
             levelNum -= 1;
         }
         const currentLevel = score.levels[score.currentLevel];
-        const index = currentLevel.find(id => id === this.state.id);
+        const index = currentLevel.findIndex(id => id === this.state.id);
         const [id] = currentLevel.splice(index, 1);
 
-        if (levelNum < score.levels.length) {
-            score.levels[levelNum].push(id);
-        }
+        score.levels[levelNum].push(id);
         return score;
     }
 
@@ -171,70 +173,42 @@ export default class StudySetContainer extends React.Component {
         });
     }
 
-    initScore(mode, cards) {
-        if (mode === "standard") {
-            return this.initStandardScore();
-        }
-        return this.initLeitnerScore(cards);
-    }
-
     getNextCard = answer => {
         const index = this.state.index + 1;
 
         this.score = this.updateScore(answer, this.mode, this.score);
-
-        if (index === this.cards.length) {
-            this.setState(prevState => Object.assign(prevState, { last: true }));
-        }
-        else {
-            this.setState(this.getCard(index));
-        }
+        this.setState(index === this.cards.length ? { last: true } : this.getCard(index));
     }
 
-
-    initNextStandardRound = () => {
-        const cards = this.cards.reduce((cards, card) => {
-            if (this.score.incorrectIds.includes(card.id)) {
-                cards.push(card);
-            }
-            return cards;
-        }, []);
-
-        this.score.currentLevel += 1;
-        this.score = this.initStandardScore(this.score);
-        this.cards = this.shuffleArray(cards);
-        this.setState(Object.assign({ last: false }, this.getCard()));
-    }
-
-    initNextLeitnerLevel = () => {
-        let levelNum = this.score.currentLevel;
-        let cardIds = [];
-        const pastLevels = this.score.levels.slice(0, levelNum + 1);
-
-        this.score = this.resetScoreCounter(this.score);
-
-        for (let i = 0; i < pastLevels.length; i += 1) {
-            if (pastLevels[i].length) {
-                levelNum = i;
-                cardIds = pastLevels[levelNum];
-                break;
-            }
-        }
-
-        if (!cardIds.length) {
-            levelNum += 1;
-            cardIds = this.score.levels[levelNum];
-        }
-        this.score.currentLevel = levelNum;
-        const cards = this.initialCards.reduce((cards, card) => {
+    getNextLevelCards(cards, cardIds) {
+        return cards.reduce((cards, card) => {
             if (cardIds.includes(card.id)) {
                 cards.push(card);
             }
             return cards;
         }, []);
+    }
 
-        this.cards = this.shuffleArray(cards);
+    initNextLevel(score, cards) {
+        this.score = this.initStandardScore(score);
+        this.cards = this.randomizeCards ? this.shuffleArray(cards) : cards;
         this.setState(Object.assign({ last: false }, this.getCard()));
+    }
+
+    initNextStandardRound = () => {
+        const cards = this.getNextLevelCards(this.cards, this.score.incorrectIds);
+
+        this.score.currentLevel += 1;
+        this.initNextLevel(this.score, cards);
+    }
+
+    initNextLeitnerLevel = () => {
+        const levels = this.score.levels;
+        const index = levels.findIndex(level => level.length);
+        const cards = this.getNextLevelCards(this.initialCards, levels[index]);
+
+        this.score.currentLevel = index;
+        this.initNextLevel(this.score, cards);
     }
 
     render() {
