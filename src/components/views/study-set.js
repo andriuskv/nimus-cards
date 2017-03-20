@@ -6,8 +6,8 @@ export default function StudySet({ card, cardCount, score, mode, revealBack, get
     function renderFooterBtns() {
         return (
             <div>
-                <button className="btn study-footer-btn" onClick={() => getNextCard(0)}>I Was Wrong</button>
-                <button className="btn study-footer-btn" onClick={() => getNextCard(1)}>I Got It Right</button>
+                <button className="btn btn-danger study-footer-btn" onClick={() => getNextCard(0)}>I Was Wrong</button>
+                <button className="btn btn-success" onClick={() => getNextCard(1)}>I Got It Right</button>
             </div>
         );
     }

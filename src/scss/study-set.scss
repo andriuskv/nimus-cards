@@ -19,8 +19,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
     width: 50%;
+    height: 100%;
+    padding: 1px;
 }
 
 .study-score-right-bar {
@@ -119,7 +120,11 @@
 
 .study-reveal-btn {
     width: 100%;
-    height: 100%;
+    color: $alt-text-color;
+
+    &:hover {
+        background-color: darken($bg-color1, 4%);
+    }
 }
 
 .study-progress {
@@ -128,15 +133,11 @@
 }
 
 .study-footer-btn {
-    background-color: $success-color;
-
-    &:first-of-type {
-        margin-right: 8px;
-        background-color: $danger-color;
-    }
+    margin-right: 8px;
 }
 
 .set-score-container {
+    width: 100%;
     max-width: 400px;
     padding: 8px;
     border: 1px solid $border-color;
