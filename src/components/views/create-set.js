@@ -35,7 +35,7 @@ export default function CreateSet({ set, message, handleSubmit, handleChange, ge
                         defaultValue={set.title} required />
                 </label>
                 <ul>{set.cards.map(renderListItem)}</ul>
-                <div className="create-footer">
+                <div className="container-footer create-footer">
                     <button type="button" className="btn" onClick={getNewCard}>New Card</button>
                     <div>
                         {message && <span className="create-message">{message}</span>}
