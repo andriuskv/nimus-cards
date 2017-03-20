@@ -1,20 +1,9 @@
-@mixin input-styles($padding: 8px, $bg-color:$bg-color1) {
+@mixin input-styles($padding, $color, $bg-color) {
     padding: $padding;
     border: none;
     background-color: $bg-color;
     font-size: 14px;
-    color: $alt-text-color;
-}
-
-@mixin btn-styles($padding: 8px 12px, $bg-color: $bg-color1) {
-    @include input-styles($padding, $bg-color);
-
-    transition: 0.2s color;
-
-    &:hover {
-        color: $text-color;
-        cursor: pointer;
-    }
+    color: $color;
 }
 
 @mixin card-breakpoint {
