@@ -67,15 +67,45 @@ ul {
 }
 
 .input {
-    @include input-styles;
+    @include input-styles(8px,  $alt-text-color, $bg-color1);
 }
 
 .btn {
-    @include btn-styles;
+    @include input-styles(8px 12px,  #fff, $primary-btn-color);
+
+    transition: 0.2s background-color;
+
+    &:hover {
+        background-color: darken($primary-btn-color, 4%);
+        cursor: pointer;
+    }
 }
 
 .btn-icon {
-    @include btn-styles(2px 4px, transparent);
+    @include input-styles(2px 4px,  $alt-text-color, transparent);
+
+    transition: 0.2s color;
+
+    &:hover {
+        color: $text-color;
+        cursor: pointer;
+    }
+}
+
+.btn-success {
+    background-color: $success-color;
+
+    &:hover {
+        background-color: darken($success-color, 8%);
+    }
+}
+
+.btn-danger {
+    background-color: $danger-color;
+
+    &:hover {
+        background-color: darken($danger-color, 8%);
+    }
 }
 
 .icon {
