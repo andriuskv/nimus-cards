@@ -28,7 +28,7 @@ export default function CreateSet({ set, message, handleSubmit, handleChange, ge
 
     return (
         <Container title="Create New Flashcard Set">
-            <form className="container" onSubmit={handleSubmit} onChange={handleChange}>
+            <form className="create-form" onSubmit={handleSubmit} onChange={handleChange}>
                 <label className="create-title-input-container">
                     <div className="side-name">Set title</div>
                     <input id="title" className="input create-title-input" name="title"

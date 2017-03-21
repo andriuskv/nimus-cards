@@ -1,24 +1,17 @@
 .home {
-    position: absolute;
-    display: flex;
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
+    padding: 16px;
 }
 
-.home-main-title {
-    text-align: left;
+.home-title, .home-desc {
+    margin-top: 0;
+    margin-bottom: 16px;
 }
 
-.home-main-desc {
-    height: calc(100% - 48px);
+.home-title {
+    font-weight: normal;
 }
 
-.home-aside {
-    flex-shrink: 0;
-    flex-grow: 0;
-    width: calc(100% / 4);
-    margin-left: 8px;
-    text-align: center;
+.home-desc {
+    max-width: 600px;
+    word-break: break-word;
 }
