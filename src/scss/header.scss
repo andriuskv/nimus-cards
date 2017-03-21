@@ -42,4 +42,8 @@
         border-bottom-color: $highlight-color;
         color: $text-color;
     }
+
+    &:visited {
+        color: $alt-text-color;
+    }
 }

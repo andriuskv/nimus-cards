@@ -1,16 +1,20 @@
 import React from "react";
 
-export default function StudyScoreBar({ score, name }) {
-    function renderBar(barName) {
+export default function StudyScoreBar({ score, type, barName, className = "" }) {
+    function renderBar(score, barName) {
         if (!score.total) {
-            return <div className={`study-score-bar study-score-${barName}-bar`}>{score[barName]}</div>;
+            return <div className={`score-bar score-${barName}-bar`}>{score[barName]}</div>;
         }
+
         if (score[barName]) {
-            return <div className={`study-score-bar study-score-${barName}-bar`}
-                style={{ width: `${score[barName] / score.total * 100}%` }}>{score[barName]}</div>;
+            const width = score[barName] / score.total * 100;
+            const propName = type === "study" ? "width" : "maxWidth";
+
+            return <div className={`score-bar score-${barName}-bar expand ${className}`}
+                style={{ [propName]: `${width}%` }}>{score[barName]}</div>;
         }
         return null;
     }
 
-    return renderBar(name);
+    return renderBar(score, barName);
 }

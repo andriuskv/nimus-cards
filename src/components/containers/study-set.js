@@ -214,24 +214,22 @@ export default class StudySetContainer extends React.Component {
     render() {
         return (
             <Container title={this.setTitle}>
-                <div className="container">
-                    {this.state.last ?
-                        <StudySetScore
-                            score={this.score}
-                            mode={this.mode}
-                            cardCount={this.initialCards.length}
-                            initNextStandardRound={this.initNextStandardRound}
-                            initNextLeitnerLevel={this.initNextLeitnerLevel} /> :
-                        <StudySet
-                            card={this.state}
-                            cardCount={this.cards.length}
-                            score={this.score}
-                            mode={this.mode}
-                            revealBack={this.revealBack}
-                            getSideElement={this.getSideElement}
-                            getNextCard={this.getNextCard} />
-                    }
-                </div>
+                {this.state.last ?
+                    <StudySetScore
+                        score={this.score}
+                        mode={this.mode}
+                        cardCount={this.initialCards.length}
+                        initNextStandardRound={this.initNextStandardRound}
+                        initNextLeitnerLevel={this.initNextLeitnerLevel} /> :
+                    <StudySet
+                        card={this.state}
+                        cardCount={this.cards.length}
+                        score={this.score}
+                        mode={this.mode}
+                        revealBack={this.revealBack}
+                        getSideElement={this.getSideElement}
+                        getNextCard={this.getNextCard} />
+                }
             </Container>
         );
     }

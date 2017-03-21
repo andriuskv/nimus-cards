@@ -4,7 +4,7 @@
     border-bottom: 1px solid $border-color;
 }
 
-.study-score-bar-name-container, .study-score-bar {
+.study-score-bar-name-container, .score-bar {
     font-size: 14px;
     color: $alt-text-color;
 }
@@ -15,20 +15,19 @@
     margin-bottom: 4px;
 }
 
-.study-score-bar {
+.score-bar {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 50%;
-    height: 100%;
-    padding: 1px;
+    padding: 1px 0;
 }
 
-.study-score-right-bar {
+.score-right-bar {
     background-color: $success-color;
 }
 
-.study-score-wrong-bar {
+.score-wrong-bar {
     background-color: $danger-color;
 }
 
@@ -193,6 +192,17 @@
     background-color: $bg-color1;
 }
 
+.set-score-bar-inner {
+    width: 0;
+    animation-duration: 0.8s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+
+    &.expand {
+        animation-name: expand;
+    }
+}
+
 .set-score-btn-container {
     display: flex;
     justify-content: center;
@@ -200,4 +210,13 @@
 
 .set-score-btn {
     margin-right: 8px;
+}
+
+@keyframes expand {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
 }

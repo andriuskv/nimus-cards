@@ -29,14 +29,12 @@ export default function ListSets({ sets, editSet, removeSet }) {
 
     return (
         <Container title="Your Flashcard Sets">
-            <div className="container">
-                {sets.length ?
-                    <ul>{sets.map(renderListItem)}</ul> :
-                    <p className="set-list-message">You have no flashcard sets</p>
-                }
-                <div className="container-footer">
-                    <Link to="/flashcards/create" className="btn">Create New Set</Link>
-                </div>
+            {sets.length ?
+                <ul>{sets.map(renderListItem)}</ul> :
+                <p className="set-list-message">You have no flashcard sets</p>
+            }
+            <div className="container-footer">
+                <Link to="/flashcards/create" className="btn">Create New Set</Link>
             </div>
         </Container>
     );

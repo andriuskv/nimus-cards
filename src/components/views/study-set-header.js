@@ -10,8 +10,8 @@ export default function StudySetHeader({ score, mode }) {
                     {(score.total && !score.wrong) ? null : <div>Wrong</div>}
                 </div>
                 <div>
-                    <StudyScoreBar score={score} name="right" />
-                    <StudyScoreBar score={score} name="wrong" />
+                    <StudyScoreBar score={score} type="study" barName="right" />
+                    <StudyScoreBar score={score} type="study" barName="wrong" />
                 </div>
             </div>
         );
@@ -24,11 +24,13 @@ export default function StudySetHeader({ score, mode }) {
                     <div className="study-score-table-cell-name">Level</div>
                     <div>Card Count</div>
                 </div>
-                {score && score.levels.map((level, index) => (
+                {score.levels.map((level, index) => (
                     <div className={`study-score-table-cell ${score.currentLevel === index ? "active" : ""}`}
                         key={index}
                     >
-                        <div className="study-score-table-cell-name">{index + 1}</div>
+                        <div className="study-score-table-cell-name">
+                            {index === 4 ? "Memorized" : index + 1}
+                        </div>
                         <div>{level.length}</div>
                     </div>
                 ))}
@@ -38,7 +40,7 @@ export default function StudySetHeader({ score, mode }) {
 
     return (
         <div className="study-header">
-            {mode === "standard" ? renderScoreBar(score) : renderScoreTable(score)}
+            {score && (mode === "standard" ? renderScoreBar(score) : renderScoreTable(score))}
         </div>
     );
 }
