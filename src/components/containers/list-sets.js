@@ -11,11 +11,11 @@ export default class ListSetsContainer extends React.Component {
     }
 
     saveSets(sets) {
-        localStorage.setItem("sets", JSON.stringify(sets));
+        localStorage.setItem("nimus-cards-sets", JSON.stringify(sets));
     }
 
     getSets(newSet) {
-        const sets = JSON.parse(localStorage.getItem("sets")) || [];
+        const sets = JSON.parse(localStorage.getItem("nimus-cards-sets")) || [];
 
         if (newSet) {
             const index = sets.findIndex(set => set.id === newSet.id);

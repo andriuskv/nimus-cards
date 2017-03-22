@@ -14,13 +14,13 @@ function getDefault() {
 
 function getSettings() {
     const defaultSettings = getDefault();
-    const storedSettings = JSON.parse(localStorage.getItem("settings")) || {};
+    const storedSettings = JSON.parse(localStorage.getItem("nimus-cards-settings")) || {};
 
     return Object.assign(defaultSettings, storedSettings);
 }
 
 function saveSettings(settings) {
-    localStorage.setItem("settings", JSON.stringify(settings));
+    localStorage.setItem("nimus-cards-settings", JSON.stringify(settings));
 }
 
 export {
