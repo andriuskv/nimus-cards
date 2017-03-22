@@ -21,7 +21,7 @@ export default class StudySetContainer extends React.Component {
 
     componentDidMount() {
         const setId = this.props.match.params.id;
-        const sets = JSON.parse(localStorage.getItem("sets")) || [];
+        const sets = JSON.parse(localStorage.getItem("nimus-cards-sets")) || [];
         const set = sets.find(set => set.id === setId);
 
         if (set) {
