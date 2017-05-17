@@ -2,21 +2,42 @@
     height: 56px;
     background-color: $bg-color2;
     box-shadow: 0 1px 2px 0 $shadow-color;
+
+    @include breakpoint-smallest {
+        position: relative;
+        height: 40px;
+        margin-bottom: 2px;
+        background-color: $bg-color3;
+        box-shadow: none;
+    };
 }
 
 .header-nav {
-    height: inherit;
+    height: 100%;
     max-width: 1060px;
     margin: 0 auto;
+
+    @include breakpoint-smallest {
+        &:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 2px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+            background-color: $bg-color3;
+        }
+    };
 }
 
 .header-nav-items {
     display: flex;
-    height: inherit;
+    height: 100%;
 }
 
 .header-nav-item {
-    height: inherit;
+    height: 100%;
     transition: 0.2s all;
 
     &:hover {
@@ -26,12 +47,16 @@
     &:last-of-type {
         margin-left: auto;
     }
+
+    @include breakpoint-smallest {
+        z-index: 1;
+    };
 }
 
 .header-link {
     display: flex;
     align-items: center;
-    height: inherit;
+    height: 100%;
     padding-left: 8px;
     padding-right: 8px;
     border-bottom: 4px solid transparent;

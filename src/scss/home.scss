@@ -1,17 +1,88 @@
 .home {
+    display: flex;
     padding: 16px;
+
+    @include breakpoint-smallest {
+        flex-direction: column;
+        padding: 8px;
+    }
 }
 
-.home-title, .home-desc {
+.home-title,
+.home-desc,
+.home-feature-desc {
     margin-top: 0;
-    margin-bottom: 16px;
 }
 
 .home-title {
     font-weight: normal;
+
+    @include breakpoint-smallest {
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
 }
 
 .home-desc {
-    max-width: 600px;
-    word-break: break-word;
+    @include breakpoint-smallest {
+        font-size: 14px;
+    }
+}
+
+.home-feature-container {
+    flex: 0 0 30%;
+    margin-left: 16px;
+    padding-left: 16px;
+    border-left: 1px solid $border-color;
+    text-align: center;
+
+    @include breakpoint-small {
+        flex-basis: 40%;
+    }
+
+    @include breakpoint-smallest {
+        flex-basis: 100%;
+        margin-left: 0;
+        padding-left: 0;
+        padding-top: 8px;
+        border-left: none;
+        border-top: 1px solid $border-color;
+    }
+}
+
+.home-features {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    .icon {
+        width: 64px;
+        height: 64px;
+        color: $highlight-color;
+    }
+
+    @include breakpoint-smallest {
+        flex-direction: row;
+
+        .icon {
+            width: 48px;
+            height: 48px;
+        }
+    }
+}
+
+.home-features-item {
+    font-size: 14px;
+
+    @include breakpoint-smallest {
+        flex: 1 0 50%;
+        min-width: 160px;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
+
+.home-features-item-title {
+    margin-top: 8px;
+    margin-bottom: 8px;
 }

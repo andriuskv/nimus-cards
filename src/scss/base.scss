@@ -10,6 +10,10 @@ body {
     background-color: $bg-color1;
     color: $text-color;
     font-size: 16px;
+
+    @include breakpoint-smallest {
+        background-color: $bg-color2;
+    }
 }
 
 a {
@@ -42,6 +46,12 @@ ul {
     padding: 8px;
     background-color: $bg-color2;
     box-shadow: 0 0 2px 0 $shadow-color;
+
+    @include breakpoint-smallest {
+        min-height: calc(100% - 42px);
+        margin: auto;
+        box-shadow: none;
+    }
 }
 
 .container {
@@ -61,6 +71,10 @@ ul {
     text-align: center;
     font-size: 20px;
     font-weight: normal;
+
+    @include breakpoint-smallest {
+        font-size: 18px;
+    }
 }
 
 .container-footer {
@@ -93,6 +107,9 @@ ul {
 .btn-icon {
     @include input-styles(2px 4px,  $alt-text-color, transparent);
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: 0.2s color;
 
     &:hover {
@@ -118,7 +135,6 @@ ul {
 }
 
 .icon {
-    display: block;
     width: 16px;
     height: 16px;
     fill: currentColor;

@@ -19,26 +19,27 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "react-router-dom": "^4.0.0"
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-router-dom": "^4.1.1"
   },
   "devDependencies": {
-    "autoprefixer": "^6.7.7",
-    "babel-core": "^6.24.0",
-    "babel-eslint": "^7.2.0",
-    "babel-loader": "^6.4.1",
-    "babel-plugin-transform-class-properties": "^6.23.0",
-    "babel-preset-env": "^1.2.2",
-    "babel-preset-react": "^6.23.0",
+    "autoprefixer": "^7.1.0",
+    "babel-core": "^6.24.1",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
+    "babel-preset-react": "^6.24.1",
     "csso-cli": "^1.0.0",
-    "eslint": "^3.18.0",
-    "eslint-plugin-react": "^6.10.3",
+    "eslint": "^3.19.0",
+    "eslint-plugin-compat": "^1.0.2",
+    "eslint-plugin-react": "^7.0.1",
     "live-server": "^1.2.0",
-    "node-sass": "^4.5.0",
+    "node-sass": "^4.5.3",
     "onchange": "^3.2.1",
-    "postcss-cli": "^3.0.0",
-    "webpack": "^2.2.1"
+    "postcss-cli": "^4.0.0",
+    "webpack": "^2.5.1"
   },
   "browserslist": [
     "last 2 versions",
