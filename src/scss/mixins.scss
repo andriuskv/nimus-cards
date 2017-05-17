@@ -6,8 +6,14 @@
     color: $color;
 }
 
-@mixin card-breakpoint {
+@mixin breakpoint-small {
   @media (max-width: 800px) {
+      @content;
+  }
+}
+
+@mixin breakpoint-smallest {
+  @media (max-width: 600px) {
       @content;
   }
 }

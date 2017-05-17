@@ -19,7 +19,8 @@ export default function StudySetScore({ score, mode, cardCount, initNextStandard
             level += 1;
         }
         return score.levels[4].length !== cardCount && (
-            <button className="btn set-score-btn" onClick={initNextLeitnerLevel}>Continue to Level {level}</button>
+            <button className="btn set-score-btn"
+                onClick={initNextLeitnerLevel}>Continue to Level {level}</button>
         );
     }
 

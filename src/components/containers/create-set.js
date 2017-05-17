@@ -1,10 +1,6 @@
 import React from "react";
 import CreateSet from "../views/create-set";
 
-function getRandomString() {
-    return Math.random().toString(32).slice(2, 10);
-}
-
 export default class CreateSetContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -15,12 +11,16 @@ export default class CreateSetContainer extends React.Component {
         this.messageTimeout = 0;
     }
 
+    getRandomString() {
+        return Math.random().toString(32).slice(2, 10);
+    }
+
     getSet(state = {}) {
         return Object.assign({
-            id: getRandomString(),
+            id: this.getRandomString(),
             title: "",
             cards: [{
-                id: getRandomString(),
+                id: this.getRandomString(),
                 front: "",
                 back: ""
             }]
@@ -56,7 +56,7 @@ export default class CreateSetContainer extends React.Component {
         const set = Object.assign({}, this.state.set);
 
         set.cards.push({
-            id: getRandomString(),
+            id: this.getRandomString(),
             front: "",
             back: ""
         });
@@ -83,10 +83,15 @@ export default class CreateSetContainer extends React.Component {
     removeCard = index => {
         const set = Object.assign({}, this.state.set);
 
-        if (set.cards.length > 1) {
-            set.cards.splice(index, 1);
-            this.setState({ set });
-        }
+        set.cards.splice(index, 1);
+        this.setState({ set });
+    }
+
+    switchSide = (index, side) => {
+        const card = this.state.set.cards[index];
+        card.visibleSide = side === "front" ? "back" : "front";
+
+        this.setState({ set: this.state.set });
     }
 
     render() {
@@ -96,6 +101,7 @@ export default class CreateSetContainer extends React.Component {
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
             getNewCard={this.getNewCard}
-            removeCard = {this.removeCard} />;
+            removeCard = {this.removeCard}
+            switchSide = {this.switchSide} />;
     }
 }
