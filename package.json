@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dist": "rm -rf dist && mkdir dist && cp -R src/index.html dist",
-    "webpack": "webpack --progress --colors --config src/webpack.config.js",
+    "webpack": "webpack --progress --colors --config ./webpack.config.js",
     "postcss": "postcss -u autoprefixer -r dist/main.css",
     "scss": "node-sass --source-map-embed src/scss/index.scss dist/main.css && npm run postcss",
     "watch:js": "npm run webpack -- --watch",
@@ -24,7 +24,7 @@
     "react-router-dom": "^4.1.1"
   },
   "devDependencies": {
-    "autoprefixer": "^7.1.0",
+    "autoprefixer": "^7.1.1",
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.0.0",

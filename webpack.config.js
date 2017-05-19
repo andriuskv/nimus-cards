@@ -36,7 +36,7 @@ module.exports = function(env = {}) {
             main: "./src/index.js"
         },
         output: {
-            path: path.resolve(__dirname, "../dist"),
+            path: path.resolve(__dirname, "./dist"),
             filename: "[name].js"
         },
         module: {
