@@ -33,6 +33,13 @@ export default function Home() {
                                 multiple devices.
                             </p>
                         </div>
+                        <div className="home-features-item">
+                            <Icon name="offline" />
+                            <h4 className="home-features-item-title">Works Offline</h4>
+                            <p className="home-feature-desc">
+                                Even without connection, you can still use NimusCards.
+                            </p>
+                        </div>
                     </div>
                 </section>
             </div>
