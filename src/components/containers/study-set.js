@@ -16,7 +16,6 @@ export default class StudySetContainer extends React.Component {
             back: ""
         };
         this.score = null;
-        this.sideElement = {};
     }
 
     componentDidMount() {
@@ -30,16 +29,6 @@ export default class StudySetContainer extends React.Component {
         else {
             this.props.history.replace("/flashcards");
         }
-    }
-
-    componentDidUpdate() {
-        Object.keys(this.sideElement).forEach(side => {
-            const element = this.sideElement[side];
-            const maxHeight = element.clientHeight;
-            const height = element.firstElementChild.clientHeight;
-
-            element.style.paddingTop = height < maxHeight ? `${(maxHeight - height) / 2}px` : "8px";
-        });
     }
 
     initSet(set) {
@@ -98,13 +87,6 @@ export default class StudySetContainer extends React.Component {
             front,
             back: ""
         };
-    }
-
-    getSideElement = (element, name) => {
-        if (!element) {
-            return;
-        }
-        this.sideElement[name] = element;
     }
 
     updateStandardScore(score, answer) {
@@ -227,7 +209,6 @@ export default class StudySetContainer extends React.Component {
                         score={this.score}
                         mode={this.mode}
                         revealBack={this.revealBack}
-                        getSideElement={this.getSideElement}
                         getNextCard={this.getNextCard} />
                 }
             </Container>
