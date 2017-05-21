@@ -1,19 +1,6 @@
 import React from "react";
-import Icon from "./icon";
 
-export default function CardSide({ index, side, oppositeSide, card, switchSide }) {
-    const visibleSide = card.visibleSide || "front";
-
-    function renderSwitchSideButton() {
-        return visibleSide === side && (
-            <button type="button" className="btn-icon switch-side-btn"
-                title={`Switch to ${oppositeSide} side`}
-                onClick={() => switchSide(index, side)}>
-                <Icon name="switch" />
-            </button>
-        );
-    }
-
+export default function CardSide({ index, side, oppositeSide, card }) {
     function renderMessage() {
         const isCurrentSideEmpty = !card[side] && card[oppositeSide];
         const isOppositeSideEmpty = !card[oppositeSide] && card[side];
@@ -32,15 +19,18 @@ export default function CardSide({ index, side, oppositeSide, card, switchSide }
         return <div className="create-side-message">{message}</div>;
     }
 
+    function setSideValue(element) {
+        if (element) {
+            element.textContent = card[side];
+        }
+    }
+
     return (
-        <label className={`create-side${visibleSide === side ? " visible": ""}`}>
-            <div className="create-side-header">
-                {renderSwitchSideButton()}
-                <span className="side-name">{side}</span>
-            </div>
-            <textarea id={`${side}-${index}`} className="input create-side-input" name={side}
-                defaultValue={card[side]}></textarea>
+        <div className={`create-side${card.visibleSide === side ? " visible": ""}`}>
+            <span className="side-name">{side}</span>
+            <div id={`${side}-${index}`} className="input create-side-input" ref={setSideValue}
+                contentEditable></div>
             {renderMessage()}
-        </label>
+        </div>
     );
 }

@@ -27,22 +27,33 @@ export default class CreateSetContainer extends React.Component {
         }, state);
     }
 
+    showMessage(message) {
+        this.setState({ message });
+
+        clearTimeout(this.messageTimeout);
+        this.messageTimeout = setTimeout(() => {
+            this.setState({ message: "" });
+        }, 3200);
+    }
+
     handleSubmit = event => {
-        const set = Object.assign({}, this.state.set);
-        const containsEmptySide = set.cards.some(({ front, back }) => !front && back || !back && front);
+        const title = event.target.elements.title.value.trim();
 
         event.preventDefault();
+
+        if (!title) {
+            this.showMessage("Please specify set title");
+            return;
+        }
+        const set = Object.assign({}, this.state.set);
+        const containsEmptySide = set.cards.some(({ front, back }) => !front && back || !back && front);
+        set.title = title;
 
         if (!containsEmptySide) {
             set.cards = set.cards.filter(card => card.front || card.back);
 
             if (!set.cards.length) {
-                this.setState({ message: "Please fill in at least one card" });
-
-                clearTimeout(this.messageTimeout);
-                this.messageTimeout = setTimeout(() => {
-                    this.setState({ message: "" });
-                }, 3200);
+                this.showMessage("Please fill in at least one card");
                 return;
             }
             this.props.history.push({
@@ -66,18 +77,15 @@ export default class CreateSetContainer extends React.Component {
         });
     }
 
-    handleChange = ({ target: { value, id } }) => {
+    handleInput = ({ target: { id, textContent } }) => {
         const set = Object.assign({}, this.state.set);
+        const [side, index] = id.split("-");
+        const card = set.cards[index];
 
-        if (id === "title") {
-            set.title = value;
+        if (card[side] !== textContent) {
+            card[side] = textContent;
+            this.setState({ set });
         }
-        else {
-            const [name, index] = id.split("-");
-
-            set.cards[index][name] = value;
-        }
-        this.setState({ set });
     }
 
     removeCard = index => {
@@ -87,21 +95,13 @@ export default class CreateSetContainer extends React.Component {
         this.setState({ set });
     }
 
-    switchSide = (index, side) => {
-        const card = this.state.set.cards[index];
-        card.visibleSide = side === "front" ? "back" : "front";
-
-        this.setState({ set: this.state.set });
-    }
-
     render() {
         return <CreateSet
             set={this.state.set}
             message={this.state.message}
             handleSubmit={this.handleSubmit}
-            handleChange={this.handleChange}
+            handleInput={this.handleInput}
             getNewCard={this.getNewCard}
-            removeCard = {this.removeCard}
-            switchSide = {this.switchSide} />;
+            removeCard = {this.removeCard} />;
     }
 }

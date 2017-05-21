@@ -25,6 +25,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 26px;
     padding-top: 2px;
     padding-bottom: 2px;
     border-top: 1px solid $border-color;
@@ -43,7 +44,7 @@
 
 .create-side {
     position: relative;
-    flex-grow: 1;
+    flex-basis: 50%;
 
     &:last-of-type {
         margin-left: 8px;
@@ -57,18 +58,9 @@
         }
 
         &.visible {
+            flex-basis: 100%;
             display: block;
         }
-    }
-}
-
-.create-side-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 4px;
-
-    .side-name {
-        margin-bottom: 0;
     }
 }
 
@@ -77,15 +69,16 @@
 
     @include breakpoint-smallest {
         display: flex;
-        margin-right: 4px;
+        margin-left: 4px;
+        margin-right: auto;
     }
 }
 
 .create-side-input {
-    resize: none;
-    display: block;
-    width: 100%;
+    overflow: auto;
     height: 300px;
+    word-break: break-all;
+    white-space: pre-line;
 
     @include breakpoint-smallest {
         height: 240px;
