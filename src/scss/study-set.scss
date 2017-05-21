@@ -94,7 +94,7 @@
     }
 }
 
-.study-side-container {
+.study-side {
     width: calc(50% - 4px);
 
     @include breakpoint-smallest {
@@ -107,32 +107,27 @@
     }
 }
 
-.study-side {
+.study-side-content-container {
+    overflow: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
     height: 300px;
+    padding: 16px;
     background-color: $bg-color1;
+
+    @include breakpoint-small {
+        padding: 8px;
+    }
 
     @include breakpoint-smallest {
         height: 240px;
     }
 }
 
-.study-side-content-container {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    height: 100%;
-    padding: 8px;
-    overflow: auto;
-}
-
 .study-side-content {
-    margin-top: 0;
-    margin-bottom: 0;
+    margin: auto;
     white-space: pre-line;
-}
-
-.study-footer {
-    align-items: center;
 }
 
 .study-reveal-btn {
@@ -142,6 +137,10 @@
     &:hover {
         background-color: darken($bg-color1, 4%);
     }
+}
+
+.study-footer {
+    align-items: center;
 }
 
 .study-progress {
