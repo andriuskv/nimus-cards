@@ -19,11 +19,7 @@ export default class CreateSetContainer extends React.Component {
         return Object.assign({
             id: this.getRandomString(),
             title: "",
-            cards: [{
-                id: this.getRandomString(),
-                front: "",
-                back: ""
-            }]
+            cards: [this.getNewCard()]
         }, state);
     }
 
@@ -36,6 +32,10 @@ export default class CreateSetContainer extends React.Component {
         }, 3200);
     }
 
+    hasSideContent(side) {
+        return side.text || side.image;
+    }
+
     handleSubmit = event => {
         const title = event.target.elements.title.value.trim();
 
@@ -46,11 +46,18 @@ export default class CreateSetContainer extends React.Component {
             return;
         }
         const set = Object.assign({}, this.state.set);
-        const containsEmptySide = set.cards.some(({ front, back }) => !front && back || !back && front);
+        const containsEmptySide = set.cards.some(({ front, back }) => {
+            const isFrontEmpty = this.hasSideContent(front);
+            const isBackEmpty = this.hasSideContent(back);
+
+            return !isFrontEmpty && isBackEmpty || !isBackEmpty && isFrontEmpty;
+        });
         set.title = title;
 
         if (!containsEmptySide) {
-            set.cards = set.cards.filter(card => card.front || card.back);
+            set.cards = set.cards.filter(({ front, back }) => {
+                return this.hasSideContent(front) || this.hasSideContent(back);
+            });
 
             if (!set.cards.length) {
                 this.showMessage("Please fill in at least one card");
@@ -63,14 +70,22 @@ export default class CreateSetContainer extends React.Component {
         }
     }
 
-    getNewCard = ({ target }) => {
+    getNewCard() {
+        return {
+            id: this.getRandomString(),
+            front: {
+                text: ""
+            },
+            back: {
+                text: ""
+            }
+        };
+    }
+
+    addCard = ({ target }) => {
         const set = Object.assign({}, this.state.set);
 
-        set.cards.push({
-            id: this.getRandomString(),
-            front: "",
-            back: ""
-        });
+        set.cards.push(this.getNewCard());
 
         this.setState({ set }, () => {
             target.scrollIntoView();
@@ -82,8 +97,8 @@ export default class CreateSetContainer extends React.Component {
         const [side, index] = id.split("-");
         const card = set.cards[index];
 
-        if (card[side] !== textContent) {
-            card[side] = textContent;
+        if (card[side].text !== textContent) {
+            card[side].text = textContent;
             this.setState({ set });
         }
     }
@@ -95,13 +110,32 @@ export default class CreateSetContainer extends React.Component {
         this.setState({ set });
     }
 
+    handleImageUpload = (index, side, file) => {
+        const set = Object.assign({}, this.state.set);
+        const card = set.cards[index];
+
+        if (file.type.split("/")[0] === "image") {
+            card[side].image = file;
+        }
+        else {
+            card[side].toolboxMessage = "File is not an image";
+        }
+        this.setState({ set });
+
+        setTimeout(() => {
+            card[side].toolboxMessage = "";
+            this.setState({ set });
+        }, 3200);
+    }
+
     render() {
         return <CreateSet
             set={this.state.set}
             message={this.state.message}
             handleSubmit={this.handleSubmit}
             handleInput={this.handleInput}
-            getNewCard={this.getNewCard}
-            removeCard = {this.removeCard} />;
+            addCard={this.addCard}
+            removeCard={this.removeCard}
+            handleImageUpload={this.handleImageUpload} />;
     }
 }

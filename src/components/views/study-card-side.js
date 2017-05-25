@@ -5,20 +5,28 @@ export default function CardSide({ side, card, revealBack }) {
         return side === "front" && !backSide || side === "back" && backSide;
     }
 
-    function setContent(element, content) {
-        if (element) {
-            element.innerHTML = content;
-        }
-    }
-
     return (
-        <div className={`study-side${isVisible(side, card.back) ? " visible" : ""}`}>
+        <div className={`side-container${isVisible(side, card.back) ? " visible" : ""}`}>
             <div className="side-name">{side}</div>
-            {side === "front" || card[side] ? (
-                <div className="study-side-content-container">
-                    <div className="study-side-content" ref={(ref) => setContent(ref, card[side])}></div>
-                </div>) :
-                <button className="btn study-side-content-container study-reveal-btn" onClick={revealBack}>Reveal</button>}
+            <div className="side">
+                {card[side] ? <div className="side-content study-side-content">
+                    {card[side].image && (
+                        <div className={`side-image-container${card[side].text ? "": " full"}`}>
+                            <img src={URL.createObjectURL(card[side].image)} alt="" className="side-image" />
+                        </div>
+                    )}
+                    {card[side].text && (
+                        <div className="side-text study-side-text">
+                            <div>{card[side].text}</div>
+                        </div>
+                    )}
+                </div> :
+                <div className="side-content study-side-content">
+                    <button className="btn side-text study-side-text study-reveal-btn" onClick={revealBack}>
+                        <div>Reveal</div>
+                    </button>
+                </div>}
+            </div>
         </div>
     );
 }

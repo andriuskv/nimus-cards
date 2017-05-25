@@ -1,4 +1,5 @@
 import React from "react";
+import { getSets } from "../../services/db";
 import { getSettings } from "../../services/settings";
 import Container from "../views/container";
 import StudySet from "../views/study-set";
@@ -12,23 +13,25 @@ export default class StudySetContainer extends React.Component {
         this.cards = [];
         this.initialCards = [];
         this.state = {
-            front: "",
-            back: ""
+            front: null,
+            back: null
         };
         this.score = null;
     }
 
     componentDidMount() {
-        const setId = this.props.match.params.id;
-        const sets = JSON.parse(localStorage.getItem("nimus-cards-sets")) || [];
-        const set = sets.find(set => set.id === setId);
+        getSets()
+        .then(sets => {
+            const setId = this.props.match.params.id;
+            const set = sets.find(set => set.id === setId);
 
-        if (set) {
-            this.initSet(set);
-        }
-        else {
-            this.props.history.replace("/flashcards");
-        }
+            if (set) {
+                this.initSet(set);
+            }
+            else {
+                this.props.history.replace("/flashcards");
+            }
+        });
     }
 
     initSet(set) {
@@ -85,7 +88,7 @@ export default class StudySetContainer extends React.Component {
             index,
             id,
             front,
-            back: ""
+            back: null
         };
     }
 

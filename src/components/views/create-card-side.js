@@ -1,9 +1,23 @@
 import React from "react";
+import Icon from "./icon";
 
-export default function CardSide({ index, side, oppositeSide, card }) {
-    function renderMessage() {
-        const isCurrentSideEmpty = !card[side] && card[oppositeSide];
-        const isOppositeSideEmpty = !card[oppositeSide] && card[side];
+export default class CreateCardSide extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            card: props.card
+        };
+    }
+
+    hasSideContent(side) {
+        return side.text || side.image;
+    }
+
+    renderMessage() {
+        const { card, side, oppositeSide } = this.props;
+        const isCurrentSideEmpty = !this.hasSideContent(card[side]) && this.hasSideContent(card[oppositeSide]);
+        const isOppositeSideEmpty = !this.hasSideContent(card[oppositeSide]) && this.hasSideContent(card[side]);
         let message = "";
 
         if (isCurrentSideEmpty) {
@@ -19,18 +33,52 @@ export default function CardSide({ index, side, oppositeSide, card }) {
         return <div className="create-side-message">{message}</div>;
     }
 
-    function setSideValue(element) {
-        if (element) {
-            element.textContent = card[side];
+    setSideText = element => {
+        if (element && !element.rendered) {
+            element.textContent = this.props.card[this.props.side].text;
+            element.rendered = true;
         }
     }
 
-    return (
-        <div className={`create-side${card.visibleSide === side ? " visible": ""}`}>
-            <span className="side-name">{side}</span>
-            <div id={`${side}-${index}`} className="input create-side-input" ref={setSideValue}
-                contentEditable></div>
-            {renderMessage()}
-        </div>
-    );
+    removeImage = () => {
+        const card = Object.assign({}, this.state.card);
+        const side = card[this.props.side];
+
+        delete side.image;
+        this.setState({ card });
+    }
+
+    render() {
+        const { index, side, handleImageUpload } = this.props;
+        const toolboxMessage = this.state.card[side].toolboxMessage;
+
+        return (
+            <div className={`side-container${this.state.card.visibleSide === side ? " visible": ""}`}>
+                <span className="side-name">{side}</span>
+                <div className="side">
+                    <div className="create-side-toolbox">
+                        <label className="btn-icon" tabIndex="0" title="Upload image">
+                            <Icon name="image" />
+                            <input type="file" className="image-upload-input"
+                                onChange={(event) => handleImageUpload(index, side, event.target.files[0])} />
+                        </label>
+                        {toolboxMessage && <div className="create-side-toolbox-mesasge">{toolboxMessage}</div>}
+                    </div>
+                    <div className="side-content create-side-content">
+                        {this.state.card[side].image && (
+                            <div className="side-image-container">
+                                <img src={URL.createObjectURL(this.state.card[side].image)} alt="" className="side-image" />
+                                <button type="button" className="btn-icon create-side-image-btn" onClick={this.removeImage} title="Remove image">
+                                    <Icon name="remove" />
+                                </button>
+                            </div>
+                        )}
+                        <div id={`${side}-${index}`} className="side-text" ref={this.setSideText}
+                            contentEditable></div>
+                    </div>
+                    {this.renderMessage()}
+                </div>
+            </div>
+        );
+    }
 }

@@ -6,7 +6,7 @@
   "scripts": {
     "dist": "rm -rf dist && mkdir dist && cp -R src/index.html src/sw.js ./dist",
     "webpack": "webpack --progress --colors --config ./webpack.config.js",
-    "postcss": "postcss -u autoprefixer -r dist/main.css",
+    "postcss": "postcss -u autoprefixer -u css-mqpacker -r dist/main.css",
     "scss": "node-sass --source-map-embed src/scss/index.scss dist/main.css && npm run postcss",
     "watch:js": "npm run webpack -- --watch",
     "watch:scss": "onchange 'src/scss/*.scss' -i -- npm run scss",
@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
+    "dexie": "^1.5.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-router-dom": "^4.1.1"
@@ -29,8 +30,9 @@
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.5.0",
+    "babel-preset-env": "^1.5.1",
     "babel-preset-react": "^6.24.1",
+    "css-mqpacker": "^6.0.0",
     "csso-cli": "^1.0.0",
     "eslint": "^3.19.0",
     "eslint-plugin-compat": "^1.0.2",
@@ -39,7 +41,7 @@
     "node-sass": "^4.5.3",
     "onchange": "^3.2.1",
     "postcss-cli": "^4.0.0",
-    "webpack": "^2.5.1"
+    "webpack": "^2.6.0"
   },
   "browserslist": [
     "last 2 versions",
