@@ -50,6 +50,7 @@ export default class CreateCardSide extends React.Component {
 
     render() {
         const { index, side, handleImageUpload } = this.props;
+        const toolboxMessage = this.state.card[side].toolboxMessage;
 
         return (
             <div className={`side-container${this.state.card.visibleSide === side ? " visible": ""}`}>
@@ -61,6 +62,7 @@ export default class CreateCardSide extends React.Component {
                             <input type="file" className="image-upload-input"
                                 onChange={(event) => handleImageUpload(index, side, event.target.files[0])} />
                         </label>
+                        {toolboxMessage && <div className="create-side-toolbox-mesasge">{toolboxMessage}</div>}
                     </div>
                     <div className="side-content create-side-content">
                         {this.state.card[side].image && (
