@@ -94,40 +94,16 @@
     }
 }
 
-.study-side {
-    width: calc(50% - 4px);
-
-    @include breakpoint-smallest {
-        display: none;
-        width: 100%;
-
-        &.visible {
-            display: block;
-        }
-    }
-}
-
-.study-side-content-container {
-    overflow: auto;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    height: 300px;
-    padding: 16px;
-    background-color: $bg-color1;
-
-    @include breakpoint-small {
-        padding: 8px;
-    }
-
-    @include breakpoint-smallest {
-        height: 240px;
-    }
-}
-
 .study-side-content {
-    margin: auto;
-    white-space: pre-line;
+    height: 333px;
+}
+
+.study-side-text {
+    display: flex;
+
+    div {
+        margin: auto;
+    }
 }
 
 .study-reveal-btn {

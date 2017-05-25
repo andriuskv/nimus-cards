@@ -1,4 +1,5 @@
 import React from "react";
+import { getSets, addSet, removeSet } from "../../services/db";
 import ListSets from "../views/list-sets";
 
 export default class ListSetsContainer extends React.Component {
@@ -6,16 +7,23 @@ export default class ListSetsContainer extends React.Component {
         super(props);
 
         this.state = {
-            sets: this.getSets(props.location.state)
+            sets: [],
+            loading: true
         };
     }
 
-    saveSets(sets) {
-        localStorage.setItem("nimus-cards-sets", JSON.stringify(sets));
+    componentDidMount() {
+        this.getSets(this.props.location.state)
+        .then(sets => {
+            this.setState({
+                sets,
+                loading: false
+            });
+        });
     }
 
-    getSets(newSet) {
-        const sets = JSON.parse(localStorage.getItem("nimus-cards-sets")) || [];
+    async getSets(newSet) {
+        const sets = await getSets();
 
         if (newSet) {
             const index = sets.findIndex(set => set.id === newSet.id);
@@ -26,7 +34,7 @@ export default class ListSetsContainer extends React.Component {
             else {
                 sets.splice(index, 1, newSet);
             }
-            this.saveSets(sets);
+            addSet(newSet);
         }
         return sets;
     }
@@ -40,16 +48,21 @@ export default class ListSetsContainer extends React.Component {
 
     removeSet = index => {
         const sets = [].concat(this.state.sets);
-        const confirmed = confirm(`Are you sure you want to remve ${sets[index].title} set?`);
+        const set = sets[index];
+        const confirmed = confirm(`Are you sure you want to remve ${set.title} set?`);
 
         if (confirmed) {
+            removeSet(set._id);
             sets.splice(index, 1);
             this.setState({ sets });
-            this.saveSets(sets);
         }
     }
 
     render() {
-        return <ListSets sets={this.state.sets} editSet={this.editSet} removeSet={this.removeSet} />;
+        return <ListSets
+            sets={this.state.sets}
+            loading={this.state.loading}
+            editSet={this.editSet}
+            removeSet={this.removeSet} />;
     }
 }

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Container from "./container";
 import Icon from "./icon";
 
-export default function ListSets({ sets, editSet, removeSet }) {
+export default function ListSets({ sets, loading, editSet, removeSet }) {
     function renderListItem(set, index) {
         return (
             <li className="list-item" key={set.id}>
@@ -29,10 +29,10 @@ export default function ListSets({ sets, editSet, removeSet }) {
 
     return (
         <Container title="Your Flashcard Sets">
-            {sets.length ?
+            {!loading && (sets.length ?
                 <ul>{sets.map(renderListItem)}</ul> :
                 <p className="set-list-message">You have no flashcard sets</p>
-            }
+            )}
             <div className="container-footer">
                 <Link to="/flashcards/create" className="btn">Create New Set</Link>
             </div>

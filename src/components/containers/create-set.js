@@ -19,11 +19,7 @@ export default class CreateSetContainer extends React.Component {
         return Object.assign({
             id: this.getRandomString(),
             title: "",
-            cards: [{
-                id: this.getRandomString(),
-                front: "",
-                back: ""
-            }]
+            cards: [this.getNewCard()]
         }, state);
     }
 
@@ -63,14 +59,22 @@ export default class CreateSetContainer extends React.Component {
         }
     }
 
-    getNewCard = ({ target }) => {
+    getNewCard() {
+        return {
+            id: this.getRandomString(),
+            front: {
+                text: ""
+            },
+            back: {
+                text: ""
+            }
+        };
+    }
+
+    addCard = ({ target }) => {
         const set = Object.assign({}, this.state.set);
 
-        set.cards.push({
-            id: this.getRandomString(),
-            front: "",
-            back: ""
-        });
+        set.cards.push(this.getNewCard());
 
         this.setState({ set }, () => {
             target.scrollIntoView();
@@ -82,8 +86,8 @@ export default class CreateSetContainer extends React.Component {
         const [side, index] = id.split("-");
         const card = set.cards[index];
 
-        if (card[side] !== textContent) {
-            card[side] = textContent;
+        if (card[side].text !== textContent) {
+            card[side].text = textContent;
             this.setState({ set });
         }
     }
@@ -95,13 +99,22 @@ export default class CreateSetContainer extends React.Component {
         this.setState({ set });
     }
 
+    handleImageUpload = (index, side, image) => {
+        const set = Object.assign({}, this.state.set);
+        const card = set.cards[index];
+
+        card[side].image = image;
+        this.setState({ set });
+    }
+
     render() {
         return <CreateSet
             set={this.state.set}
             message={this.state.message}
             handleSubmit={this.handleSubmit}
             handleInput={this.handleInput}
-            getNewCard={this.getNewCard}
-            removeCard = {this.removeCard} />;
+            addCard={this.addCard}
+            removeCard={this.removeCard}
+            handleImageUpload={this.handleImageUpload} />;
     }
 }
