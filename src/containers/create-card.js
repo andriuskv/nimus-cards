@@ -24,7 +24,7 @@ export default class CreateCardContainer extends React.Component {
     }
 
     render() {
-        const { index, handleImageUpload } = this.props;
+        const { index, handleFileUpload } = this.props;
         const side = this.state.card.visibleSide;
         const oppositeSide = this.getOppositeSide(side);
 
@@ -50,13 +50,13 @@ export default class CreateCardContainer extends React.Component {
                         side="front"
                         oppositeSide="back"
                         card={this.state.card}
-                        handleImageUpload={handleImageUpload} />
+                        handleFileUpload={handleFileUpload} />
                     <CardSide
                         index={index}
                         side="back"
                         oppositeSide="front"
                         card={this.state.card}
-                        handleImageUpload={handleImageUpload} />
+                        handleFileUpload={handleFileUpload} />
                 </div>
             </li>
         );

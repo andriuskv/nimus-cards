@@ -33,7 +33,7 @@ export default class CreateSetContainer extends React.Component {
     }
 
     hasSideContent(side) {
-        return side.text || side.image;
+        return side.text || side.attachment;
     }
 
     handleSubmit = event => {
@@ -93,6 +93,10 @@ export default class CreateSetContainer extends React.Component {
     }
 
     handleInput = ({ target: { id, textContent } }) => {
+        if (!id) {
+            return;
+        }
+
         const set = Object.assign({}, this.state.set);
         const [side, index] = id.split("-");
         const card = set.cards[index];
@@ -110,22 +114,27 @@ export default class CreateSetContainer extends React.Component {
         this.setState({ set });
     }
 
-    handleImageUpload = (index, side, file) => {
+    handleFileUpload = (target, index, side, type) => {
         const set = Object.assign({}, this.state.set);
         const card = set.cards[index];
+        const cardSide = card[side];
+        const [file] = target.files;
 
-        if (file.type.split("/")[0] === "image") {
-            card[side].image = file;
+        if (file.type.split("/")[0] === type) {
+            cardSide.attachment = Object.assign({}, { type, file });
         }
         else {
-            card[side].toolboxMessage = "File is not an image";
+            cardSide.toolboxMessage = `File is not an ${type}`;
         }
         this.setState({ set });
 
-        setTimeout(() => {
-            card[side].toolboxMessage = "";
-            this.setState({ set });
-        }, 3200);
+        if (cardSide.toolboxMessage) {
+            setTimeout(() => {
+                cardSide.toolboxMessage = "";
+                this.setState({ set });
+            }, 3200);
+        }
+        target.value = "";
     }
 
     render() {
@@ -136,6 +145,6 @@ export default class CreateSetContainer extends React.Component {
             handleInput={this.handleInput}
             addCard={this.addCard}
             removeCard={this.removeCard}
-            handleImageUpload={this.handleImageUpload} />;
+            handleFileUpload={this.handleFileUpload} />;
     }
 }

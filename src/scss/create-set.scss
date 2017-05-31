@@ -53,9 +53,14 @@
     padding-left: 4px;
     padding-right: 4px;
     border-bottom: 1px solid $border-color;
+
+    .icon {
+        width: 18px;
+        height: 18px;
+    }
 }
 
-.image-upload-input {
+.file-input {
     display: none;
 }
 
@@ -69,7 +74,7 @@
     height: 276px;
 }
 
-.create-side-image-btn {
+.create-side-attachment-btn {
     position: absolute;
     top: 0;
     right: 0;
