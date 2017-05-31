@@ -1,9 +1,9 @@
 import React from "react";
-import { getSets } from "../../services/db";
-import { getSettings } from "../../services/settings";
-import Container from "../views/container";
-import StudySet from "../views/study-set";
-import StudySetScore from "../views/study-set-score";
+import { getSets } from "../services/db";
+import { getSettings } from "../services/settings";
+import Container from "../components/container";
+import StudySet from "../components/study-set";
+import StudySetScore from "../components/study-set-score";
 
 export default class StudySetContainer extends React.Component {
     constructor(props) {

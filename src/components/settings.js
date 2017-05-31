@@ -1,5 +1,5 @@
 import React from "react";
-import Container from "../views/container";
+import Container from "./container";
 
 export default function Settings({ settings, handleChange }) {
     return (

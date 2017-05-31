@@ -1,5 +1,5 @@
 import React from "react";
-import CreateSet from "../views/create-set";
+import CreateSet from "../components/create-set";
 
 export default class CreateSetContainer extends React.Component {
     constructor(props) {

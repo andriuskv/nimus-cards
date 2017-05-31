@@ -1,6 +1,6 @@
 import React from "react";
-import { getSets, addSet, removeSet } from "../../services/db";
-import ListSets from "../views/list-sets";
+import { getSets, addSet, removeSet } from "../services/db";
+import ListSets from "../components/list-sets";
 
 export default class ListSetsContainer extends React.Component {
     constructor(props) {

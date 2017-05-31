@@ -3,13 +3,13 @@ import "babel-polyfill";
 import React from "react";
 import { render } from "react-dom";
 import { HashRouter, Route, Switch } from "react-router-dom";
-import Header from "./components/views/header";
-import Home from "./components/views/home";
-import ListSetsContainer from "./components/containers/list-sets";
-import CreateSetContainer from "./components/containers/create-set";
-import StudySetContainer from "./components/containers/study-set";
-import SettingsContainer from "./components/containers/settings";
-import NoMatch from "./components/views/no-match";
+import Header from "./components/header";
+import Home from "./components/home";
+import ListSetsContainer from "./containers/list-sets";
+import CreateSetContainer from "./containers/create-set";
+import StudySetContainer from "./containers/study-set";
+import SettingsContainer from "./containers/settings";
+import NoMatch from "./components/no-match";
 
 render(
     <HashRouter>
@@ -26,7 +26,7 @@ render(
         </div>
     </HashRouter>
 , document.getElementById("app"));
-
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(console.log);
-}
+//
+// if ("serviceWorker" in navigator) {
+//     navigator.serviceWorker.register("./sw.js").catch(console.log);
+// }
