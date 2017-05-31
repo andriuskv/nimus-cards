@@ -1,5 +1,5 @@
 import React from "react";
-import Icon from "./icon";
+import Icon from "../components/icon";
 import CardSide from "./create-card-side";
 
 export default class CreateCardContainer extends React.Component {

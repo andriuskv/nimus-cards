@@ -1,6 +1,6 @@
 import React from "react";
 import Container from "./container";
-import Card from "./create-card";
+import Card from "../containers/create-card";
 
 export default function CreateSet({ set, message, handleSubmit, handleInput, addCard, removeCard, handleImageUpload }) {
     function renderList() {

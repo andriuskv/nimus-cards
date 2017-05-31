@@ -1,6 +1,6 @@
 import React from "react";
-import { getSettings, saveSettings } from "../../services/settings";
-import Settings from "../views/settings";
+import { getSettings, saveSettings } from "../services/settings";
+import Settings from "../components/settings";
 
 export default class SettingsContainer extends React.Component {
     constructor(props) {
