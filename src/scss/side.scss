@@ -34,7 +34,7 @@
     }
 }
 
-.side-image-container {
+.side-attachment-container {
     position: relative;
     flex-grow: 0;
     flex-shrink: 0;
@@ -58,6 +58,14 @@
         width: 100%;
         object-fit: scale-down;
     }
+}
+
+.side-audio {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 2px 0 $shadow-color;
 }
 
 .side-text {

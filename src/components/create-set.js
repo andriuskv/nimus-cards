@@ -2,14 +2,14 @@ import React from "react";
 import Container from "./container";
 import Card from "../containers/create-card";
 
-export default function CreateSet({ set, message, handleSubmit, handleInput, addCard, removeCard, handleImageUpload }) {
+export default function CreateSet({ set, message, handleSubmit, handleInput, addCard, removeCard, handleFileUpload }) {
     function renderList() {
         return (
             <ul onInput={handleInput}>
                 {set.cards.map((card, index) => (
                     <Card key={card.id} index={index} card={card} cardCount={set.cards.length}
                         removeCard={removeCard}
-                        handleImageUpload={handleImageUpload} />
+                        handleFileUpload={handleFileUpload} />
                 ))}
             </ul>
         );
