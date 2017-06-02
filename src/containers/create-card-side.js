@@ -33,13 +33,6 @@ export default class CreateCardSide extends React.Component {
         return <div className="create-side-message">{message}</div>;
     }
 
-    setSideText = element => {
-        if (element && !element.rendered) {
-            element.textContent = this.props.card[this.props.side].text;
-            element.rendered = true;
-        }
-    }
-
     removeAttachment = () => {
         const card = Object.assign({}, this.state.card);
         const side = card[this.props.side];
@@ -98,8 +91,8 @@ export default class CreateCardSide extends React.Component {
                     </div>
                     <div className="side-content create-side-content">
                         {this.renderAttachment(card[side].attachment)}
-                        <div id={`${side}-${index}`} className="side-text" ref={this.setSideText}
-                            contentEditable></div>
+                        <textarea id={`${side}-${index}`} className="create-side-text-input side-text"
+                            defaultValue={card[side].text}></textarea>
                     </div>
                     {this.renderMessage()}
                 </div>

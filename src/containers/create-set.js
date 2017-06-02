@@ -92,7 +92,7 @@ export default class CreateSetContainer extends React.Component {
         });
     }
 
-    handleInput = ({ target: { id, textContent } }) => {
+    handleInput = ({ target: { id, value } }) => {
         if (!id) {
             return;
         }
@@ -101,8 +101,8 @@ export default class CreateSetContainer extends React.Component {
         const [side, index] = id.split("-");
         const card = set.cards[index];
 
-        if (card[side].text !== textContent) {
-            card[side].text = textContent;
+        if (card[side].text !== value) {
+            card[side].text = value;
             this.setState({ set });
         }
     }
