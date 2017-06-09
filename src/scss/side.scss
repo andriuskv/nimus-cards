@@ -66,6 +66,10 @@
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 2px 0 $shadow-color;
+
+    @include breakpoint-smallest {
+        transform: translate(-50%, -50%) scale(0.88);
+    }
 }
 
 .side-text {
