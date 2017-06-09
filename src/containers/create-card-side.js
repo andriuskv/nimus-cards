@@ -41,6 +41,13 @@ export default class CreateCardSide extends React.Component {
         this.setState({ card });
     }
 
+    handleTextSizeSelect = (event, side) => {
+        const card = this.state.card;
+
+        card[side].textSize = event.target.value;
+        this.setState({ card });
+    }
+
     renderUploadBtn(index, side, type) {
         return (
             <label className="btn-icon" tabIndex="0" title={`Upload ${type}`}>
@@ -100,9 +107,9 @@ export default class CreateCardSide extends React.Component {
                         </select>
                     </div>
                     <div className="side-content create-side-content">
-                        {this.renderAttachment(card[side].attachment)}
-                        <textarea id={`${side}-${index}`} className="create-side-text-input side-text"
-                            defaultValue={card[side].text}></textarea>
+                        {this.renderAttachment(cardSide.attachment)}
+                        <textarea className="create-side-text-input side-text"
+                            defaultValue={cardSide.text} style={style} onInput={event => this.handleInput(event, side)}></textarea>
                     </div>
                     {this.renderMessage()}
                 </div>
