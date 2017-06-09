@@ -92,21 +92,6 @@ export default class CreateSetContainer extends React.Component {
         });
     }
 
-    handleInput = ({ target: { id, value } }) => {
-        if (!id) {
-            return;
-        }
-
-        const set = Object.assign({}, this.state.set);
-        const [side, index] = id.split("-");
-        const card = set.cards[index];
-
-        if (card[side].text !== value) {
-            card[side].text = value;
-            this.setState({ set });
-        }
-    }
-
     removeCard = index => {
         const set = Object.assign({}, this.state.set);
 
@@ -114,37 +99,12 @@ export default class CreateSetContainer extends React.Component {
         this.setState({ set });
     }
 
-    handleFileUpload = (target, index, side, type) => {
-        const set = Object.assign({}, this.state.set);
-        const card = set.cards[index];
-        const cardSide = card[side];
-        const [file] = target.files;
-
-        if (file.type.split("/")[0] === type) {
-            cardSide.attachment = Object.assign({}, { type, file });
-        }
-        else {
-            cardSide.toolboxMessage = `File is not an ${type}`;
-        }
-        this.setState({ set });
-
-        if (cardSide.toolboxMessage) {
-            setTimeout(() => {
-                cardSide.toolboxMessage = "";
-                this.setState({ set });
-            }, 3200);
-        }
-        target.value = "";
-    }
-
     render() {
         return <CreateSet
             set={this.state.set}
             message={this.state.message}
             handleSubmit={this.handleSubmit}
-            handleInput={this.handleInput}
             addCard={this.addCard}
-            removeCard={this.removeCard}
-            handleFileUpload={this.handleFileUpload} />;
+            removeCard={this.removeCard} />;
     }
 }

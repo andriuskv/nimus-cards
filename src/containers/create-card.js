@@ -24,7 +24,7 @@ export default class CreateCardContainer extends React.Component {
     }
 
     render() {
-        const { index, handleFileUpload } = this.props;
+        const { index, removeCard } = this.props;
         const side = this.state.card.visibleSide;
         const oppositeSide = this.getOppositeSide(side);
 
@@ -38,25 +38,20 @@ export default class CreateCardContainer extends React.Component {
                         <Icon name="switch" />
                     </button>
                     {this.props.cardCount > 1 && (
-                        <button type="button" className="btn-icon" title="Remove card"
-                            onClick={() => this.props.removeCard(index)}>
+                        <button type="button" className="btn-icon" title="Remove card" onClick={() => removeCard(index)}>
                             <Icon name="remove" />
                         </button>
                     )}
                 </div>
                 <div className="create-card">
                     <CardSide
-                        index={index}
                         side="front"
                         oppositeSide="back"
-                        card={this.state.card}
-                        handleFileUpload={handleFileUpload} />
+                        card={this.state.card} />
                     <CardSide
-                        index={index}
                         side="back"
                         oppositeSide="front"
-                        card={this.state.card}
-                        handleFileUpload={handleFileUpload} />
+                        card={this.state.card} />
                 </div>
             </li>
         );
