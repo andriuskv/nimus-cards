@@ -27,6 +27,16 @@ export default function CardSide({ side, card, revealBack }) {
         );
     }
 
+    function getTextStyles() {
+        const { textSize } = card[side];
+
+        if (textSize) {
+            return {
+                fontSize: `${card[side].textSize}px`
+            };
+        }
+    }
+
     return (
         <div className={`side-container${isVisible(side, card.back) ? " visible" : ""}`}>
             <div className="side-name">{side}</div>
@@ -35,7 +45,7 @@ export default function CardSide({ side, card, revealBack }) {
                     {renderAttachment(card[side].attachment)}
                     {card[side].text && (
                         <div className="side-text study-side-text">
-                            <div>{card[side].text}</div>
+                            <div style={getTextStyles()}>{card[side].text}</div>
                         </div>
                     )}
                 </div> :

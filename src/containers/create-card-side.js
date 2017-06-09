@@ -77,8 +77,12 @@ export default class CreateCardSide extends React.Component {
     }
 
     render() {
-        const { index, card, side } = this.props;
-        const toolboxMessage = card[side].toolboxMessage;
+        const { card, side } = this.props;
+        const cardSide = card[side];
+        const toolboxMessage = cardSide.toolboxMessage;
+        const style = {
+            fontSize: `${cardSide.textSize}px`
+        };
 
         return (
             <div className={`side-container${card.visibleSide === side ? " visible": ""}`}>
@@ -88,6 +92,12 @@ export default class CreateCardSide extends React.Component {
                         {this.renderUploadBtn(index, side, "image")}
                         {this.renderUploadBtn(index, side, "audio")}
                         {toolboxMessage && <div className="create-side-toolbox-mesasge">{toolboxMessage}</div>}
+                        <select defaultValue={cardSide.textSize || 16} title="Text size" onInput={event => this.handleTextSizeSelect(event, side)} className="input create-side-select">
+                            <option value="16">16px</option>
+                            <option value="24">24px</option>
+                            <option value="36">36px</option>
+                            <option value="48">48px</option>
+                        </select>
                     </div>
                     <div className="side-content create-side-content">
                         {this.renderAttachment(card[side].attachment)}
