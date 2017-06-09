@@ -41,6 +41,37 @@ export default class CreateCardSide extends React.Component {
         this.setState({ card });
     }
 
+    handleInput = ({ target: { value } }, side) => {
+        const card = this.state.card;
+
+        if (value !== card[side].text) {
+            card[side].text = value;
+            this.setState({ card });
+        }
+    }
+
+    handleFileUpload = (target, side, type) => {
+        const card = this.state.card;
+        const cardSide = card[side];
+        const [file] = target.files;
+
+        if (file.type.split("/")[0] === type) {
+            cardSide.attachment = Object.assign({}, { type, file });
+        }
+        else {
+            cardSide.toolboxMessage = `File is not an ${type}`;
+        }
+        this.setState({ card });
+
+        if (cardSide.toolboxMessage) {
+            setTimeout(() => {
+                cardSide.toolboxMessage = "";
+                this.setState({ card });
+            }, 3200);
+        }
+        target.value = "";
+    }
+
     handleTextSizeSelect = (event, side) => {
         const card = this.state.card;
 
@@ -48,12 +79,12 @@ export default class CreateCardSide extends React.Component {
         this.setState({ card });
     }
 
-    renderUploadBtn(index, side, type) {
+    renderUploadBtn(side, type) {
         return (
             <label className="btn-icon" tabIndex="0" title={`Upload ${type}`}>
                 <Icon name={type} />
                 <input type="file" className="file-input"
-                    onChange={({ target }) => this.props.handleFileUpload(target, index, side, type)} />
+                    onChange={({ target }) => this.handleFileUpload(target, side, type)} />
             </label>
         );
     }
@@ -96,8 +127,8 @@ export default class CreateCardSide extends React.Component {
                 <span className="side-name">{side}</span>
                 <div className="side">
                     <div className="create-side-toolbox">
-                        {this.renderUploadBtn(index, side, "image")}
-                        {this.renderUploadBtn(index, side, "audio")}
+                        {this.renderUploadBtn(side, "image")}
+                        {this.renderUploadBtn(side, "audio")}
                         {toolboxMessage && <div className="create-side-toolbox-mesasge">{toolboxMessage}</div>}
                         <select defaultValue={cardSide.textSize || 16} title="Text size" onInput={event => this.handleTextSizeSelect(event, side)} className="input create-side-select">
                             <option value="16">16px</option>
