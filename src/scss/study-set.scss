@@ -100,9 +100,11 @@
 
 .study-side-text {
     display: flex;
+    padding: 8px;
 
     div {
         margin: auto;
+        line-height: 1;
     }
 }
 
