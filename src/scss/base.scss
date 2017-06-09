@@ -86,7 +86,7 @@ ul {
 }
 
 .input {
-    @include input-styles(8px,  $alt-text-color, $bg-color1);
+    @include input-styles(8px,  $text-color, $bg-color1);
 }
 
 .btn {
