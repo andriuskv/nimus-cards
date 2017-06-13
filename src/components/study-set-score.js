@@ -33,19 +33,17 @@ export default function StudySetScore({ score, mode, cardCount, initNextStandard
                 </div>
                 <div className="set-score-bars">
                     <div className="set-score-bar-container">
-                        <span className="set-score-bar-name">Right </span>
+                        <span className="set-score-bar-name">Right</span>
                         <div className="set-score-bar">
-                            <StudyScoreBar score={score} type="final" barName="right"
-                                className="set-score-bar-inner"
-                            />
+                            <StudyScoreBar score={score} type="maxWidth" barName="right"
+                                className="set-score-bar-inner" />
                         </div>
                     </div>
                     <div className="set-score-bar-container">
-                        <span className="set-score-bar-name">Wrong </span>
+                        <span className="set-score-bar-name">Wrong</span>
                         <div className="set-score-bar">
-                            <StudyScoreBar score={score} type="final" barName="wrong"
-                                className="set-score-bar-inner"
-                            />
+                            <StudyScoreBar score={score} type="maxWidth" barName="wrong"
+                                className="set-score-bar-inner" />
                         </div>
                     </div>
                 </div>

@@ -5,15 +5,11 @@ export default function StudyScoreBar({ score, type, barName, className = "" }) 
         if (!score.total) {
             return <div className={`score-bar score-${barName}-bar`}>{score[barName]}</div>;
         }
+        const style = {
+            [type]: `${score[barName] / score.total * 100}%`
+        };
 
-        if (score[barName]) {
-            const width = score[barName] / score.total * 100;
-            const propName = type === "study" ? "width" : "maxWidth";
-
-            return <div className={`score-bar score-${barName}-bar expand ${className}`}
-                style={{ [propName]: `${width}%` }}>{score[barName]}</div>;
-        }
-        return null;
+        return <div className={`score-bar score-${barName}-bar ${className}`} style={style}>{score[barName]}</div>;
     }
 
     return renderBar(score, barName);

@@ -15,12 +15,17 @@
     margin-bottom: 4px;
 }
 
+.study-score-bar-inner {
+    transition: width 0.4s;
+}
+
 .score-bar {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 50%;
     padding: 1px 0;
+    overflow: hidden;
 }
 
 .score-right-bar {
@@ -198,13 +203,11 @@
 
 .set-score-bar-inner {
     width: 0;
-    animation-duration: 0.8s;
+    animation-name: expand;
+    animation-duration: 0.6s;
+    animation-delay: 0.2s;
     animation-fill-mode: forwards;
     animation-timing-function: ease-out;
-
-    &.expand {
-        animation-name: expand;
-    }
 }
 
 .set-score-btn-container {
