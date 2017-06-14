@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dist": "rm -rf dist && mkdir dist && cp -R src/index.html src/sw.js ./dist",
-    "webpack": "webpack --progress --colors --config ./webpack.config.js",
+    "webpack": "webpack --progress --colors",
     "postcss": "postcss -u autoprefixer -u css-mqpacker -r dist/main.css",
     "scss": "node-sass --source-map-embed src/scss/index.scss dist/main.css && npm run postcss",
     "watch:js": "npm run webpack -- --watch",
@@ -20,8 +20,8 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "dexie": "^1.5.1",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "react": "^15.6.0",
+    "react-dom": "^15.6.0",
     "react-router-dom": "^4.1.1"
   },
   "devDependencies": {
@@ -35,8 +35,7 @@
     "css-mqpacker": "^6.0.1",
     "csso-cli": "^1.0.0",
     "eslint": "^4.0.0",
-    "eslint-plugin-compat": "^1.0.3",
-    "eslint-plugin-react": "^7.0.1",
+    "eslint-plugin-react": "^7.1.0",
     "live-server": "^1.2.0",
     "node-sass": "^4.5.3",
     "onchange": "^3.2.1",

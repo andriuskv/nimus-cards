@@ -9,8 +9,7 @@
         }
     },
     "plugins": [
-        "react",
-        "compat"
+        "react"
     ],
     "env": {
         "browser": true,
