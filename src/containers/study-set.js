@@ -20,8 +20,7 @@ export default class StudySetContainer extends React.Component {
     }
 
     componentDidMount() {
-        getSets()
-        .then(sets => {
+        getSets().then(sets => {
             const setId = this.props.match.params.id;
             const set = sets.find(set => set.id === setId);
 

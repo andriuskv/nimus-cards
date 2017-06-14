@@ -37,7 +37,7 @@ export default class CreateSetContainer extends React.Component {
     }
 
     handleSubmit = event => {
-        const title = event.target.elements.title.value.trim();
+        const title = document.getElementById("js-create-set-title").value.trim();
 
         event.preventDefault();
 

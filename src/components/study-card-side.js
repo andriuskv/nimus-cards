@@ -10,7 +10,7 @@ export default function CardSide({ side, card, revealBack }) {
             return;
         }
         const cardSide = card[side];
-        const src = URL.createObjectURL(attachment.file);
+        const src = typeof attachment.file === "string" ? attachment.file : URL.createObjectURL(attachment.file);
         let element = null;
 
         if (attachment.type === "image") {
@@ -21,7 +21,7 @@ export default function CardSide({ side, card, revealBack }) {
         }
 
         return (
-            <div className={`side-attachment-container${cardSide.text ? "": " full"}`}>
+            <div className={`side-panel-container${cardSide.text ? "": " full"}`}>
                 {element}
             </div>
         );
@@ -41,19 +41,21 @@ export default function CardSide({ side, card, revealBack }) {
         <div className={`side-container${isVisible(side, card.back) ? " visible" : ""}`}>
             <div className="side-name">{side}</div>
             <div className="side">
-                {card[side] ? <div className="side-content study-side-content">
-                    {renderAttachment(card[side].attachment)}
-                    {card[side].text && (
-                        <div className="side-text study-side-text">
-                            <div style={getTextStyles()}>{card[side].text}</div>
-                        </div>
-                    )}
-                </div> :
-                <div className="side-content study-side-content">
-                    <button className="btn side-text study-side-text study-reveal-btn" onClick={revealBack}>
-                        <div>Reveal</div>
-                    </button>
-                </div>}
+                {card[side] ?
+                    <div className="side-content study-side-content">
+                        {renderAttachment(card[side].attachment)}
+                        {card[side].text && (
+                            <div className="side-text study-side-text">
+                                <div style={getTextStyles()}>{card[side].text}</div>
+                            </div>
+                        )}
+                    </div> :
+                    <div className="side-content study-side-content">
+                        <button className="btn side-text study-side-text study-reveal-btn" onClick={revealBack}>
+                            <div>Reveal</div>
+                        </button>
+                    </div>
+                }
             </div>
         </div>
     );

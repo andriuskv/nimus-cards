@@ -6,6 +6,7 @@ export default class CreateCardSide extends React.Component {
         super(props);
 
         this.state = {
+            side: props.side,
             card: props.card
         };
     }
@@ -34,15 +35,14 @@ export default class CreateCardSide extends React.Component {
     }
 
     removeAttachment = () => {
-        const card = Object.assign({}, this.state.card);
-        const side = card[this.props.side];
+        const { card, side } = this.state;
 
-        delete side.attachment;
+        delete card[side].attachment;
         this.setState({ card });
     }
 
-    handleInput = ({ target: { value } }, side) => {
-        const card = this.state.card;
+    handleInput = ({ target: { value } }) => {
+        const { card, side } = this.state;
 
         if (value !== card[side].text) {
             card[side].text = value;
@@ -50,42 +50,142 @@ export default class CreateCardSide extends React.Component {
         }
     }
 
-    handleFileUpload = (target, side, type) => {
-        const card = this.state.card;
-        const cardSide = card[side];
-        const [file] = target.files;
+    showUploadPanelMessage(message) {
+        const { card, side } = this.state;
+        card[side].panelMessage = message;
 
-        if (file.type.split("/")[0] === type) {
-            cardSide.attachment = Object.assign({}, { type, file });
-        }
-        else {
-            cardSide.toolboxMessage = `File is not an ${type}`;
-        }
         this.setState({ card });
 
-        if (cardSide.toolboxMessage) {
-            setTimeout(() => {
-                cardSide.toolboxMessage = "";
-                this.setState({ card });
-            }, 3200);
-        }
-        target.value = "";
+        setTimeout(() => {
+            card[side].panelMessage = "";
+            this.setState({ card });
+        }, 3200);
     }
 
-    handleTextSizeSelect = (event, side) => {
-        const card = this.state.card;
+    handleFileUpload = ({ target }) => {
+        const { uploadType: type } = this.state;
+        const [file] = target.files;
+
+        target.value = "";
+
+        if (file.type.split("/")[0] === type) {
+            this.addAttachment(file, type);
+            return;
+        }
+        this.showUploadPanelMessage(`File is not an ${type}`);
+    }
+
+    addAttachment(file, type) {
+        const { card, side } = this.state;
+        card[side].attachment = Object.assign({}, { file, type });
+
+        this.setState({
+            card,
+            isUploadPanelVisible: false,
+            uploadType: ""
+        });
+    }
+
+    handleFileUploadFormURL = (event) => {
+        const url = event.target.elements.url.value.trim();
+        const { uploadType: type } = this.state;
+
+        event.preventDefault();
+
+        if (!url) {
+            this.showUploadPanelMessage(`Please specify valid url`);
+            return;
+        }
+        if (type === "image") {
+            const image = new Image();
+
+            image.onload = () => {
+                this.addAttachment(url, type);
+            };
+
+            image.onerror = event => {
+                this.showUploadPanelMessage(`URL doesn't contain ${type} file`);
+                console.log(event);
+            };
+
+            image.src = url;
+        }
+        else if (type === "audio") {
+            const audio = new Audio(url);
+
+            audio.onloadedmetadata = () => {
+                this.addAttachment(url, type);
+            };
+
+            audio.onerror = event => {
+                this.showUploadPanelMessage(`URL doesn't contain ${type} file`);
+                console.log(event);
+            };
+        }
+    }
+
+    handleTextSizeSelect = event => {
+        const { card, side } = this.state;
 
         card[side].textSize = event.target.value;
         this.setState({ card });
     }
 
-    renderUploadBtn(side, type) {
+    showUploadPanel = type => {
+        this.setState({
+            isUploadPanelVisible: true,
+            uploadType: type
+        });
+    }
+
+    closeUploadPanel = () => {
+        this.setState({
+            isUploadPanelVisible: false,
+            uploadType: ""
+        });
+    }
+
+    renderFileUploadBtn() {
         return (
-            <label className="btn-icon" tabIndex="0" title={`Upload ${type}`}>
-                <Icon name={type} />
-                <input type="file" className="file-input"
-                    onChange={({ target }) => this.handleFileUpload(target, side, type)} />
+            <label className="btn" tabIndex="0" title={`Upload ${this.state.uploadType}`}>
+                <span>Upload</span>
+                <input type="file" className="file-input" onChange={this.handleFileUpload} />
             </label>
+        );
+    }
+
+    renderUploadPanel(cardSide) {
+        const message = cardSide.panelMessage;
+
+        return (
+            <div className="side-panel-container">
+                <ul className="create-side-upload-items">
+                    <li className="create-side-upload-item create-side-upload-device">
+                        <div>Upload from device</div>
+                        {this.renderFileUploadBtn()}
+                    </li>
+                    <li className="create-side-upload-item create-side-upload-url">
+                        <div>Upload from url</div>
+                        <form onSubmit={this.handleFileUploadFormURL}>
+                            <input type="text" name="url" className="input" />
+                            <button className="btn">Upload</button>
+                        </form>
+                    </li>
+                </ul>
+                {message && <div className="create-side-upload-panel-message">{message}</div>}
+                <button type="button" className="btn-icon create-side-panel-btn"
+                    onClick={this.closeUploadPanel} title="Close panel">
+                    <Icon name="close" />
+                </button>
+            </div>
+        );
+    }
+
+    renderToolbarBtn(type) {
+        return (
+            <button type="button" className={`btn-icon toolbar-btn${this.state.uploadType === type ? " active" : ""}`} title={`Upload ${type}`} onClick={() => this.showUploadPanel(type)}>
+                <Icon name={type} />
+            </button>
         );
     }
 
@@ -93,7 +193,7 @@ export default class CreateCardSide extends React.Component {
         if (!attachment) {
             return null;
         }
-        const src = URL.createObjectURL(attachment.file);
+        const src = typeof attachment.file === "string" ? attachment.file : URL.createObjectURL(attachment.file);
         let element = null;
 
         if (attachment.type === "image") {
@@ -104,8 +204,8 @@ export default class CreateCardSide extends React.Component {
         }
 
         return (
-            <div className="side-attachment-container">
-                <button type="button" className="btn-icon create-side-attachment-btn"
+            <div className="side-panel-container">
+                <button type="button" className="btn-icon create-side-panel-btn"
                     onClick={this.removeAttachment} title="Remove attachment">
                     <Icon name="remove" />
                 </button>
@@ -115,9 +215,8 @@ export default class CreateCardSide extends React.Component {
     }
 
     render() {
-        const { card, side } = this.props;
+        const { card, side } = this.state;
         const cardSide = card[side];
-        const toolboxMessage = cardSide.toolboxMessage;
         const style = {
             fontSize: `${cardSide.textSize}px`
         };
@@ -126,11 +225,10 @@ export default class CreateCardSide extends React.Component {
             <div className={`side-container${card.visibleSide === side ? " visible": ""}`}>
                 <span className="side-name">{side}</span>
                 <div className="side">
-                    <div className="create-side-toolbox">
-                        {this.renderUploadBtn(side, "image")}
-                        {this.renderUploadBtn(side, "audio")}
-                        {toolboxMessage && <div className="create-side-toolbox-mesasge">{toolboxMessage}</div>}
-                        <select defaultValue={cardSide.textSize || 16} title="Text size" onInput={event => this.handleTextSizeSelect(event, side)} className="input create-side-select">
+                    <div className="create-side-toolbar">
+                        {this.renderToolbarBtn("image")}
+                        {this.renderToolbarBtn("audio")}
+                        <select defaultValue={cardSide.textSize || 16} title="Text size" onInput={this.handleTextSizeSelect} className="input create-side-select">
                             <option value="16">16px</option>
                             <option value="24">24px</option>
                             <option value="36">36px</option>
@@ -138,9 +236,12 @@ export default class CreateCardSide extends React.Component {
                         </select>
                     </div>
                     <div className="side-content create-side-content">
-                        {this.renderAttachment(cardSide.attachment)}
+                        {this.state.isUploadPanelVisible ?
+                            this.renderUploadPanel(cardSide) :
+                            this.renderAttachment(cardSide.attachment)
+                        }
                         <textarea className="create-side-text-input side-text"
-                            defaultValue={cardSide.text} style={style} onInput={event => this.handleInput(event, side)}></textarea>
+                            defaultValue={cardSide.text} style={style} onInput={this.handleInput}></textarea>
                     </div>
                     {this.renderMessage()}
                 </div>
