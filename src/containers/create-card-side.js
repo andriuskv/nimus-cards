@@ -11,29 +11,6 @@ export default class CreateCardSide extends React.Component {
         };
     }
 
-    hasSideContent(side) {
-        return side.text || side.attachment;
-    }
-
-    renderMessage() {
-        const { card, side, oppositeSide } = this.props;
-        const isCurrentSideEmpty = !this.hasSideContent(card[side]) && this.hasSideContent(card[oppositeSide]);
-        const isOppositeSideEmpty = !this.hasSideContent(card[oppositeSide]) && this.hasSideContent(card[side]);
-        let message = "";
-
-        if (isCurrentSideEmpty) {
-            message = `Please fill in card ${side}`;
-        }
-        else if (isOppositeSideEmpty && window.innerWidth <= 600) {
-            const capitalizedName = oppositeSide.charAt(0).toUpperCase() + oppositeSide.slice(1);
-            message = `${capitalizedName} side is empty`;
-        }
-        else {
-            return null;
-        }
-        return <div className="create-side-message">{message}</div>;
-    }
-
     removeAttachment = () => {
         const { card, side } = this.state;
 
@@ -243,7 +220,6 @@ export default class CreateCardSide extends React.Component {
                         <textarea className="create-side-text-input side-text"
                             defaultValue={cardSide.text} style={style} onInput={this.handleInput}></textarea>
                     </div>
-                    {this.renderMessage()}
                 </div>
             </div>
         );

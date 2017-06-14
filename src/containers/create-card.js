@@ -44,14 +44,8 @@ export default class CreateCardContainer extends React.Component {
                     )}
                 </div>
                 <div className="create-card">
-                    <CardSide
-                        side="front"
-                        oppositeSide="back"
-                        card={this.state.card} />
-                    <CardSide
-                        side="back"
-                        oppositeSide="front"
-                        card={this.state.card} />
+                    <CardSide side="front" card={this.state.card} />
+                    <CardSide side="back" card={this.state.card} />
                 </div>
             </li>
         );
