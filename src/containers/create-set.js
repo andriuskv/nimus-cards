@@ -36,10 +36,8 @@ export default class CreateSetContainer extends React.Component {
         return side.text || side.attachment;
     }
 
-    handleSubmit = event => {
+    handleSubmit = () => {
         const title = document.getElementById("js-create-set-title").value.trim();
-
-        event.preventDefault();
 
         if (!title) {
             this.showMessage("Please specify set title");
@@ -67,7 +65,9 @@ export default class CreateSetContainer extends React.Component {
                 pathname: "/flashcards",
                 state: set
             });
+            return;
         }
+        this.showMessage("Please fill in both card sides");
     }
 
     getNewCard() {
