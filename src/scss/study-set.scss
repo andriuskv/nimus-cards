@@ -1,3 +1,9 @@
+.study-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .study-header {
     margin-bottom: 8px;
     padding-bottom: 8px;
@@ -6,7 +12,7 @@
 
 .study-score-bar-name-container, .score-bar {
     font-size: 14px;
-    color: $alt-text-color;
+    color: $color-text-alt;
 }
 
 .study-score-bar-name-container {
@@ -39,7 +45,7 @@
 .study-score-table {
     display: flex;
     font-size: 14px;
-    color: $alt-text-color;
+    color: $color-text-alt;
 
     @include breakpoint-smallest {
         font-size: 13px;
@@ -83,12 +89,6 @@
     margin-bottom: 8px;
 }
 
-.study-container {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
 .study-card {
     display: flex;
     justify-content: space-between;
@@ -115,7 +115,7 @@
 
 .study-reveal-btn {
     width: 100%;
-    color: $alt-text-color;
+    color: $color-text-alt;
 
     &:hover {
         background-color: darken($bg-color1, 4%);
@@ -128,7 +128,7 @@
 
 .study-progress {
     margin-right: auto;
-    color: $alt-text-color;
+    color: $color-text-alt;
 
     @include breakpoint-smallest {
         font-size: 14px;

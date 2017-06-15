@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Container from "./container";
 import StudyScoreBar from "./study-score-bar";
 
-export default function StudySetScore({ score, mode, cardCount, initNextStandardRound, initNextLeitnerLevel }) {
+export default function StudySetScore({ title, score, mode, cardCount, initNextStandardRound, initNextLeitnerLevel }) {
     function renderStandardBtn() {
         return score.right !== score.total && (
             <button className="btn set-score-btn" onClick={initNextStandardRound}>Go to Next Round</button>
@@ -25,9 +26,11 @@ export default function StudySetScore({ score, mode, cardCount, initNextStandard
     }
 
     return (
-        <div className="set-score-container">
+        <Container title={title}>
+            <div className="set-score-container">
                 <h3 className="set-score-title">
-                    {mode === "standard" ? "Round" : "Level"} {score.currentLevel + 1} Results</h3>
+                    {mode === "standard" ? "Round" : "Level"} {score.currentLevel + 1} Results
+                </h3>
                 <div className="set-score-in-percent">
                     <span>{Math.round(score.right / score.total * 100)}%</span>
                 </div>
@@ -51,6 +54,7 @@ export default function StudySetScore({ score, mode, cardCount, initNextStandard
                     {mode === "standard" ? renderStandardBtn() : renderLeitnerBtn()}
                     <Link to="/flashcards" className="btn">Close</Link>
                 </div>
-        </div>
+            </div>
+        </Container>
     );
 }

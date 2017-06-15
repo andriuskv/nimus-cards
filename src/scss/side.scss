@@ -1,7 +1,7 @@
 .side-name {
     margin-bottom: 4px;
     font-size: 14px;
-    color: $alt-text-color;
+    color: $color-text-alt;
     text-transform: uppercase;
 }
 
@@ -64,7 +64,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 2px 0 $shadow-color;
 
     @include breakpoint-smallest {
         transform: translate(-50%, -50%) scale(0.88);

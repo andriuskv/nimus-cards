@@ -4,7 +4,7 @@ import Container from "./container";
 export default function Settings({ settings, handleChange }) {
     return (
         <Container title="Settings">
-            <div onChange={handleChange}>
+            <div className="container" onChange={handleChange}>
                 <div className="settings-item">
                     <div className="settings-item-title">Study mode</div>
                     <div>
