@@ -1,8 +1,9 @@
 import React from "react";
+import Container from "./container";
 import CardSide from "./study-card-side";
 import StudySetHeader from "./study-set-header";
 
-export default function StudySet({ card, cardCount, score, mode, revealBack, getNextCard, getSideElement }) {
+export default function StudySet({ title, card, cardCount, score, mode, revealBack, getNextCard, getSideElement }) {
     function renderFooterBtns() {
         return card.back ? (
             <div>
@@ -15,16 +16,18 @@ export default function StudySet({ card, cardCount, score, mode, revealBack, get
     }
 
     return (
-        <div className="study-container">
-            <StudySetHeader score={score} mode={mode} />
-            <div className="study-card">
-                <CardSide side="front" card={card} getSideElement={getSideElement} />
-                <CardSide side="back" card={card} getSideElement={getSideElement} revealBack={revealBack} />
+        <Container title={title}>
+            <div className="container study-container">
+                <StudySetHeader score={score} mode={mode} />
+                <div className="study-card">
+                    <CardSide side="front" card={card} getSideElement={getSideElement} />
+                    <CardSide side="back" card={card} getSideElement={getSideElement} revealBack={revealBack} />
+                </div>
             </div>
-            <div className="container-footer study-footer">
+            <div className="container container-footer study-footer">
                 <span className="study-progress">Progress: {card.index + 1}/{cardCount}</span>
                 {renderFooterBtns()}
             </div>
-        </div>
+        </Container>
     );
 }

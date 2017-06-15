@@ -1,7 +1,6 @@
 import React from "react";
 import { getSets } from "../services/db";
 import { getSettings } from "../services/settings";
-import Container from "../components/container";
 import StudySet from "../components/study-set";
 import StudySetScore from "../components/study-set-score";
 
@@ -196,24 +195,21 @@ export default class StudySetContainer extends React.Component {
     }
 
     render() {
-        return (
-            <Container title={this.setTitle}>
-                {this.state.last ?
-                    <StudySetScore
-                        score={this.score}
-                        mode={this.mode}
-                        cardCount={this.initialCards.length}
-                        initNextStandardRound={this.initNextStandardRound}
-                        initNextLeitnerLevel={this.initNextLeitnerLevel} /> :
-                    <StudySet
-                        card={this.state}
-                        cardCount={this.cards.length}
-                        score={this.score}
-                        mode={this.mode}
-                        revealBack={this.revealBack}
-                        getNextCard={this.getNextCard} />
-                }
-            </Container>
-        );
+        return this.state.last ?
+            <StudySetScore
+                title={this.setTitle}
+                score={this.score}
+                mode={this.mode}
+                cardCount={this.initialCards.length}
+                initNextStandardRound={this.initNextStandardRound}
+                initNextLeitnerLevel={this.initNextLeitnerLevel} /> :
+            <StudySet
+                title={this.setTitle}
+                card={this.state}
+                cardCount={this.cards.length}
+                score={this.score}
+                mode={this.mode}
+                revealBack={this.revealBack}
+                getNextCard={this.getNextCard} />;
     }
 }

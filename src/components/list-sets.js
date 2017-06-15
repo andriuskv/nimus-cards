@@ -30,10 +30,10 @@ export default function ListSets({ sets, loading, editSet, removeSet }) {
     return (
         <Container title="Your Flashcard Sets">
             {!loading && (sets.length ?
-                <ul>{sets.map(renderListItem)}</ul> :
+                <ul className="container">{sets.map(renderListItem)}</ul> :
                 <p className="set-list-message">You have no flashcard sets</p>
             )}
-            <div className="container-footer">
+            <div className="container container-footer">
                 <Link to="/flashcards/create" className="btn">Create New Set</Link>
             </div>
         </Container>

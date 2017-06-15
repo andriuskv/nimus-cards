@@ -27,7 +27,7 @@
 }
 
 .create-card-index {
-    color: $alt-text-color;
+    color: $color-text-alt;
     font-size: 12px;
 }
 
@@ -137,13 +137,12 @@
     right: 0;
     background-color: $bg-color2;
     font-size: 14px;
-    color: $alt-text-color;
+    color: $color-text-alt;
 }
-
 
 .create-side-text-input {
     border: none;
-    color: $text-color;
+    color: $color-text-primary;
     resize: none;
 }
 
