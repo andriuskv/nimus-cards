@@ -150,8 +150,15 @@
     margin-right: 8px;
     padding: 4px 8px;
     background-color: $danger-color;
+
+    @include breakpoint-smallest {
+        position: absolute;
+        top: -22px;
+        right: 0;
+    }
 }
 
 .create-footer {
+    position: relative;
     justify-content: space-between;
 }
