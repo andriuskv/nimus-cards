@@ -84,8 +84,13 @@ export default class CreateSetContainer extends React.Component {
 
     addCard = ({ target }) => {
         const set = Object.assign({}, this.state.set);
+        const lastCard = set.cards[set.cards.length - 1];
+        const card = this.getNewCard();
 
-        set.cards.push(this.getNewCard());
+        card.front.textSize = lastCard.front.textSize;
+        card.back.textSize = lastCard.back.textSize;
+
+        set.cards.push(card);
 
         this.setState({ set }, () => {
             target.scrollIntoView();
