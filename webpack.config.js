@@ -1,8 +1,15 @@
 const webpack = require("webpack");
 const path = require("path");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = function(env = {}) {
-    const plugins = [];
+    const plugins = [
+        new ExtractTextPlugin("main.css"),
+        new HtmlWebpackPlugin({
+            "template": "./src/index.html"
+        })
+    ];
 
     if (env.prod) {
         plugins.push(
@@ -42,6 +49,39 @@ module.exports = function(env = {}) {
         module: {
             rules: [
                 {
+                    test: /\.scss$/,
+                    use: ExtractTextPlugin.extract({
+                        fallback: "style-loader",
+                        use: [{
+                            loader: "css-loader",
+                            options: {
+                                sourceMap: !env.prod
+                            }
+                        },{
+                            loader: "postcss-loader",
+                            options: {
+                                sourceMap: !env.prod,
+                                plugins: () => {
+                                    const plugins = [require("autoprefixer")()];
+
+                                    if (env.prod) {
+                                        plugins.push(
+                                            require("css-mqpacker")(),
+                                            require("cssnano")()
+                                        );
+                                    }
+                                    return plugins;
+                                }
+                            }
+                        }, {
+                            loader: "sass-loader",
+                            options: {
+                                sourceMap: !env.prod
+                            }
+                        }]
+                    })
+                },
+                {
                     test: /\.js$/,
                     loader: "babel-loader",
                     exclude: /node_modules/,
@@ -53,7 +93,7 @@ module.exports = function(env = {}) {
                             modules: false,
                             useBuiltIns: true,
                             targets: {
-                                browsers: ["last 2 versions", "IE >= 11"]
+                                browsers: ["last 1 versions", "IE >= 11"]
                             }
                         }], "react"]
                     }

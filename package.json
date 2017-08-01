@@ -6,16 +6,8 @@
   "scripts": {
     "dist": "rm -rf dist && mkdir dist && cp -R src/index.html src/sw.js ./dist",
     "webpack": "webpack --progress --colors",
-    "postcss": "postcss -u autoprefixer -u css-mqpacker -r dist/main.css",
-    "scss": "node-sass --source-map-embed src/scss/index.scss dist/main.css && npm run postcss",
-    "watch:js": "npm run webpack -- --watch",
-    "watch:scss": "onchange 'src/scss/*.scss' -i -- npm run scss",
-    "watch": "npm run watch:js & npm run watch:scss",
-    "server": "live-server dist",
-    "start": "npm run dist && npm run server & npm run watch",
-    "build:css": "npm run scss && csso ./dist/main.css ./dist/main.css",
-    "build:js": "npm run webpack -- --env.prod",
-    "build": "npm run dist && npm run build:css && npm run build:js"
+    "start": "npm run dist && live-server dist & npm run webpack -- --watch",
+    "build": "npm run dist && npm run webpack -- --env.prod"
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
@@ -32,18 +24,23 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.5.2",
     "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.4",
     "css-mqpacker": "^6.0.1",
-    "csso-cli": "^1.0.0",
+    "cssnano": "^3.10.0",
     "eslint": "^4.0.0",
     "eslint-plugin-react": "^7.1.0",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^2.30.1",
     "live-server": "^1.2.0",
     "node-sass": "^4.5.3",
-    "onchange": "^3.2.1",
-    "postcss-cli": "^4.1.0",
-    "webpack": "^3.0.0"
+    "postcss-loader": "^2.0.6",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.4.1"
   },
   "browserslist": [
-    "last 2 versions",
+    "last 1 versions",
     "IE >= 11"
   ]
 }

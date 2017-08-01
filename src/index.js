@@ -1,4 +1,5 @@
 import "babel-polyfill";
+import "./scss/index.scss";
 
 import React from "react";
 import { render } from "react-dom";
@@ -24,8 +25,9 @@ render(
                 <Route component={NoMatch}></Route>
             </Switch>
         </div>
-    </HashRouter>
-, document.getElementById("app"));
+    </HashRouter>,
+    document.getElementById("app")
+);
 
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(console.log);
