@@ -37,10 +37,12 @@ export default class CreateSetContainer extends React.Component {
     }
 
     handleSubmit = () => {
-        const title = document.getElementById("js-create-set-title").value.trim();
+        const titleElement = document.getElementById("js-create-set-title");
+        const title = titleElement.value.trim();
 
         if (!title) {
             this.showMessage("Please specify set title");
+            titleElement.focus();
             return;
         }
         const set = Object.assign({}, this.state.set);

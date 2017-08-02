@@ -8,8 +8,7 @@ export default function CreateSet({ set, message, handleSubmit, addCard, removeC
             <div className="container">
                 <label className="create-title-input-container">
                     <div className="side-name">Set title</div>
-                    <input id="js-create-set-title" className="input create-title-input" name="title"
-                        defaultValue={set.title} />
+                    <input id="js-create-set-title" className="input create-title-input" name="title" defaultValue={set.title} />
                 </label>
                 <ul>
                     {set.cards.map((card, index) => (

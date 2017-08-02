@@ -140,8 +140,8 @@ export default class StudySetContainer extends React.Component {
         });
     }
 
-    initStandardScore(score) {
-        return this.resetScoreCounter(score || {
+    initStandardScore() {
+        return this.resetScoreCounter({
             incorrectIds: [],
             currentLevel: 0
         });
@@ -151,7 +151,7 @@ export default class StudySetContainer extends React.Component {
         const cardIds = cards.map(card => card.id);
 
         return this.resetScoreCounter({
-            levels: cards && [cardIds, [], [], [], []],
+            levels: [cardIds, [], [], [], []],
             currentLevel: 0
         });
     }
@@ -164,16 +164,11 @@ export default class StudySetContainer extends React.Component {
     }
 
     getNextLevelCards(cards, cardIds) {
-        return cards.reduce((cards, card) => {
-            if (cardIds.includes(card.id)) {
-                cards.push(card);
-            }
-            return cards;
-        }, []);
+        return cards.filter(card => cardIds.indexOf(card.id) !== -1);
     }
 
     initNextLevel(score, cards) {
-        this.score = this.initStandardScore(score);
+        this.score = this.resetScoreCounter(score);
         this.cards = this.randomizeCards ? this.shuffleArray(cards) : cards;
         this.setState(Object.assign({ last: false }, this.getCard()));
     }
@@ -182,6 +177,7 @@ export default class StudySetContainer extends React.Component {
         const cards = this.getNextLevelCards(this.cards, this.score.incorrectIds);
 
         this.score.currentLevel += 1;
+        this.score.incorrectIds.length = 0;
         this.initNextLevel(this.score, cards);
     }
 
