@@ -39,23 +39,29 @@ export default class StudySetContainer extends React.Component {
         this.randomizeCards = settings.randomize.value;
         this.setTitle = set.title;
         this.cards = this.getCards(set.cards, settings);
+        this.score = this.resetScoreCounter({
+            currentLevel: 0,
+            session: this.resetScoreCounter()
+        });
 
         if (this.mode === "standard") {
-            this.score = this.initStandardScore();
+            this.score.incorrectIds = [];
         }
         else {
+            const cardIds = this.cards.map(card => card.id);
+
             this.initialCards = [].concat(this.cards);
-            this.score = this.initLeitnerScore(this.cards);
+            this.score.levels = [cardIds, [], [], [], []];
         }
         this.setState(this.getCard());
     }
 
     getCards(setCards, settings) {
         const cardCount = parseInt(settings.cardCount.value, 10);
-        let cards = settings.randomize.value ? this.shuffleArray(setCards) : setCards;
+        const cards = settings.randomize.value ? this.shuffleArray(setCards) : setCards;
 
         if (cardCount) {
-            cards = cards.slice(0, cardCount);
+            return cards.slice(0, cardCount);
         }
         return cards;
     }
@@ -94,6 +100,7 @@ export default class StudySetContainer extends React.Component {
         if (!answer) {
             score.incorrectIds.push(this.state.id);
         }
+        score.isLast = score.right === score.total;
         return score;
     }
 
@@ -114,10 +121,11 @@ export default class StudySetContainer extends React.Component {
         const [id] = currentLevel.splice(index, 1);
 
         score.levels[levelNum].push(id);
+        score.isLast = score.levels[4].length === this.initialCards.length;
         return score;
     }
 
-    updateScore(answer, mode, score) {
+    updateScoreCounter(answer, score) {
         if (answer) {
             score.right += 1;
         }
@@ -125,6 +133,11 @@ export default class StudySetContainer extends React.Component {
             score.wrong += 1;
         }
         score.total = score.right + score.wrong;
+    }
+
+    updateScore(answer, mode, score) {
+        this.updateScoreCounter(answer, score);
+        this.updateScoreCounter(answer, score.session);
 
         if (mode === "standard") {
             return this.updateStandardScore(score, answer);
@@ -132,27 +145,11 @@ export default class StudySetContainer extends React.Component {
         return this.updateLeitnerScore(score, answer);
     }
 
-    resetScoreCounter(score) {
+    resetScoreCounter(score = {}) {
         return Object.assign(score, {
             right: 0,
             wrong: 0,
             total: 0
-        });
-    }
-
-    initStandardScore() {
-        return this.resetScoreCounter({
-            incorrectIds: [],
-            currentLevel: 0
-        });
-    }
-
-    initLeitnerScore(cards) {
-        const cardIds = cards.map(card => card.id);
-
-        return this.resetScoreCounter({
-            levels: [cardIds, [], [], [], []],
-            currentLevel: 0
         });
     }
 
@@ -196,7 +193,6 @@ export default class StudySetContainer extends React.Component {
                 title={this.setTitle}
                 score={this.score}
                 mode={this.mode}
-                cardCount={this.initialCards.length}
                 initNextStandardRound={this.initNextStandardRound}
                 initNextLeitnerLevel={this.initNextLeitnerLevel} /> :
             <StudySet
