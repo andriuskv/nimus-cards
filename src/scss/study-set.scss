@@ -92,7 +92,6 @@
 .study-card {
     display: flex;
     justify-content: space-between;
-    padding-bottom: 8px;
 
     @include breakpoint-smallest {
         flex-direction: column;
