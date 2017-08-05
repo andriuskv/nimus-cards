@@ -1,13 +1,16 @@
 function getDefault() {
     return {
+        studyMode: {
+            value: "standard"
+        },
         randomize: {
             value: true
         },
         cardCount: {
             value: ""
         },
-        studyMode: {
-            value: "standard"
+        timeoutDuration: {
+            value: ""
         }
     };
 }

@@ -2,8 +2,16 @@ import React from "react";
 import Container from "./container";
 import CardSide from "./study-card-side";
 import StudySetHeader from "./study-set-header";
+import Timeout from "../containers/timeout";
 
-export default function StudySet({ title, card, cardCount, score, mode, revealBack, getNextCard, getSideElement }) {
+export default function StudySet({ title, card, cardCount, score, mode, timeoutDuration, revealBack, getNextCard, getSideElement }) {
+    function renderTimeoutComponent() {
+        if (!timeoutDuration || card.back) {
+            return null;
+        }
+        return <Timeout duration={timeoutDuration} callback={revealBack} />;
+    }
+
     function renderFooterBtns() {
         return card.back ? (
             <div>
@@ -26,6 +34,7 @@ export default function StudySet({ title, card, cardCount, score, mode, revealBa
             </div>
             <div className="container container-footer study-footer">
                 <span className="study-progress">Progress: {card.index + 1}/{cardCount}</span>
+                {renderTimeoutComponent()}
                 {renderFooterBtns()}
             </div>
         </Container>

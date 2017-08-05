@@ -37,6 +37,7 @@ export default class StudySetContainer extends React.Component {
 
         this.mode = settings.studyMode.value;
         this.randomizeCards = settings.randomize.value;
+        this.timeoutDuration = parseInt(settings.timeoutDuration.value || 0, 10);
         this.setTitle = set.title;
         this.cards = this.getCards(set.cards, settings);
         this.score = this.resetScoreCounter({
@@ -201,6 +202,7 @@ export default class StudySetContainer extends React.Component {
                 cardCount={this.cards.length}
                 score={this.score}
                 mode={this.mode}
+                timeoutDuration={this.timeoutDuration}
                 revealBack={this.revealBack}
                 getNextCard={this.getNextCard} />;
     }
