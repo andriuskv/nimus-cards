@@ -1,4 +1,6 @@
-.settings-item:not(:last-of-type) {
+.settings-item {
+    display: block;
+    padding-left: 4px;
     padding-bottom: 8px;
     border-bottom: 1px solid $border-color;
     margin-bottom: 8px;
@@ -17,15 +19,21 @@
 }
 
 .settings-input {
-    width: 40px;
+    width: 60px;
+    padding: 4px 8px;
     margin-right: 4px;
     margin-left: 4px;
     text-align: center;
+
+    &:invalid ~ .settings-message {
+        display: block;
+    }
 }
 
 .settings-message {
+    display: none;
     margin-top: 4px;
-    font-size: 14px;
+    font-size: 13px;
     color: $danger-color;
 }
 

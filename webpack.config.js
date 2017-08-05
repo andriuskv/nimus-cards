@@ -7,7 +7,8 @@ module.exports = function(env = {}) {
     const plugins = [
         new ExtractTextPlugin("main.css"),
         new HtmlWebpackPlugin({
-            "template": "./src/index.html"
+            template: "./src/index.html",
+            excludeChunks: ["sw"]
         })
     ];
 
@@ -40,7 +41,8 @@ module.exports = function(env = {}) {
 
     return {
         entry: {
-            main: "./src/index.js"
+            main: "./src/index.js",
+            sw: "./src/sw.js"
         },
         output: {
             path: path.resolve(__dirname, "./dist"),

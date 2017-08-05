@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dist": "rm -rf dist && mkdir dist && cp -R src/index.html src/sw.js ./dist",
+    "dist": "rm -rf dist && mkdir dist",
     "webpack": "webpack --progress --colors",
     "start": "npm run dist && live-server dist & npm run webpack -- --watch",
     "build": "npm run dist && npm run webpack -- --env.prod"

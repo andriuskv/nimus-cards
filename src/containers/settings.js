@@ -13,9 +13,7 @@ export default class SettingsContainer extends React.Component {
         this.setState({
             [name]: setting
         }, () => {
-            if (!setting.invalid) {
-                saveSettings(this.state);
-            }
+            saveSettings(this.state);
         });
     }
 
@@ -28,8 +26,7 @@ export default class SettingsContainer extends React.Component {
                 setting.value = target.checked;
                 break;
             case "text":
-                setting.value = target.value.trim();
-                setting.invalid = setting.value && !/^[0-9]+$/g.test(setting.value);
+                setting.value = target.validity.valid ? target.value : "";
                 break;
             case "radio":
                 setting.value = target.getAttribute("data-study-mode");
