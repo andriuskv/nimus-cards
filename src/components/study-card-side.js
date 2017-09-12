@@ -1,4 +1,5 @@
 import React from "react";
+import { getAttachment } from "../utils";
 
 export default function CardSide({ side, card, revealBack }) {
     function isVisible(side, backSide) {
@@ -9,20 +10,9 @@ export default function CardSide({ side, card, revealBack }) {
         if (!attachment) {
             return;
         }
-        const cardSide = card[side];
-        const src = typeof attachment.file === "string" ? attachment.file : URL.createObjectURL(attachment.file);
-        let element = null;
-
-        if (attachment.type === "image") {
-            element = <img src={src} alt="" className="side-image" />;
-        }
-        else if (attachment.type === "audio") {
-            element = <audio src={src} className="side-audio" controls></audio>;
-        }
-
         return (
-            <div className={`side-panel-container${cardSide.text ? "": " full"}`}>
-                {element}
+            <div className={`side-panel-container${card[side].text ? "": " full"}`}>
+                {getAttachment(attachment)}
             </div>
         );
     }
