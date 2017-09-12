@@ -7,7 +7,7 @@ export default function CreateSet(props) {
 
     function renderToolbarBtn(type) {
         return (
-            <button className={`btn-icon toolbar-btn${props.uploadType === type ? " active" : ""}`} title={`Upload ${type}`} onClick={() => props.showUploadPanel(type)}>
+            <button className={`btn-icon toolbar-btn${props.uploadType === type ? " active" : ""}`} title={`Upload ${type}`} onClick={() => props.toggleUploadPanel(type)}>
                 <Icon name={type} />
             </button>
         );
@@ -43,23 +43,21 @@ export default function CreateSet(props) {
         const message = cardSide.panelMessage;
 
         return (
-            <div className="side-panel-container">
-                <ul className="create-side-upload-items">
-                    <li className="create-side-upload-item create-side-upload-device">
-                        <div>Upload from device</div>
-                        <label className="btn" tabIndex="0">
-                            <span>Upload</span>
-                            <input type="file" className="file-input" onChange={props.handleFileUpload} />
-                        </label>
-                    </li>
-                    <li className="create-side-upload-item create-side-upload-url">
-                        <div>Upload from url</div>
-                        <form onSubmit={props.handleFileUploadFormURL}>
-                            <input type="text" name="url" className="input" />
-                            <button className="btn">Upload</button>
-                        </form>
-                    </li>
-                </ul>
+            <div className="side-panel-container create-side-panel-container">
+                <div className="create-side-upload-item create-side-upload-device">
+                    <div>Upload {props.uploadType} from device</div>
+                    <label className="btn" tabIndex="0">
+                        <span>Upload</span>
+                        <input type="file" className="file-input" onChange={props.handleFileUpload} />
+                    </label>
+                </div>
+                <div className="create-side-upload-item">
+                    <div>Upload {props.uploadType} from url</div>
+                    <form className="create-side-upload-item-form" onSubmit={props.handleFileUploadFormURL}>
+                        <input type="text" name="url" className="input" />
+                        <button className="btn">Upload</button>
+                    </form>
+                </div>
                 {message && <div className="create-side-upload-panel-message">{message}</div>}
                 <button type="button" className="btn-icon create-side-panel-btn"
                     onClick={props.closeUploadPanel} title="Close panel">

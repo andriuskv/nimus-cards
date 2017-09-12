@@ -79,19 +79,10 @@
     height: 274px;
 }
 
-.create-side-panel-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: $bg-color2;
-}
-
-.create-side-upload-items {
+.create-side-panel-container {
     display: flex;
-    height: 100%;
 
     @include breakpoint-small {
-        height: calc(100% - 14px);
         flex-direction: column;
 
         .create-side-upload-device {
@@ -104,6 +95,13 @@
             border-bottom: 1px solid $border-color;
         }
     }
+}
+
+.create-side-panel-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: $bg-color2;
 }
 
 .create-side-upload-item {
@@ -124,10 +122,8 @@
     }
 }
 
-.create-side-upload-url {
-    form {
-        margin: auto;
-    }
+.create-side-upload-item-form {
+    margin: auto;
 }
 
 .create-side-upload-panel-message {
