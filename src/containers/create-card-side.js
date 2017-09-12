@@ -108,7 +108,11 @@ export default class CreateCardSideContainer extends React.Component {
         this.setState({ card });
     }
 
-    showUploadPanel = type => {
+    toggleUploadPanel = type => {
+        if (type === this.state.uploadType) {
+            this.closeUploadPanel();
+            return;
+        }
         this.setState({
             isUploadPanelVisible: true,
             uploadType: type
@@ -127,7 +131,7 @@ export default class CreateCardSideContainer extends React.Component {
             handleTextSizeSelect={this.handleTextSizeSelect}
             handleInput={this.handleInput}
             removeAttachment={this.removeAttachment}
-            showUploadPanel={this.showUploadPanel}
+            toggleUploadPanel={this.toggleUploadPanel}
             closeUploadPanel={this.closeUploadPanel}
             handleFileUpload={this.handleFileUpload}
             handleFileUploadFormURL={this.handleFileUploadFormURL} />;
