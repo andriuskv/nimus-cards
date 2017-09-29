@@ -1,22 +1,19 @@
 import React from "react";
+import Attachment from "./attachment";
 import Icon from "../components/icon";
-import { getAttachment } from "../utils";
 
-export default function CreateSet(props) {
+export default function CreateCardFront(props) {
     const { card, side } = props;
     const cardSide = card[side];
 
-    function renderToolbarBtns(side, uploadType) {
-        if (side === "front") {
-            return ["image", "audio"].map((type, index) => (
-                <button key={index}
-                    className={`btn-icon toolbar-btn${uploadType === type ? " active" : ""}`}
-                    title={`Upload ${type}`} onClick={() => props.toggleUploadPanel(type)}>
-                    <Icon name={type} />
-                </button>
-            ));
-        }
-        return null;
+    function renderToolbarBtns(uploadType) {
+        return ["image", "audio"].map((type, index) => (
+            <button key={index}
+                className={`btn-icon toolbar-btn${uploadType === type ? " active" : ""}`}
+                title={`Upload ${type}`} onClick={() => props.toggleUploadPanel(type)}>
+                <Icon name={type} />
+            </button>
+        ));
     }
 
     function renderAttachment(attachment) {
@@ -29,25 +26,23 @@ export default function CreateSet(props) {
                     onClick={props.removeAttachment} title="Remove attachment">
                     <Icon name="remove" />
                 </button>
-                {getAttachment(attachment)}
+                <Attachment {...attachment}></Attachment>
             </div>
         );
     }
 
-    function renderUploadPanel(cardSide) {
-        const message = cardSide.panelMessage;
-
+    function renderUploadPanel(uploadType, message) {
         return (
             <div className="side-panel-container create-side-panel-container">
                 <div className="create-side-upload-item create-side-upload-device">
-                    <div>Upload {props.uploadType} from device</div>
+                    <div>Upload {uploadType} from device</div>
                     <label className="btn" tabIndex="0">
                         <span>Upload</span>
                         <input type="file" className="file-input" onChange={props.handleFileUpload} />
                     </label>
                 </div>
                 <div className="create-side-upload-item">
-                    <div>Upload {props.uploadType} from url</div>
+                    <div>Upload {uploadType} from url</div>
                     <form className="create-side-upload-item-form" onSubmit={props.handleFileUploadFormURL}>
                         <input type="text" name="url" className="input" />
                         <button className="btn">Upload</button>
@@ -67,8 +62,8 @@ export default function CreateSet(props) {
             <span className="side-name">{side}</span>
             <div className="side">
                 <div className="create-side-toolbar">
-                    {renderToolbarBtns(side, props.uploadType)}
-                    <select defaultValue={cardSide.textSize || 16} title="Text size" onInput={props.handleTextSizeSelect} className="input create-side-select">
+                    {renderToolbarBtns(props.uploadType)}
+                    <select defaultValue={cardSide.textSize || 16} title="Text size" onInput={(e) => props.handleTextSizeSelect(e, side)} className="input create-side-select">
                         <option value="16">16px</option>
                         <option value="24">24px</option>
                         <option value="36">36px</option>
@@ -77,13 +72,13 @@ export default function CreateSet(props) {
                 </div>
                 <div className="side-content create-side-content">
                     {props.isUploadPanelVisible ?
-                        renderUploadPanel(cardSide) :
+                        renderUploadPanel(props.uploadType, cardSide.panelMessage) :
                         renderAttachment(cardSide.attachment)
                     }
                     <textarea className="create-side-text-input side-text"
                         defaultValue={cardSide.text}
                         style={{ fontSize: `${cardSide.textSize}px` }}
-                        onInput={props.handleInput}></textarea>
+                        onInput={(e) => props.handleInput(e, side)}></textarea>
                 </div>
             </div>
         </div>

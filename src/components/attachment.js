@@ -1,6 +1,6 @@
 import React from "react";
 
-function getAttachment({ file, type }) {
+export default function Attachment({ file, type }) {
     const src = typeof file === "string" ? file : URL.createObjectURL(file);
 
     if (type === "image") {
@@ -11,7 +11,3 @@ function getAttachment({ file, type }) {
     }
     return null;
 }
-
-export {
-    getAttachment
-};

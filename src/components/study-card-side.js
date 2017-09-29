@@ -1,5 +1,5 @@
 import React from "react";
-import { getAttachment } from "../utils";
+import Attachment from "./attachment";
 
 export default function CardSide({ side, card, revealBack }) {
     function isVisible(side, backSide) {
@@ -12,7 +12,7 @@ export default function CardSide({ side, card, revealBack }) {
         }
         return (
             <div className={`side-panel-container${card[side].text ? "": " full"}`}>
-                {getAttachment(attachment)}
+                <Attachment {...attachment}></Attachment>
             </div>
         );
     }
