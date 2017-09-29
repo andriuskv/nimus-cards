@@ -1,13 +1,13 @@
 import React from "react";
-import CardSide from "../components/create-card-side";
+import CardFront from "../components/create-card-front";
 
-export default class CreateCardSideContainer extends React.Component {
+export default class CreateCardFrontContainer extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            side: props.side,
-            card: props.card
+            card: props.card,
+            side: "front"
         };
     }
 
@@ -16,15 +16,6 @@ export default class CreateCardSideContainer extends React.Component {
 
         delete card[side].attachment;
         this.setState({ card });
-    }
-
-    handleInput = ({ target: { value } }) => {
-        const { card, side } = this.state;
-
-        if (value !== card[side].text) {
-            card[side].text = value;
-            this.setState({ card });
-        }
     }
 
     showUploadPanelMessage(message) {
@@ -73,6 +64,7 @@ export default class CreateCardSideContainer extends React.Component {
             this.showUploadPanelMessage(`Please specify valid url`);
             return;
         }
+
         if (type === "image") {
             const image = new Image();
 
@@ -101,13 +93,6 @@ export default class CreateCardSideContainer extends React.Component {
         }
     }
 
-    handleTextSizeSelect = event => {
-        const { card, side } = this.state;
-
-        card[side].textSize = event.target.value;
-        this.setState({ card });
-    }
-
     toggleUploadPanel = type => {
         if (type === this.state.uploadType) {
             this.closeUploadPanel();
@@ -127,9 +112,9 @@ export default class CreateCardSideContainer extends React.Component {
     }
 
     render() {
-        return <CardSide {...this.state}
-            handleTextSizeSelect={this.handleTextSizeSelect}
-            handleInput={this.handleInput}
+        return <CardFront {...this.state}
+            handleTextSizeSelect={this.props.handleTextSizeSelect}
+            handleInput={this.props.handleInput}
             removeAttachment={this.removeAttachment}
             toggleUploadPanel={this.toggleUploadPanel}
             closeUploadPanel={this.closeUploadPanel}

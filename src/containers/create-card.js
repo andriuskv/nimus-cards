@@ -1,6 +1,7 @@
 import React from "react";
 import Icon from "../components/icon";
-import CardSide from "./create-card-side";
+import CardFront from "./create-card-front";
+import CardBack from "./create-card-back";
 
 export default class CreateCardContainer extends React.Component {
     constructor(props) {
@@ -20,6 +21,22 @@ export default class CreateCardContainer extends React.Component {
         const card = this.state.card;
         card.visibleSide = this.getOppositeSide(side);
 
+        this.setState({ card });
+    }
+
+    handleInput = ({ target: { value } }, side) => {
+        const { card } = this.state;
+
+        if (value !== card[side].text) {
+            card[side].text = value;
+            this.setState({ card });
+        }
+    }
+
+    handleTextSizeSelect = ({ target: { value } }, side) => {
+        const { card } = this.state;
+
+        card[side].textSize = value;
         this.setState({ card });
     }
 
@@ -44,8 +61,14 @@ export default class CreateCardContainer extends React.Component {
                     )}
                 </div>
                 <div className="create-card">
-                    <CardSide side="front" card={this.state.card} />
-                    <CardSide side="back" card={this.state.card} />
+                    <CardFront
+                        card={this.state.card}
+                        handleInput={this.handleInput}
+                        handleTextSizeSelect={this.handleTextSizeSelect} />
+                    <CardBack
+                        card={this.state.card}
+                        handleInput={this.handleInput}
+                        handleTextSizeSelect={this.handleTextSizeSelect} />
                 </div>
             </li>
         );

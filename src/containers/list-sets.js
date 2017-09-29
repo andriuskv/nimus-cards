@@ -13,8 +13,7 @@ export default class ListSetsContainer extends React.Component {
     }
 
     componentDidMount() {
-        this.getSets(this.props.location.state)
-        .then(sets => {
+        this.getSets(this.props.location.state).then(sets => {
             this.setState({
                 sets,
                 loading: false
