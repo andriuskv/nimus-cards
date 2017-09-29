@@ -5,13 +5,14 @@ export default class TimeoutContainer extends React.Component {
         super(props);
 
         this.state = {
-            duration: props.duration
+            duration: props.duration,
+            formatedDuration: this.formatDuration(props.duration)
         };
         this.timeoutId = 0;
     }
 
     componentDidMount() {
-        this.setTimeout(performance.now(), 0);
+        this.runTimer(performance.now(), 0);
     }
 
     componentWillUnmount() {
@@ -42,30 +43,33 @@ export default class TimeoutContainer extends React.Component {
         return `${hours ? `${hours}:` : ""}${minutes}:${seconds}`;
     }
 
-    setTimeout(startTime, elapsed) {
-        const duration = this.state.duration;
-        this.formatedDuration = this.formatDuration(duration);
+    runTimer(startTime, elapsed) {
+        const ideal = performance.now() - startTime;
+        const diff = ideal - elapsed;
 
-        if (!duration) {
-            this.setState({ duration: -1 });
+        this.timeoutId = setTimeout(() => {
+            this.update(startTime, elapsed + 1000);
+        }, 1000 - diff);
+    }
+
+    update(startTime, elapsed) {
+        const duration = this.state.duration - 1;
+
+        if (duration < 0) {
+            this.setState({ duration });
             this.props.callback();
             return;
         }
         this.setState({
-            duration: duration - 1
+            duration,
+            formatedDuration: this.formatDuration(duration)
         }, () => {
-            const ideal = performance.now() - startTime;
-            const diff = ideal - elapsed;
-
-            this.timeoutId = setTimeout(() => {
-                this.setTimeout(startTime, elapsed + 1000);
-            }, 1000 - diff);
+            this.runTimer(startTime, elapsed);
         });
     }
 
     render() {
-        return this.state.duration < 0 ? null : (
-            <div className="study-timeout" title="Time left till answer reveal">{this.formatedDuration}</div>
-        );
+        const { duration, formatedDuration } = this.state;
+        return duration >= 0 ? <div className="study-timeout">{formatedDuration}</div> : null;
     }
 }
