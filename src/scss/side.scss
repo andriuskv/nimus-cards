@@ -77,3 +77,12 @@
     white-space: pre-line;
     background-color: $bg-color1;
 }
+
+.side-flip-btn {
+    display: none;
+
+    @include breakpoint-smallest {
+        display: flex;
+        margin-left: auto;
+    }
+}

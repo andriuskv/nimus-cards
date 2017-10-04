@@ -90,12 +90,19 @@
 }
 
 .study-card {
+    position: relative;
     display: flex;
     justify-content: space-between;
 
     @include breakpoint-smallest {
         flex-direction: column;
     }
+}
+
+.study-side-flip-btn {
+    position: absolute;
+    top: -4px;
+    right: 0;
 }
 
 .study-side-content {

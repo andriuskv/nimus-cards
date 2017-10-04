@@ -59,7 +59,7 @@ export default function CreateCardFront(props) {
 
     return (
         <div className={`side-container${card.visibleSide === side ? " visible": ""}`}>
-            <span className="side-name">{side}</span>
+            <div className="side-name">{side}</div>
             <div className="side">
                 <div className="create-side-toolbar">
                     {renderToolbarBtns(props.uploadType)}
