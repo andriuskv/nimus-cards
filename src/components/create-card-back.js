@@ -1,5 +1,4 @@
 import React from "react";
-import Icon from "../components/icon";
 
 export default function CreateCardBack(props) {
     const { card, side } = props;
@@ -7,7 +6,7 @@ export default function CreateCardBack(props) {
 
     return (
         <div className={`side-container${card.visibleSide === side ? " visible": ""}`}>
-            <span className="side-name">{side}</span>
+            <div className="side-name">{side}</div>
             <div className="side">
                 <div className="create-side-toolbar">
                     <select defaultValue={cardSide.textSize || 16} title="Text size" onInput={(e) => props.handleTextSizeSelect(e, side)} className="input create-side-select">

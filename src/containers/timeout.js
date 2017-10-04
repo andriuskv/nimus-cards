@@ -5,14 +5,16 @@ export default class TimeoutContainer extends React.Component {
         super(props);
 
         this.state = {
-            duration: props.duration,
+            duration: props.duration || -1,
             formatedDuration: this.formatDuration(props.duration)
         };
         this.timeoutId = 0;
     }
 
     componentDidMount() {
-        this.runTimer(performance.now(), 0);
+        if (this.state.duration > 0) {
+            this.runTimer(performance.now(), 0);
+        }
     }
 
     componentWillUnmount() {

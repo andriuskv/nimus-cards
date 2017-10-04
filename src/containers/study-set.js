@@ -82,18 +82,27 @@ export default class StudySetContainer extends React.Component {
 
     revealBack = () => {
         this.setState({
-            back: this.cards[this.state.index].back
+            isBackSideRevealed: true,
+            visibleSide: "back"
         });
     }
 
+    flipSide = () => {
+        this.setState(({ visibleSide }) => ({
+            visibleSide: visibleSide === "front" ? "back" : "front"
+        }));
+    }
+
     getCard(index = 0) {
-        const { id, front } = this.cards[index];
+        const { id, front, back } = this.cards[index];
 
         return {
             index,
             id,
             front,
-            back: null
+            back,
+            isBackSideRevealed: false,
+            visibleSide: "front"
         };
     }
 
@@ -189,6 +198,9 @@ export default class StudySetContainer extends React.Component {
     }
 
     render() {
+        if (!this.state.front || !this.state.back) {
+            return null;
+        }
         return this.state.last ?
             <StudySetScore
                 title={this.setTitle}
@@ -204,6 +216,7 @@ export default class StudySetContainer extends React.Component {
                 mode={this.mode}
                 timeoutDuration={this.timeoutDuration}
                 revealBack={this.revealBack}
+                flipSide={this.flipSide}
                 getNextCard={this.getNextCard} />;
     }
 }
