@@ -25,6 +25,10 @@ ul {
     list-style: none;
 }
 
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: 0;
+}
+
 .app {
     height: 100%;
 }
