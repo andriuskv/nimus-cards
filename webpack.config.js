@@ -1,48 +1,37 @@
-const webpack = require("webpack");
 const path = require("path");
+const { DefinePlugin } = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = function(env = {}) {
+    const mode = env.prod ? "production" : "development";
     const plugins = [
         new ExtractTextPlugin("main.css"),
         new HtmlWebpackPlugin({
-            template: "./src/index.html",
-            excludeChunks: ["sw"]
+            template: "./src/index.html"
+        }),
+        new DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify(mode)
+            }
         })
     ];
 
     if (env.prod) {
         plugins.push(
-            new webpack.DefinePlugin({
-                "process.env": {
-                    NODE_ENV: JSON.stringify("production")
-                }
-            }),
-            new webpack.optimize.UglifyJsPlugin({
-                compress: {
-                    warnings: false,
-                    unused: true,
-                    dead_code: true,
-                    screw_ie8: true,
-                    unsafe: true,
-                    conditionals: true,
-                    comparisons: true,
-                    sequences: true,
-                    evaluate: true,
-                    drop_console: true
-                },
-                output: {
-                    comments: false
+            new UglifyJsPlugin({
+                uglifyOptions: {
+                    ecma: 8
                 }
             })
         );
     }
 
     return {
+        mode,
         entry: {
-            main: "./src/index.js",
-            sw: "./src/sw.js"
+            main: "./src/index.js"
         },
         output: {
             path: path.resolve(__dirname, "./dist"),
@@ -57,7 +46,8 @@ module.exports = function(env = {}) {
                         use: [{
                             loader: "css-loader",
                             options: {
-                                sourceMap: !env.prod
+                                sourceMap: !env.prod,
+                                minimize: env.prod
                             }
                         },{
                             loader: "postcss-loader",
@@ -67,10 +57,7 @@ module.exports = function(env = {}) {
                                     const plugins = [require("autoprefixer")()];
 
                                     if (env.prod) {
-                                        plugins.push(
-                                            require("css-mqpacker")(),
-                                            require("cssnano")()
-                                        );
+                                        plugins.push(require("css-mqpacker")());
                                     }
                                     return plugins;
                                 }
@@ -88,19 +75,24 @@ module.exports = function(env = {}) {
                     loader: "babel-loader",
                     exclude: /node_modules/,
                     options: {
-                        plugins: [
-                            "transform-class-properties"
-                        ],
-                        presets: [["env", {
+                        presets: [["@babel/preset-env", {
                             modules: false,
-                            useBuiltIns: true,
-                            targets: {
-                                browsers: ["last 1 versions", "IE >= 11"]
-                            }
-                        }], "react"]
+                            shippedProposals: true,
+                            loose: true,
+                            useBuiltIns: "usage"
+                        }], "@babel/react"],
+                        plugins: [
+                            "@babel/plugin-syntax-dynamic-import",
+                            "transform-class-properties"
+                        ]
                     }
                 }
             ]
+        },
+        watchOptions: {
+            aggregateTimeout: 300,
+            poll: 1000,
+            ignored: /node_modules/
         },
         devtool: env.prod ? false : "inline-source-map",
         plugins

@@ -1,46 +1,52 @@
 {
-  "name": "Flashcards",
+  "name": "nimus-cards",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dist": "rm -rf dist && mkdir dist",
+    "dist": "rm -rf dist && mkdir dist && cp src/sw.js dist",
     "webpack": "webpack --progress --colors",
+    "a": "live-server dist",
     "start": "npm run dist && live-server dist & npm run webpack -- --watch",
     "build": "npm run dist && npm run webpack -- --env.prod"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
     "dexie": "^2.0.1",
+    "focus-visible": "^4.0.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
-    "autoprefixer": "^7.1.4",
-    "babel-core": "^6.26.0",
+    "@babel/core": "^7.0.0-beta.40",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.40",
+    "@babel/polyfill": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.0.0-beta.40",
+    "@babel/preset-react": "^7.0.0-beta.40",
+    "autoprefixer": "^8.1.0",
     "babel-eslint": "^8.0.1",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-react": "^6.24.1",
+    "babel-loader": "^8.0.0-beta.2",
     "css-loader": "^0.28.7",
     "css-mqpacker": "^6.0.1",
-    "cssnano": "^3.10.0",
     "eslint": "^4.8.0",
     "eslint-plugin-react": "^7.4.0",
-    "extract-text-webpack-plugin": "^3.0.1",
-    "html-webpack-plugin": "^2.30.1",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "html-webpack-plugin": "^3.0.4",
     "live-server": "^1.2.0",
     "node-sass": "^4.5.3",
     "postcss-loader": "^2.0.6",
-    "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.6",
-    "style-loader": "^0.19.0",
-    "webpack": "^3.6.0"
+    "style-loader": "^0.20.2",
+    "uglifyjs-webpack-plugin": "^1.2.2",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.10"
   },
   "browserslist": [
-    "last 1 versions",
-    "IE >= 11"
+    "last 4 chrome versions",
+    "last 4 firefox versions",
+    "last 2 edge versions",
+    "last 2 and_chr versions",
+    "last 1 safari versions",
+    "last 1 ios versions"
   ]
 }

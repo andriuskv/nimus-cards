@@ -1,4 +1,5 @@
-import "babel-polyfill";
+import "focus-visible";
+
 import "./scss/index.scss";
 
 import React from "react";
