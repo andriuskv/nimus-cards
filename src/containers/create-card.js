@@ -55,7 +55,7 @@ export default class CreateCardContainer extends React.Component {
                         </button>
                     )}
                 </div>
-                <div className="create-card">
+                <div className="create-input-group">
                     <CardFront
                         card={this.state.card}
                         handleInput={this.handleInput}

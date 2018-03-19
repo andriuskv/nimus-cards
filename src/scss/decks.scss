@@ -13,10 +13,14 @@
     }
 }
 
+.deck-description,
 .deck-card-count {
-    margin-top: 4px;
-    font-size: 13px;
+    margin-top: 8px;
     color: $color-text-alt;
+}
+
+.deck-card-count {
+    font-size: 0.875em;
 }
 
 .deck-btn-container {

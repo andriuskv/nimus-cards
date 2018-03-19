@@ -19,6 +19,7 @@ export default class CreateDeckContainer extends React.Component {
         return Object.assign({
             id: this.getRandomString(),
             title: "",
+            description: "",
             cards: [this.getNewCard()]
         }, state);
     }
@@ -37,12 +38,11 @@ export default class CreateDeckContainer extends React.Component {
     }
 
     handleSubmit = () => {
-        const titleElement = document.getElementById("js-create-deck-title");
-        const title = titleElement.value.trim();
+        const { value: title } = document.getElementById("js-deck-title");
+        const { value: description } = document.getElementById("js-deck-description");
 
         if (!title) {
             this.showMessage("Please specify deck title");
-            titleElement.focus();
             return;
         }
         const deck = { ...this.state.deck };
@@ -53,12 +53,13 @@ export default class CreateDeckContainer extends React.Component {
             return !isFrontEmpty && isBackEmpty || !isBackEmpty && isFrontEmpty;
         });
         deck.title = title;
+        deck.description = description;
 
         if (!containsEmptySide) {
             deck.cards = deck.cards.filter(({ front, back }) => this.hasSideContent(front) || this.hasSideContent(back));
 
-            if (!deck.cards.length) {
-                this.showMessage("Please fill in at least one card");
+            if (deck.cards.length < 2) {
+                this.showMessage("Please fill in at least two cards");
                 return;
             }
             this.props.history.push({
