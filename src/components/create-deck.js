@@ -14,11 +14,14 @@ export default function CreateDeck({ deck, message, handleSubmit, addCard, remov
                     <textarea id="js-deck-description" className="input side-text create-description-input" defaultValue={deck.description}></textarea>
                 </label>
             </div>
-            <ul>
-                {deck.cards.map((card, index) => (
-                    <Card key={card.id} index={index} card={card} cardCount={deck.cards.length} removeCard={removeCard} />
-                ))}
-            </ul>
+            {deck.cards.length ?
+                <ul>
+                    {deck.cards.map((card, index) => (
+                        <Card key={card.id} index={index} card={card} removeCard={removeCard} />
+                    ))}
+                </ul> :
+                <p className="create-deck-message">Deck is empty</p>
+            }
             <div className="container-footer create-footer">
                 <button className="btn" onClick={addCard}>New Card</button>
                 {message && <span className="create-message">{message}</span>}
