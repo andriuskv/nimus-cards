@@ -90,9 +90,10 @@ export default class CreateDeckContainer extends React.Component {
         const lastCard = deck.cards[deck.cards.length - 1];
         const card = this.getNewCard();
 
-        card.front.textSize = lastCard.front.textSize;
-        card.back.textSize = lastCard.back.textSize;
-
+        if (lastCard) {
+            card.front.textSize = lastCard.front.textSize;
+            card.back.textSize = lastCard.back.textSize;
+        }
         deck.cards.push(card);
 
         this.setState({ deck }, () => {

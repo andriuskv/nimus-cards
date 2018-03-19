@@ -1,6 +1,7 @@
 .create-input-group {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 
     @include breakpoint-smallest {
         flex-direction: column;
@@ -41,18 +42,40 @@
     }
 }
 
+.create-deck-message {
+    margin: auto;
+    font-size: 1.5em;
+}
+
 .create-list-item {
+    display: flex;
+    align-items: flex-start;
     margin-bottom: 16px;
 }
 
-.create-card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 4px;
+.create-card-index,
+.create-card-btns {
+    flex-shrink: 0;
+    min-width: 20px;
+    margin-top: 20px;
 }
 
 .create-card-index {
+    margin-right: 4px;
     color: $color-text-alt;
+    text-align: center;
+}
+
+.create-card-btns {
+    margin-left: 4px;
+
+    .btn-icon:first-of-type {
+        margin-bottom: 8px;
+    }
+}
+
+.create-card {
+    flex: 1;
 }
 
 .create-side-toolbar {

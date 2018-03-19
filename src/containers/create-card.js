@@ -42,20 +42,8 @@ export default class CreateCardContainer extends React.Component {
 
         return (
             <li className="create-list-item">
-                <div className="create-card-header">
-                    <div className="create-card-index">{index + 1}.</div>
-                    <button className="btn-icon side-flip-btn"
-                        title="Flip side"
-                        onClick={() => this.flipSide(side)}>
-                        <Icon name="flip" />
-                    </button>
-                    {this.props.cardCount > 1 && (
-                        <button className="btn-icon" title="Remove card" onClick={() => removeCard(index)}>
-                            <Icon name="remove" />
-                        </button>
-                    )}
-                </div>
-                <div className="create-input-group">
+                <div className="create-card-index">{index + 1}.</div>
+                <div className="create-input-group create-card">
                     <CardFront
                         card={this.state.card}
                         handleInput={this.handleInput}
@@ -64,6 +52,18 @@ export default class CreateCardContainer extends React.Component {
                         card={this.state.card}
                         handleInput={this.handleInput}
                         handleTextSizeSelect={this.handleTextSizeSelect} />
+                </div>
+                <div className="create-card-btns">
+                    <button className="btn-icon"
+                        title="Remove card"
+                        onClick={() => removeCard(index)}>
+                        <Icon name="remove" />
+                    </button>
+                    <button className="btn-icon side-flip-btn"
+                        title="Flip side"
+                        onClick={() => this.flipSide(side)}>
+                        <Icon name="flip" />
+                    </button>
                 </div>
             </li>
         );
