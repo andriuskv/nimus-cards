@@ -1,5 +1,5 @@
 const cacheName = "v1";
-const toCache = ["./index.html", "./main.css", "./main.js"];
+const toCache = ["./index.html", "./main.css", "./main.js", "./vendor.js"];
 
 self.addEventListener("install", event => {
     event.waitUntil(

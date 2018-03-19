@@ -1,20 +1,22 @@
 const path = require("path");
 const { DefinePlugin } = require("webpack");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = function(env = {}) {
     const mode = env.prod ? "production" : "development";
     const plugins = [
-        new ExtractTextPlugin("main.css"),
-        new HtmlWebpackPlugin({
-            template: "./src/index.html"
-        }),
         new DefinePlugin({
             "process.env": {
                 NODE_ENV: JSON.stringify(mode)
             }
+        }),
+        new MiniCssExtractPlugin({
+            filename: "main.css"
+        }),
+        new HtmlWebpackPlugin({
+            template: "./src/index.html"
         })
     ];
 
@@ -30,6 +32,9 @@ module.exports = function(env = {}) {
 
     return {
         mode,
+
+        // https://github.com/webpack-contrib/mini-css-extract-plugin/issues/23
+        cache: false,
         entry: {
             main: "./src/index.js"
         },
@@ -37,38 +42,48 @@ module.exports = function(env = {}) {
             path: path.resolve(__dirname, "./dist"),
             filename: "[name].js"
         },
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    vendor: {
+                        test: /node_modules/,
+                        name: "vendor",
+                        chunks: "initial"
+                    }
+                }
+            }
+        },
         module: {
             rules: [
                 {
                     test: /\.scss$/,
-                    use: ExtractTextPlugin.extract({
-                        fallback: "style-loader",
-                        use: [{
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        {
                             loader: "css-loader",
                             options: {
                                 sourceMap: !env.prod,
+                                url: false,
                                 minimize: env.prod
                             }
-                        },{
+                        },
+                        {
                             loader: "postcss-loader",
                             options: {
                                 sourceMap: !env.prod,
-                                plugins: () => {
-                                    const plugins = [require("autoprefixer")()];
-
-                                    if (env.prod) {
-                                        plugins.push(require("css-mqpacker")());
-                                    }
-                                    return plugins;
-                                }
+                                plugins: () => [
+                                    require("autoprefixer")(),
+                                    require("css-mqpacker")()
+                                ]
                             }
-                        }, {
+                        },
+                        {
                             loader: "sass-loader",
                             options: {
                                 sourceMap: !env.prod
                             }
-                        }]
-                    })
+                        }
+                    ]
                 },
                 {
                     test: /\.js$/,
@@ -89,12 +104,11 @@ module.exports = function(env = {}) {
                 }
             ]
         },
-        watchOptions: {
-            aggregateTimeout: 300,
-            poll: 1000,
-            ignored: /node_modules/
-        },
         devtool: env.prod ? false : "inline-source-map",
-        plugins
+        plugins,
+        stats: {
+            entrypoints: false,
+            children: false
+        }
     };
 };

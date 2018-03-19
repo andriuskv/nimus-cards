@@ -6,29 +6,26 @@ db.version(1).stores({
     sets: "++_id"
 });
 
-function getSets() {
-    return db.sets.toArray()
-        .catch(error => {
-            console.log(error);
-        });
-}
-
-function addSet(set) {
-    db.sets.put(set)
-    .catch(error => {
+function getDecks() {
+    return db.sets.toArray().catch(error => {
         console.log(error);
     });
 }
 
-function removeSet(id) {
-    db.sets.delete(id)
-    .catch(error => {
+function addDeck(set) {
+    db.sets.put(set).catch(error => {
+        console.log(error);
+    });
+}
+
+function removeDeck(id) {
+    db.sets.delete(id).catch(error => {
         console.log(error);
     });
 }
 
 export {
-    getSets,
-    addSet,
-    removeSet
+    getDecks,
+    addDeck,
+    removeDeck
 };

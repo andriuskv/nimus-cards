@@ -1,10 +1,10 @@
 import React from "react";
 import StudyScoreBar from "./study-score-bar";
 
-export default function StudySetHeader({ score, mode }) {
+export default function StudyDeckHeader({ score, mode }) {
     function renderScoreBar(score) {
         return (
-            <div>
+            <React.Fragment>
                 <div className="study-score-bar-name-container">
                     {(score.total && !score.right) ? null : <div>Right</div>}
                     {(score.total && !score.wrong) ? null : <div>Wrong</div>}
@@ -13,7 +13,7 @@ export default function StudySetHeader({ score, mode }) {
                     <StudyScoreBar score={score} type="width" barName="right" className="study-score-bar-inner" />
                     <StudyScoreBar score={score} type="width" barName="wrong" className="study-score-bar-inner" />
                 </div>
-            </div>
+            </React.Fragment>
         );
     }
 

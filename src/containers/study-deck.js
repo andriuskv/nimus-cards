@@ -1,14 +1,14 @@
 import React from "react";
-import { getSets } from "../services/db";
+import { getDecks } from "../services/db";
 import { getSettings } from "../services/settings";
-import StudySet from "../components/study-set";
-import StudySetScore from "../components/study-set-score";
+import StudyDeck from "../components/study-deck";
+import StudyDeckScore from "../components/study-deck-score";
 
-export default class StudySetContainer extends React.Component {
+export default class StudyDeckContainer extends React.Component {
     constructor(props) {
         super(props);
 
-        this.setTitle = "";
+        this.deckTitle = "";
         this.cards = [];
         this.initialCards = [];
         this.state = {
@@ -19,27 +19,27 @@ export default class StudySetContainer extends React.Component {
     }
 
     componentDidMount() {
-        getSets().then(sets => {
-            const setId = this.props.match.params.id;
-            const set = sets.find(set => set.id === setId);
+        getDecks().then(decks => {
+            const { id } = this.props.match.params;
+            const deck = decks.find(deck => deck.id === id);
 
-            if (set) {
-                this.initSet(set);
+            if (deck) {
+                this.initDeck(deck);
             }
             else {
-                this.props.history.replace("/flashcards");
+                this.props.history.replace("/decks");
             }
         });
     }
 
-    initSet(set) {
+    initDeck({ title, cards }) {
         const settings = getSettings();
 
         this.mode = settings.studyMode.value;
         this.randomizeCards = settings.randomize.value;
         this.timeoutDuration = parseInt(settings.timeoutDuration.value || 0, 10);
-        this.setTitle = set.title;
-        this.cards = this.getCards(set.cards, settings);
+        this.deckTitle = title;
+        this.cards = this.getCards(cards, settings);
         this.score = this.resetScoreCounter({
             currentLevel: 0,
             session: this.resetScoreCounter()
@@ -57,9 +57,9 @@ export default class StudySetContainer extends React.Component {
         this.setState(this.getCard());
     }
 
-    getCards(setCards, settings) {
+    getCards(cards, settings) {
         const cardCount = parseInt(settings.cardCount.value, 10);
-        const cards = settings.randomize.value ? this.shuffleArray(setCards) : setCards;
+        cards = settings.randomize.value ? this.shuffleArray(cards) : cards;
 
         if (cardCount) {
             return cards.slice(0, cardCount);
@@ -202,14 +202,14 @@ export default class StudySetContainer extends React.Component {
             return null;
         }
         return this.state.last ?
-            <StudySetScore
-                title={this.setTitle}
+            <StudyDeckScore
+                title={this.deckTitle}
                 score={this.score}
                 mode={this.mode}
                 initNextStandardRound={this.initNextStandardRound}
                 initNextLeitnerLevel={this.initNextLeitnerLevel} /> :
-            <StudySet
-                title={this.setTitle}
+            <StudyDeck
+                title={this.deckTitle}
                 card={this.state}
                 cardCount={this.cards.length}
                 score={this.score}

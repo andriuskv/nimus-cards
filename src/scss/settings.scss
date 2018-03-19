@@ -1,9 +1,9 @@
 .settings-item {
     display: block;
-    padding-left: 4px;
+    padding-left: 8px;
     padding-bottom: 8px;
-    border-bottom: 1px solid $border-color;
     margin-bottom: 8px;
+    border-bottom: 1px solid $background-color-darkest;
 }
 
 .settings-item-title {
@@ -23,6 +23,7 @@
     padding: 4px 8px;
     margin-right: 4px;
     margin-left: 4px;
+    box-shadow: $box-shadow;
     text-align: center;
 
     &:invalid ~ .settings-message {
@@ -32,11 +33,11 @@
 
 .settings-message {
     display: none;
-    margin-top: 4px;
+    margin-top: 8px;
     font-size: 13px;
     color: $danger-color;
 }
 
 .settings-radio-label {
-    margin-top: 4px;
+    margin-top: 8px;
 }

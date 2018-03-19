@@ -14,13 +14,13 @@ function getTextStyles(cardSide) {
 export default function StudyCard({ card, revealBack, flipSide }) {
     return (
         <div className="study-card">
-            {card.isBackSideRevealed && (
+            {card.isBackSideRevealed &&
                 <button className="btn-icon side-flip-btn study-side-flip-btn"
                     title="Flip side"
                     onClick={flipSide}>
                     <Icon name="flip" />
                 </button>
-            )}
+            }
             <CardFront card={card}
                 visibleSide={card.visibleSide}
                 textStyles={getTextStyles(card.front)} />
