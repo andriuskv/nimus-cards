@@ -7,6 +7,7 @@ export default function Decks({ decks, loading, editDeck, removeDeck }) {
         return (
             <li className="deck" key={deck.id}>
                 <Link to={`/decks/${deck.id}`} className="deck-title">{deck.title}</Link>
+                {deck.description && <p className="deck-description">{deck.description}</p>}
                 <div className="deck-card-count">
                     {deck.cards.length} card{deck.cards.length > 1 && "s"}
                 </div>

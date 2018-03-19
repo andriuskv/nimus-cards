@@ -1,3 +1,27 @@
+.create-input-group {
+    display: flex;
+    justify-content: space-between;
+
+    @include breakpoint-smallest {
+        flex-direction: column;
+    }
+}
+
+.create-input-label {
+    width: calc(50% - 4px);
+
+    @include breakpoint-smallest {
+        width: 100%;
+    }
+}
+
+.create-description-input {
+    resize: none;
+    height: 80px;
+    margin-bottom: 16px;
+    box-shadow: $box-shadow;
+}
+
 .create-title-input-container {
     display: block;
     width: calc(50% - 4px);
@@ -11,6 +35,10 @@
 .create-title-input {
     width: 100%;
     box-shadow: $box-shadow;
+
+    @include breakpoint-smallest {
+        margin-bottom: 16px;
+    }
 }
 
 .create-list-item {
@@ -25,11 +53,6 @@
 
 .create-card-index {
     color: $color-text-alt;
-}
-
-.create-card {
-    display: flex;
-    justify-content: space-between;
 }
 
 .create-side-toolbar {
