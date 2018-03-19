@@ -1,5 +1,8 @@
 .header {
     height: 56px;
+    border-top: 4px solid $highlight-color;
+    background-color: $background-color;
+    box-shadow: $box-shadow;
 
     @include breakpoint-smallest {
         height: 40px;
@@ -8,7 +11,8 @@
 
 .header-nav {
     height: 100%;
-    padding: 0;
+    max-width: $max-width;
+    margin: 0 auto;
 }
 
 .header-nav-items {
@@ -18,10 +22,10 @@
 
 .header-nav-item {
     height: 100%;
-    transition: 0.2s all;
+    transition: 0.2s background-color;
 
     &:hover {
-        background-color: $bg-color1;
+        background-color: $background-color-dark;
     }
 
     &:last-of-type {
@@ -34,13 +38,12 @@
     display: flex;
     align-items: center;
     height: 100%;
-    padding-left: 8px;
-    padding-right: 8px;
-    font-size: 0.875em;
+    padding-left: 12px;
+    padding-right: 12px;
     color: $color-text-alt;
 
     &.active {
-        color: $highlight-color;
+        color: $color-text;
 
         &::after {
             content: "";
@@ -64,6 +67,6 @@
     }
 
     100% {
-        height: 4px;
+        height: 2px;
     }
 }

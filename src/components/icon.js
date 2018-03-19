@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Icon({ name }) {
+export default function Icon({ name, className }) {
     function getIcon(name) {
         switch (name) {
             case "edit":
@@ -40,7 +40,7 @@ export default function Icon({ name }) {
     }
 
     return (
-        <svg className="icon" viewBox="0 0 24 24">
+        <svg viewBox="0 0 24 24" className={className}>
             <path d={getIcon(name)} />
         </svg>
     );
