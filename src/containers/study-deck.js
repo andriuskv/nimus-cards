@@ -88,9 +88,11 @@ export default class StudyDeckContainer extends React.Component {
     }
 
     flipSide = () => {
-        this.setState(({ visibleSide }) => ({
-            visibleSide: visibleSide === "front" ? "back" : "front"
-        }));
+        if (this.state.isBackSideRevealed) {
+            this.setState(({ visibleSide }) => ({
+                visibleSide: visibleSide === "front" ? "back" : "front"
+            }));
+        }
     }
 
     getCard(index = 0) {
