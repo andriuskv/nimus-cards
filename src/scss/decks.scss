@@ -1,3 +1,26 @@
+.deck-list-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 44px;
+    padding: 8px;
+    margin-bottom: 16px;
+    background-color: $background-color;
+    box-shadow: $box-shadow;
+}
+
+.deck-list-title {
+    font-size: 1.5em;
+}
+
+.deck-list-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .deck {
     padding: 8px;
     margin-bottom: 16px;
@@ -40,10 +63,40 @@
     }
 }
 
-.deck-list-message-container {
+.deck-list-message {
+    margin: auto;
+}
+
+.deck-dialog-box-container {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.deck-dialog-box {
+    max-width: 380px;
+    padding: 16px 16px 8px 16px;
+    background-color: $background-color-darkest;
+    box-shadow: $box-shadow;
+}
+
+.deck-dialog-box-title {
+    margin-bottom: 24px;
+    font-size: 1em;
+}
+
+.deck-dialog-box-btns {
+    display: flex;
+    justify-content: flex-end;
+
+    .btn-icon {
+        margin-left: 16px;
+    }
 }

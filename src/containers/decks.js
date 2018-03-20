@@ -47,14 +47,11 @@ export default class DecksContainer extends React.Component {
 
     removeDeck = index => {
         const decks = [...this.state.decks];
-        const { _id, title } = decks[index];
-        const confirmed = confirm(`Are you sure you want to remove ${title} deck?`);
+        const { _id } = decks[index];
 
-        if (confirmed) {
-            removeDeck(_id);
-            decks.splice(index, 1);
-            this.setState({ decks });
-        }
+        removeDeck(_id);
+        decks.splice(index, 1);
+        this.setState({ decks });
     }
 
     render() {

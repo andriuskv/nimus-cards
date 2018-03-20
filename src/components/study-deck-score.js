@@ -30,7 +30,7 @@ export default function StudyDeckScore({ title, score, mode, initNextStandardRou
 
     return (
         <React.Fragment>
-            <h1 className="study-deck-title">{title}</h1>
+            <h1 className="component-header study-deck-title">{title}</h1>
             <div className="deck-score-container">
                 <h3 className="deck-score-title">Session Results</h3>
                 <div className="deck-score-in-percent">{Math.round(session.right / session.total * 100)}%</div>
