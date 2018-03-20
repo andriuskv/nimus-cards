@@ -70,6 +70,14 @@ svg {
     }
 }
 
+.component-header {
+    padding: 8px;
+    margin-bottom: 16px;
+    background-color: $background-color;
+    box-shadow: $box-shadow;
+    color: $color-text-alt;
+}
+
 .container-footer {
     display: flex;
     align-items: center;
@@ -90,6 +98,7 @@ svg {
     @extend %input-styles;
 
     cursor: pointer;
+    padding: 6px 12px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.32);
     color: $color-text-secondary;
     transition: 0.2s background-color;

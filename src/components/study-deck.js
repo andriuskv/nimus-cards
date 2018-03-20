@@ -6,7 +6,7 @@ import Timeout from "../containers/timeout";
 export default function StudyDeck({ title, card, cardCount, score, mode, timeoutDuration, revealBack, flipSide, getNextCard }) {
     return (
         <React.Fragment>
-            <h1 className="study-deck-title">{title}</h1>
+            <h1 className="component-header study-deck-title">{title}</h1>
             <div className="study-container">
                 <StudyDeckHeader score={score} mode={mode} />
                 <Card card={card} revealBack={revealBack} flipSide={flipSide} />

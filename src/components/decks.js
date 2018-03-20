@@ -2,8 +2,36 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Icon from "./icon";
 
-export default function Decks({ decks, loading, editDeck, removeDeck }) {
-    function renderDeck(deck, index) {
+export default class DecksContainer extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            dialogBoxVisible: false,
+            deck: null
+        };
+    }
+
+    showDialogBox = deck => {
+        this.setState({
+            dialogBoxVisible: true,
+            deck
+        });
+    }
+
+    removeDeck = index => {
+        this.props.removeDeck(index);
+        this.hideDialogBox();
+    }
+
+    hideDialogBox = () => {
+        this.setState({
+            dialogBoxVisible: false,
+            deck: null
+        });
+    }
+
+    renderDeck = (deck, index) => {
         return (
             <li className="deck" key={deck.id}>
                 <Link to={`/decks/${deck.id}`} className="deck-title">{deck.title}</Link>
@@ -13,12 +41,12 @@ export default function Decks({ decks, loading, editDeck, removeDeck }) {
                 </div>
                 <div className="deck-btn-container">
                     <button className="btn-icon deck-btn" title="Edit"
-                        onClick={() => editDeck(deck)}>
+                        onClick={() => this.props.editDeck(deck)}>
                         <Icon name="edit" />
                         <span>Edit</span>
                     </button>
                     <button className="btn-icon deck-btn" title="Remove"
-                        onClick={() => removeDeck(index)}>
+                        onClick={() => this.showDialogBox({ index, title: deck.title })}>
                         <Icon name="remove" />
                         <span>Remove</span>
                     </button>
@@ -27,16 +55,36 @@ export default function Decks({ decks, loading, editDeck, removeDeck }) {
         );
     }
 
-    return !loading && (decks.length ?
-        <React.Fragment>
-            <ul>{decks.map(renderDeck)}</ul>
-            <div className="container-footer">
-                <Link to="/decks/create" className="btn">Create Deck</Link>
+    renderDialogBox = ({ index, title }) => {
+        return (
+            <div className="deck-dialog-box-container">
+                <div className="deck-dialog-box">
+                    <h3 className="deck-dialog-box-title">Are you sure you want to remove <b>{title}</b> deck?</h3>
+                    <div className="deck-dialog-box-btns">
+                        <button className="btn-danger" onClick={() => this.removeDeck(index)}>Remove</button>
+                        <button onClick={this.hideDialogBox} className="btn-icon">Cancel</button>
+                    </div>
+                </div>
             </div>
-        </React.Fragment> :
-        <div className="deck-list-message-container">
-            <h2>You have no decks</h2>
-            <Link to="/decks/create" className="btn">Create New Deck</Link>
-        </div>
-    );
+        );
+    }
+
+    render() {
+        const { loading, decks } = this.props;
+        const { deck, dialogBoxVisible } = this.state;
+
+        return (
+            <React.Fragment>
+                <div className="component-header deck-list-header">
+                    <h1 className="deck-list-title">Your Decks</h1>
+                    <Link to="/decks/create" className="btn deck-list-btn">Create</Link>
+                </div>
+                {!loading && (decks.length ?
+                    <ul>{decks.map(this.renderDeck)}</ul> :
+                    <h2 className="deck-list-message">You have no decks</h2>
+                )}
+                {dialogBoxVisible && this.renderDialogBox(deck)}
+            </React.Fragment>
+        );
+    }
 }
