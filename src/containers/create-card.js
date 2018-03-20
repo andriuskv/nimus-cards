@@ -54,15 +54,15 @@ export default class CreateCardContainer extends React.Component {
                         handleTextSizeSelect={this.handleTextSizeSelect} />
                 </div>
                 <div className="create-card-btns">
-                    <button className="btn-icon"
-                        title="Remove card"
-                        onClick={() => removeCard(index)}>
-                        <Icon name="remove" />
-                    </button>
                     <button className="btn-icon side-flip-btn"
                         title="Flip side"
                         onClick={() => this.flipSide(side)}>
                         <Icon name="flip" />
+                    </button>
+                    <button className="btn-icon"
+                        title="Remove card"
+                        onClick={() => removeCard(index)}>
+                        <Icon name="remove" />
                     </button>
                 </div>
             </li>

@@ -3,6 +3,13 @@
     text-align: center;
 }
 
+.study-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding-bottom: 16px;
+}
+
 .study-header {
     margin-bottom: 16px;
 }
@@ -90,16 +97,17 @@
     display: flex;
     justify-content: space-between;
     margin: auto 0;
-}
 
-.study-side-flip-btn {
-    position: absolute;
-    top: -2px;
-    right: 0;
+    @include breakpoint-smallest {
+        width: 100%;
+        max-width: 492px;
+        margin: auto;
+    }
 }
 
 .study-side-content {
-    height: 338px;
+    user-select: none;
+    height: 320px;
 }
 
 .study-side-text {
@@ -126,10 +134,7 @@
 .study-progress {
     margin-right: auto;
     color: $color-text-alt;
-
-    @include breakpoint-smallest {
-        font-size: 14px;
-    }
+    font-size: 0.875em;
 }
 
 .study-timeout {

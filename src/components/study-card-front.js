@@ -1,8 +1,9 @@
 import React from "react";
 import Attachment from "./attachment";
 
-export default function CardFront({ card, visibleSide, textStyles }) {
+export default function CardFront({ card, textStyles }) {
     const side = "front";
+    const { visibleSide } = card;
     const { attachment, text } = card[side];
 
     return (
