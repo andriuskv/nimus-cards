@@ -163,7 +163,7 @@ svg {
     height: 18px;
     content: "";
     background-color: $background-color-dark;
-        box-shadow: $box-shadow;
+    box-shadow: $box-shadow;
     color: $highlight-color;
 }
 
@@ -201,4 +201,23 @@ svg {
     transform: translate(-50%, -50%);
     text-align: center;
     font-size: 1.5em;
+}
+
+.service-worker-popup {
+    z-index: 2;
+    position: fixed;
+    bottom: 8px;
+    right: 8px;
+    opacity: 0;
+    padding: 16px;
+    background-color: $background-color-dark;
+    box-shadow: $box-shadow;
+    color: $color-text-alt;
+    transition: 0.4s transform, 0.4s opacity;
+    transform: translateX(calc(100% + 10px));
+
+    &.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }

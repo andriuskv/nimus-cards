@@ -11,7 +11,10 @@ import DecksContainer from "./containers/decks";
 import CreateDeckContainer from "./containers/create-deck";
 import StudyDeckContainer from "./containers/study-deck";
 import SettingsContainer from "./containers/settings";
+import ServiceWorkerPopup from "./containers/service-worker-popup";
 import NoMatch from "./components/no-match";
+
+import { initServiceWorker } from "./services/service-worker";
 
 render(
     <HashRouter>
@@ -26,12 +29,13 @@ render(
                     <Route path="/settings" component={SettingsContainer}></Route>
                     <Route component={NoMatch}></Route>
                 </Switch>
+                <ServiceWorkerPopup />
             </main>
         </React.Fragment>
     </HashRouter>,
     document.getElementById("app")
 );
 
-// if ("serviceWorker" in navigator) {
-//     navigator.serviceWorker.register("./sw.js").catch(console.log);
-// }
+if ("serviceWorker" in navigator) {
+    initServiceWorker();
+}
