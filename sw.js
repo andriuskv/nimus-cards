@@ -4,8 +4,8 @@ const toCache = ["./index.html", "./main.css", "./main.js", "./vendor.js"];
 self.addEventListener("install", event => {
     event.waitUntil(
         caches.open(cacheName)
-        .then(cache => cache.addAll(toCache))
-        .then(() => self.skipWaiting())
+            .then(cache => cache.addAll(toCache))
+            .then(() => self.skipWaiting())
     );
 });
 
@@ -26,7 +26,7 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
     event.respondWith(
         caches.match(event.request)
-        .then(response => response || fetch(event.request))
-        .catch(() => caches.match("index.html"))
+            .then(response => response || fetch(event.request))
+            .catch(() => caches.match("index.html"))
     );
 });
