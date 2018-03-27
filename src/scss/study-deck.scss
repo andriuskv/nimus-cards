@@ -105,6 +105,21 @@
     }
 }
 
+.study-card-hint {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: none;
+    padding: 6px 12px;
+    font-size: 0.875em;
+    letter-spacing: 1px;
+    color: $color-text-alt;
+
+    @include breakpoint-smallest {
+        display: block;
+    }
+}
+
 .study-side-content {
     user-select: none;
     height: 320px;

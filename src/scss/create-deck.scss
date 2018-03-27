@@ -75,6 +75,7 @@
 }
 
 .create-card {
+    position: relative;
     flex: 1;
 }
 
@@ -141,6 +142,24 @@
 
 .create-side-text-input {
     resize: none;
+}
+
+.create-flip-btn {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    padding: 6px 12px;
+    display: none;
+    background-color: $background-color-dark;
+    box-shadow: $box-shadow;
+
+    &:hover {
+        background-color: $background-color-darkest;
+    }
+
+    @include breakpoint-smallest {
+        display: block;
+    }
 }
 
 .create-message {

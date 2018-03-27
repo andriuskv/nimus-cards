@@ -15,6 +15,7 @@ export default function StudyCard({ card, revealBack, flipSide }) {
         <div className="study-card" onClick={flipSide}>
             <CardFront card={card} textStyles={getTextStyles(card.front)} />
             <CardBack card={card} textStyles={getTextStyles(card.back)} revealBack={revealBack} />
+            {card.isBackSideRevealed && <div className="study-card-hint">CLICK TO FLIP</div>}
         </div>
     );
 }
