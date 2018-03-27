@@ -8,8 +8,6 @@ export default function Icon({ name, className }) {
                     3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z`;
             case "remove":
                 return `M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z`;
-            case "flip":
-                return `M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z`;
             case "media":
                 return `M21,17H7V3H21M21,1H7A2,2 0 0,0 5,3V17A2,2 0 0,0 7,19H21A2,2 0 0,0 23,
                     17V3A2,2 0 0,0 21,1M3,5H1V21A2,2 0 0,0 3,23H19V21H3M15.96,10.29L13.21,13.83L11.25,

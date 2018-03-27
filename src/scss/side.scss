@@ -61,12 +61,3 @@
     padding: 8px;
     white-space: pre-line;
 }
-
-.side-flip-btn {
-    display: none;
-
-    @include breakpoint-smallest {
-        display: flex;
-        margin-left: auto;
-    }
-}
