@@ -79,6 +79,7 @@ export default class DecksContainer extends React.Component {
                     <h1 className="deck-list-title">Your Decks</h1>
                     <Link to="/decks/create" className="btn deck-list-btn">Create</Link>
                 </div>
+                {loading && <img src="./assets/ring-alt.svg" className="deck-loading-indicator" />}
                 {!loading && (decks.length ?
                     <ul>{decks.map(this.renderDeck)}</ul> :
                     <h2 className="deck-list-message">You have no decks</h2>
