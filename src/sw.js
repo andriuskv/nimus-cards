@@ -1,5 +1,11 @@
-const cacheName = "v1";
-const toCache = ["./index.html", "./main.css", "./main.js", "./vendor.js"];
+const cacheName = "nimus-cards-1";
+const toCache = [
+    "./index.html",
+    "./main.css",
+    "./main.js",
+    "./vendor.js",
+    "./assets/ring-alt.svg"
+];
 
 self.addEventListener("install", event => {
     event.waitUntil(
@@ -14,7 +20,7 @@ self.addEventListener("activate", event => {
     event.waitUntil(
         caches.keys().then(keys => {
             return Promise.all(keys.map(key => {
-                if (key !== cacheName) {
+                if (key.startsWith("nimus-cards") && key !== cacheName) {
                     return caches.delete(key);
                 }
                 return key;
