@@ -82,7 +82,7 @@ svg {
     display: flex;
     align-items: center;
     margin-top: auto;
-    padding: 8px;
+    padding: 8px 0;
     border-top: 1px solid $background-color-darkest;
 }
 
@@ -209,15 +209,20 @@ svg {
     bottom: 8px;
     right: 8px;
     opacity: 0;
+    visibility: hidden;
     padding: 16px;
     background-color: $background-color-dark;
     box-shadow: $box-shadow;
     color: $color-text-alt;
-    transition: 0.4s transform, 0.4s opacity;
+    transition:
+        0.4s opacity,
+        0.4s visibility,
+        0.4s transform;
     transform: translateX(calc(100% + 10px));
 
     &.visible {
         opacity: 1;
+        visibility: visible;
         transform: translateX(0);
     }
 }

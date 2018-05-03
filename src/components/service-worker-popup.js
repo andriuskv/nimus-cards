@@ -1,7 +1,6 @@
-import React from "react";
-import { setTimeout } from "timers";
+import React, { Component } from "react";
 
-export default class ServiceWorkerPopup extends React.Component {
+export default class ServiceWorkerPopup extends Component {
     constructor(props) {
         super(props);
 
