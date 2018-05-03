@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CardBack({ card, textStyles, revealBack }) {
+export default function StudyCardBack({ card, textStyles, revealBack }) {
     const side = "back";
     const { visibleSide } = card;
     const { text } = card[side];

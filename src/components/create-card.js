@@ -3,7 +3,7 @@ import Icon from "../components/icon";
 import CardFront from "./create-card-front";
 import CardBack from "./create-card-back";
 
-export default class CreateCardContainer extends React.Component {
+export default class CreateCard extends React.Component {
     constructor(props) {
         super(props);
 
@@ -53,7 +53,6 @@ export default class CreateCardContainer extends React.Component {
                         handleInput={this.handleInput}
                         handleTextSizeSelect={this.handleTextSizeSelect} />
                     <button className="btn-icon create-flip-btn"
-                        title="Flip side"
                         onClick={() => this.flipSide(side)}>Flip</button>
                 </div>
                 <div className="create-card-btns">

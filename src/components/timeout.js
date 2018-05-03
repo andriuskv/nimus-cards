@@ -1,6 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 
-export default class TimeoutContainer extends React.Component {
+export default class Timeout extends Component {
     constructor(props) {
         super(props);
 

@@ -114,6 +114,7 @@
     font-size: 0.875em;
     letter-spacing: 1px;
     color: $color-text-alt;
+    cursor: default;
 
     @include breakpoint-smallest {
         display: block;

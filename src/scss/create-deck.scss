@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin: 0 24px;
 
     @include breakpoint-smallest {
         flex-direction: column;
@@ -57,7 +58,7 @@
 .create-card-btns {
     flex-shrink: 0;
     min-width: 20px;
-    margin-top: 20px;
+    margin-top: 22px;
 }
 
 .create-card-index {
@@ -77,6 +78,7 @@
 .create-card {
     position: relative;
     flex: 1;
+    margin: 0;
 }
 
 .create-side-toolbar {

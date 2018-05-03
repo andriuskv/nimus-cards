@@ -32,9 +32,6 @@ module.exports = function(env = {}) {
 
     return {
         mode,
-
-        // https://github.com/webpack-contrib/mini-css-extract-plugin/issues/23
-        cache: false,
         entry: {
             main: "./src/index.js"
         },
@@ -56,7 +53,7 @@ module.exports = function(env = {}) {
         module: {
             rules: [
                 {
-                    test: /\.scss$/,
+                    test: /\.s?css$/,
                     use: [
                         MiniCssExtractPlugin.loader,
                         {

@@ -1,4 +1,4 @@
-const cacheName = "nimus-cards-2";
+const cacheName = "nimus-cards-3";
 const toCache = [
     "./index.html",
     "./main.css",
