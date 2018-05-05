@@ -21,10 +21,6 @@
     color: $color-text-alt;
 }
 
-.study-score-bar-inner {
-    transition: width 0.4s;
-}
-
 .score-bar {
     overflow: hidden;
     display: inline-flex;
@@ -35,6 +31,7 @@
     padding-bottom: 2px;
     color: $color-text-secondary;
     font-size: 14px;
+    transition: width 0.4s;
 }
 
 .score-right-bar {
@@ -218,6 +215,7 @@
 }
 
 .deck-score-bar-name {
+    flex-shrink: 0;
     width: 46px;
     margin-right: 8px;
     font-size: 14px;
@@ -229,16 +227,14 @@
     flex-grow: 1;
     background-color: $background-color-lightest;
     box-shadow: inset $box-shadow;
-}
 
-.deck-score-bar-inner {
-    display: flex;
-    width: 0;
-    animation-name: expand;
-    animation-duration: 0.6s;
-    animation-delay: 0.2s;
-    animation-fill-mode: forwards;
-    animation-timing-function: ease-out;
+    .score-bar {
+        transform-origin: left;
+        animation-name: expand;
+        animation-duration: 0.4s;
+        animation-delay: 0.2s;
+        animation-fill-mode: both;
+    }
 }
 
 .deck-score-btn-container {
@@ -252,9 +248,11 @@
 
 @keyframes expand {
     0% {
-        width: 0;
+        opacity: 0;
+        transform: scaleX(0);
     }
     100% {
-        width: 100%;
+        opacity: 1;
+        transform: scaleX(1);
     }
 }

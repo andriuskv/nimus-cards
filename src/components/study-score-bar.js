@@ -1,16 +1,9 @@
 import React from "react";
 
-export default function StudyScoreBar({ score, type, barName, className = "" }) {
-    function renderBar(score, barName) {
-        if (!score.total) {
-            return <div className={`score-bar score-${barName}-bar`}>{score[barName]}</div>;
-        }
-        const style = {
-            [type]: `${score[barName] / score.total * 100}%`
-        };
+export default function StudyScoreBar({ score, name }) {
+    const style = {
+        width: `${score.total ? score[name] / score.total * 100 : 50}%`
+    };
 
-        return <div className={`score-bar score-${barName}-bar ${className}`} style={style}>{score[barName]}</div>;
-    }
-
-    return renderBar(score, barName);
+    return <div className={`score-bar score-${name}-bar`} style={style}>{score[name]}</div>;
 }

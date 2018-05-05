@@ -38,15 +38,13 @@ export default function StudyDeckScore({ title, score, mode, initNextStandardRou
                     <div className="deck-score-bar-container">
                         <span className="deck-score-bar-name">Right</span>
                         <div className="deck-score-bar">
-                            <StudyScoreBar score={session} type="maxWidth" barName="right"
-                                className="deck-score-bar-inner" />
+                            <StudyScoreBar score={session} name="right" />
                         </div>
                     </div>
                     <div className="deck-score-bar-container">
                         <span className="deck-score-bar-name">Wrong</span>
                         <div className="deck-score-bar">
-                            <StudyScoreBar score={session} type="maxWidth" barName="wrong"
-                                className="deck-score-bar-inner" />
+                            <StudyScoreBar score={session} name="wrong" />
                         </div>
                     </div>
                 </div>
