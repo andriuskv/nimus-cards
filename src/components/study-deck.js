@@ -193,7 +193,7 @@ export default class StudyDeck extends Component {
     }
 
     initNextLeitnerLevel = () => {
-        const levels = this.score.levels;
+        const { levels } = this.score;
         const index = levels.findIndex(level => level.length);
         const cards = this.getNextLevelCards(this.initialCards, levels[index]);
 
