@@ -1,5 +1,5 @@
 import React from "react";
-import StudyScoreBar from "./study-score-bar";
+import StudyScoreBar from "./study-deck-score-bar";
 
 export default function StudyDeckHeader({ score, mode }) {
     return (

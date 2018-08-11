@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { getDecks } from "../services/db";
-import { getSettings } from "../services/settings";
+import React from "react";
+import { getDecks } from "../../services/db";
+import { getSettings } from "../../services/settings";
 import StudyDeckHeader from "./study-deck-header";
 import StudyDeckScore from "./study-deck-score";
-import Card from "./study-card";
-import Timeout from "./timeout";
+import Card from "../study-card/study-card";
+import Timer from "./study-deck-timer";
 
-export default class StudyDeck extends Component {
+export default class StudyDeck extends React.Component {
     constructor(props) {
         super(props);
 
@@ -221,7 +221,7 @@ export default class StudyDeck extends Component {
                 <div className="container-footer">
                     <span className="study-progress">Progress: {this.state.index + 1}/{this.cards.length}</span>
                     {!this.state.isBackSideRevealed &&
-                        <Timeout duration={this.timeoutDuration} callback={this.revealBack} />
+                        <Timer duration={this.timeoutDuration} callback={this.revealBack} />
                     }
                     {this.state.isBackSideRevealed ?
                         <React.Fragment>

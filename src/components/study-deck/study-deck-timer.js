@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 
-export default class Timeout extends Component {
+export default class Timer extends React.Component {
     constructor(props) {
         super(props);
 
@@ -72,6 +72,6 @@ export default class Timeout extends Component {
 
     render() {
         const { duration, formatedDuration } = this.state;
-        return duration >= 0 ? <div className="study-timeout">{formatedDuration}</div> : null;
+        return duration >= 0 ? <div className="study-timer">{formatedDuration}</div> : null;
     }
 }

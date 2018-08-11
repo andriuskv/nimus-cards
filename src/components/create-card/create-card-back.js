@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import TextSizeSelect from "./create-card-text-size-select";
 
-export default class CreateCardBackSide extends Component {
+export default class CreateCardBackSide extends React.Component {
     constructor(props) {
         super(props);
 

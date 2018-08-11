@@ -1,5 +1,5 @@
 import React from "react";
-import Attachment from "./attachment";
+import Attachment from "../attachment";
 
 export default function StudyCardFront({ card, textStyles }) {
     const side = "front";

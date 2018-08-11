@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import TextSizeSelect from "./create-card-text-size-select";
-import Attachment from "./attachment";
-import Icon from "./icon";
+import Attachment from "../attachment";
+import Icon from "../icon";
 
-export default class CreateCardFrontSide extends Component {
+export default class CreateCardFrontSide extends React.Component {
     constructor(props) {
         super(props);
 
