@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import StudyScoreBar from "./study-score-bar";
+import StudyScoreBar from "./study-deck-score-bar";
 
 export default function StudyDeckScore({ title, score, mode, initNextStandardRound, initNextLeitnerLevel }) {
     const { session } = score;

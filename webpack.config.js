@@ -60,18 +60,24 @@ module.exports = function(env = {}) {
                             loader: "css-loader",
                             options: {
                                 sourceMap: !env.prod,
-                                url: false,
-                                minimize: env.prod
+                                url: false
                             }
                         },
                         {
                             loader: "postcss-loader",
                             options: {
                                 sourceMap: !env.prod,
-                                plugins: () => [
-                                    require("autoprefixer")(),
-                                    require("css-mqpacker")()
-                                ]
+                                plugins() {
+                                    const plugins = [
+                                        require("autoprefixer")(),
+                                        require("css-mqpacker")()
+                                    ];
+
+                                    if (env.prod) {
+                                        plugins.push(require("cssnano")());
+                                    }
+                                    return plugins;
+                                }
                             }
                         },
                         {
@@ -89,13 +95,16 @@ module.exports = function(env = {}) {
                     options: {
                         presets: [["@babel/preset-env", {
                             modules: false,
-                            shippedProposals: true,
                             loose: true,
                             useBuiltIns: "usage"
                         }], "@babel/react"],
                         plugins: [
+                            ["@babel/plugin-transform-runtime", {
+                                corejs: 2,
+                                useESModules: true
+                            }],
                             "@babel/plugin-syntax-dynamic-import",
-                            "transform-class-properties"
+                            "@babel/plugin-proposal-class-properties"
                         ]
                     }
                 }

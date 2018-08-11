@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import Card from "./create-card";
+import React from "react";
+import Card from "./create-card/create-card";
 
-export default class CreateDeck extends Component {
+export default class CreateDeck extends React.Component {
     constructor(props) {
         super(props);
 

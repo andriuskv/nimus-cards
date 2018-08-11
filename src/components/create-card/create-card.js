@@ -1,5 +1,5 @@
 import React from "react";
-import Icon from "../components/icon";
+import Icon from "../icon";
 import CardFront from "./create-card-front";
 import CardBack from "./create-card-back";
 

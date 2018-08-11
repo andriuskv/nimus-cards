@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import { getSettings, saveSettings } from "../services/settings";
 
-export default class Settings extends Component {
+export default class Settings extends React.Component {
     constructor(props) {
         super(props);
 
