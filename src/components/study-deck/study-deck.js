@@ -39,7 +39,7 @@ export default class StudyDeck extends React.Component {
 
         this.mode = settings.studyMode.value;
         this.randomizeCards = settings.randomize.value;
-        this.timeoutDuration = parseInt(settings.timeoutDuration.value || 0, 10);
+        this.timeoutDuration = parseInt(settings.timeoutDuration.value, 10) || 0;
         this.deckTitle = title;
         this.cards = this.getCards(cards, settings);
         this.score = this.resetScoreCounter({
@@ -220,9 +220,6 @@ export default class StudyDeck extends React.Component {
                 </div>
                 <div className="container-footer">
                     <span className="study-progress">Progress: {this.state.index + 1}/{this.cards.length}</span>
-                    {!this.state.isBackSideRevealed &&
-                        <Timer duration={this.timeoutDuration} callback={this.revealBack} />
-                    }
                     {this.state.isBackSideRevealed ?
                         <React.Fragment>
                             <button className="btn-danger study-footer-btn"
@@ -230,7 +227,10 @@ export default class StudyDeck extends React.Component {
                             <button className="btn-success study-footer-btn"
                                 onClick={() => this.getNextCard(1)}>I Got It Right</button>
                         </React.Fragment> :
-                        <button className="btn" onClick={this.revealBack}>Reveal</button>
+                        <React.Fragment>
+                            {this.timeoutDuration > 0 && <Timer duration={this.timeoutDuration} callback={this.revealBack} />}
+                            <button className="btn" onClick={this.revealBack}>Reveal</button>
+                        </React.Fragment>
                     }
                 </div>
             </React.Fragment>;
