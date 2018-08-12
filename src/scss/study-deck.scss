@@ -151,9 +151,10 @@
 }
 
 .study-timer {
-    padding: 8px 12px;
+    padding: 6px 12px;
     margin-right: 8px;
     background-color: $background-color-dark;
+    box-shadow: inset 0 1px 1px 0 $color-black-20;
     font-size: 14px;
 }
 

@@ -5,16 +5,13 @@ export default class Timer extends React.Component {
         super(props);
 
         this.state = {
-            duration: props.duration || -1,
-            formatedDuration: this.formatDuration(props.duration)
+            duration: props.duration
         };
         this.timeoutId = 0;
     }
 
     componentDidMount() {
-        if (this.state.duration > 0) {
-            this.runTimer(performance.now(), 0);
-        }
+        this.runTimer(performance.now(), 0);
     }
 
     componentWillUnmount() {
@@ -57,21 +54,19 @@ export default class Timer extends React.Component {
     update(startTime, elapsed) {
         const duration = this.state.duration - 1;
 
-        if (duration < 0) {
+        if (duration < 1) {
             this.setState({ duration });
             this.props.callback();
             return;
         }
-        this.setState({
-            duration,
-            formatedDuration: this.formatDuration(duration)
-        }, () => {
+        this.setState({ duration }, () => {
             this.runTimer(startTime, elapsed);
         });
     }
 
     render() {
-        const { duration, formatedDuration } = this.state;
-        return duration >= 0 ? <div className="study-timer">{formatedDuration}</div> : null;
+        const duration = this.formatDuration(this.state.duration);
+
+        return <div className="study-timer">{duration}</div>;
     }
 }
