@@ -1,9 +1,10 @@
-const cacheName = "nimus-cards-7";
+const cacheName = "nimus-cards-8";
 const toCache = [
     "./index.html",
     "./main.css",
     "./main.js",
     "./vendor.js",
+    "./favicon.png",
     "./assets/ring-alt.svg"
 ];
 
