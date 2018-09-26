@@ -7,9 +7,7 @@ export default function Home() {
         <React.Fragment>
             <div className="home-hero">
                 <h1 className="home-hero-title">NimusCards</h1>
-                <p className="home-hero-desc">
-                    NimusCards is easy to use web based flashcard application with the goal of giving users an ability to create, edit, and practice flashcards that are organized in decks.
-                </p>
+                <p className="home-hero-desc">Simple learning with flashcards.</p>
                 <Link to="/decks/create" className="btn home-hero-btn">Get Started</Link>
             </div>
             <h2 className="home-features-title">Features</h2>
