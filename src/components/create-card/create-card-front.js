@@ -151,7 +151,7 @@ export default class CreateCardFrontSide extends React.Component {
             <div className="side-panel-container">
                 <div className="create-side-upload-item">
                     <div>Upload {uploadType} from device</div>
-                    <label className="btn" tabIndex="0">
+                    <label className="btn-secondary" tabIndex="0">
                         <span>Upload</span>
                         <input type="file" className="file-input" onChange={this.handleFileUpload} />
                     </label>
@@ -160,7 +160,7 @@ export default class CreateCardFrontSide extends React.Component {
                     <div>Upload {uploadType} from url</div>
                     <form onSubmit={this.handleFileUploadFormURL}>
                         <input type="text" name="url" className="input" />
-                        <button className="btn">Upload</button>
+                        <button className="btn-secondary">Upload</button>
                     </form>
                 </div>
                 {message && <div className="create-side-upload-panel-message">{message}</div>}

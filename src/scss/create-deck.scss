@@ -21,7 +21,6 @@
     resize: none;
     height: 80px;
     margin-bottom: 16px;
-    box-shadow: $box-shadow;
 }
 
 .create-title-input-container {
@@ -36,7 +35,6 @@
 
 .create-title-input {
     width: 100%;
-    box-shadow: $box-shadow;
 
     @include breakpoint-smallest {
         margin-bottom: 16px;
@@ -150,14 +148,7 @@
     position: absolute;
     bottom: 4px;
     right: 4px;
-    padding: 6px 12px;
     display: none;
-    background-color: $background-color-dark;
-    box-shadow: $box-shadow;
-
-    &:hover {
-        background-color: $background-color-darkest;
-    }
 
     @include breakpoint-smallest {
         display: block;
