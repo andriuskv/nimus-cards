@@ -98,10 +98,6 @@ module.exports = function(env = {}) {
                             useBuiltIns: "usage"
                         }], "@babel/react"],
                         plugins: [
-                            ["@babel/plugin-transform-runtime", {
-                                corejs: 2,
-                                useESModules: true
-                            }],
                             "@babel/plugin-syntax-dynamic-import",
                             "@babel/plugin-proposal-class-properties"
                         ]

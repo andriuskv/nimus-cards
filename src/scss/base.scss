@@ -87,19 +87,18 @@ svg {
 }
 
 %input-styles {
-    padding: 8px 12px;
+    padding: 6px 12px;
     border: none;
     background-color: $background-color-dark;
     font-size: 14px;
     color: $color-text;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 %btn-styles {
     @extend %input-styles;
 
     cursor: pointer;
-    padding: 6px 12px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.32);
     color: $color-text-secondary;
     transition: 0.2s background-color;
 }
@@ -115,6 +114,17 @@ svg {
 
     &:hover {
         background-color: darken($highlight-color, 6%);
+    }
+}
+
+.btn-secondary {
+    @extend %btn-styles;
+
+    background-color: $background-color-dark;
+    color: $color-text-alt;
+
+    &:hover {
+        background-color: $background-color-darkest;
     }
 }
 
