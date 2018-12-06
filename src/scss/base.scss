@@ -98,9 +98,10 @@ svg {
 %btn-styles {
     @extend %input-styles;
 
-    cursor: pointer;
+    border-radius: 2px;
     color: $color-text-secondary;
     transition: 0.2s background-color;
+    cursor: pointer;
 }
 
 .input {
@@ -176,7 +177,6 @@ svg {
     box-shadow: $box-shadow;
     color: $highlight-color;
     font-size: 16px;
-    font-weight: bold;
 }
 
 .checkbox-input {
@@ -236,5 +236,50 @@ svg {
         opacity: 1;
         visibility: visible;
         transform: translateX(0);
+    }
+}
+
+.modal-container {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.4);
+    animation-fill-mode: both;
+    animation-duration: 0.2s;
+    animation-name: opacity-up;
+}
+
+@keyframes opacity-up {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal {
+    padding: 16px 16px 8px 16px;
+    border-radius: 2px;
+    background-color: $background-color-darkest;
+    box-shadow: $box-shadow;
+    animation-fill-mode: both;
+    animation-duration: 0.2s;
+    animation-name: translate-modal;
+}
+
+@keyframes translate-modal {
+    from {
+        transform: translateY(-8%);
+    }
+    to {
+        transform: translateY(0);
     }
 }

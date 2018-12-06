@@ -52,10 +52,12 @@ export default class CreateCard extends React.Component {
                         card={this.state.card}
                         handleInput={this.handleInput}
                         handleTextSizeSelect={this.handleTextSizeSelect} />
-                    <button className="btn-secondary create-flip-btn"
-                        onClick={() => this.flipSide(side)}>Flip</button>
                 </div>
                 <div className="create-card-btns">
+                    <button className="btn-icon create-card-flip-btn"
+                        onClick={() => this.flipSide(side)}>
+                        <Icon name="flip" />
+                    </button>
                     <button className="btn-icon"
                         title="Remove card"
                         onClick={() => removeCard(index)}>
