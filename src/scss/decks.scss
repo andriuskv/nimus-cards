@@ -68,48 +68,8 @@
     margin: auto;
 }
 
-.deck-dialog-box-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 8px;
-    background-color: rgba(0, 0, 0, 0.4);
-    animation-fill-mode: both;
-    animation-duration: 0.2s;
-    animation-name: opacity-up;
-}
-
-@keyframes opacity-up {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
 .deck-dialog-box {
     max-width: 380px;
-    padding: 16px 16px 8px 16px;
-    background-color: $background-color-darkest;
-    box-shadow: $box-shadow;
-    animation-fill-mode: both;
-    animation-duration: 0.32s;
-    animation-name: deck-dialog-translate;
-}
-
-@keyframes deck-dialog-translate {
-    from {
-        transform: translateY(-10%);
-    }
-    to {
-        transform: translateY(0);
-    }
 }
 
 .deck-dialog-box-title {
