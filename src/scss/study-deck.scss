@@ -102,16 +102,11 @@
     }
 }
 
-.study-card-hint {
+.study-card-flip-btn {
     position: absolute;
-    bottom: 0;
+    top: 0;
     right: 0;
     display: none;
-    padding: 6px 12px;
-    font-size: 0.875em;
-    letter-spacing: 1px;
-    color: $color-text-alt;
-    cursor: default;
 
     @include breakpoint-smallest {
         display: block;
@@ -142,6 +137,12 @@
     &:hover {
         background-color: $background-color-darkest;
     }
+}
+
+.study-expaned-image {
+    max-width: 100%;
+    max-height: calc(100% - 48px);
+    border-radius: 4px;
 }
 
 .study-progress {

@@ -78,7 +78,7 @@ export default class CreateCardUploadPanel extends React.Component {
         const { message } = this.state;
 
         return (
-            <div className="modal-container">
+            <div className="mask">
                 <div className="modal upload-panel">
                     <div className="upload-panel-device-target">
                         <div className="upload-panel-device-target-title">Select {type} file from device</div>

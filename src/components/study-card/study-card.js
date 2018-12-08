@@ -1,21 +1,19 @@
 import React from "react";
 import CardFront from "./study-card-front";
 import CardBack from "./study-card-back";
-
-function getTextStyles(cardSide) {
-    if (cardSide.textSize) {
-        return {
-            fontSize: `${cardSide.textSize}px`
-        };
-    }
-}
+import Icon from "../icon";
 
 export default function StudyCard({ card, revealBack, flipSide }) {
     return (
-        <div className="study-card" onClick={flipSide}>
-            <CardFront card={card} textStyles={getTextStyles(card.front)} />
-            <CardBack card={card} textStyles={getTextStyles(card.back)} revealBack={revealBack} />
-            {card.isBackSideRevealed && <div className="study-card-hint">CLICK TO FLIP</div>}
+        <div className="study-card">
+            {card.isBackSideRevealed && (
+                <button className="btn-icon study-card-flip-btn"
+                    onClick={flipSide} title="Flip side">
+                    <Icon name="flip" />
+                </button>
+            )}
+            <CardFront card={card} />
+            <CardBack card={card} revealBack={revealBack} />
         </div>
     );
 }

@@ -54,7 +54,7 @@ export default class CreateCard extends React.Component {
                         handleTextSizeSelect={this.handleTextSizeSelect} />
                 </div>
                 <div className="create-card-btns">
-                    <button className="btn-icon create-card-flip-btn"
+                    <button className="btn-icon create-card-flip-btn" title="Flip side"
                         onClick={() => this.flipSide(side)}>
                         <Icon name="flip" />
                     </button>
