@@ -4,58 +4,56 @@ import CardFront from "./create-card-front";
 import CardBack from "./create-card-back";
 
 export default class CreateCard extends React.Component {
-    constructor(props) {
-        super(props);
+    state = {
+        ...this.props.card,
+        visibleSide: "front"
+    };
 
-        props.card.visibleSide = "front";
-        this.state = {
-            card: props.card
-        };
+    flipSide = () => {
+        const { visibleSide } = this.state;
+
+        this.setState({
+            visibleSide: visibleSide === "front" ? "back" : "front"
+        });
     }
 
-    flipSide = side => {
-        const { card } = this.state;
-        card.visibleSide = side === "front" ? "back" : "front";
+    handleChange = ({ target }) => {
+        const { name, value } = target;
+        const side = this.state[name];
 
-        this.setState({ card });
-    }
-
-    handleInput = ({ target: { value } }, side) => {
-        const { card } = this.state;
-
-        if (value !== card[side].text) {
-            card[side].text = value;
-            this.setState({ card });
+        if (value !== side.text) {
+            side.text = value;
+            this.setState({ [name]: side });
         }
     }
 
-    handleTextSizeSelect = ({ target: { value } }, side) => {
-        const { card } = this.state;
+    handleTextSizeSelect = ({ target }) => {
+        const { name, value } = target;
+        const side = this.state[name];
 
-        card[side].textSize = value;
-        this.setState({ card });
+        side.textSize = value;
+        this.setState({ [name]: side });
     }
 
     render() {
         const { index, removeCard } = this.props;
-        const side = this.state.card.visibleSide;
 
         return (
             <li className="create-list-item">
                 <div className="create-card-index">{index + 1}.</div>
                 <div className="create-input-group create-card">
                     <CardFront
-                        card={this.state.card}
-                        handleInput={this.handleInput}
+                        card={this.state}
+                        handleChange={this.handleChange}
                         handleTextSizeSelect={this.handleTextSizeSelect} />
                     <CardBack
-                        card={this.state.card}
-                        handleInput={this.handleInput}
+                        card={this.state}
+                        handleChange={this.handleChange}
                         handleTextSizeSelect={this.handleTextSizeSelect} />
                 </div>
                 <div className="create-card-btns">
                     <button className="btn-icon create-card-flip-btn" title="Flip side"
-                        onClick={() => this.flipSide(side)}>
+                        onClick={this.flipSide}>
                         <Icon name="flip" />
                     </button>
                     <button className="btn-icon"

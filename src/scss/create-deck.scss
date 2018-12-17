@@ -87,14 +87,8 @@
     box-shadow: $box-shadow;
 }
 
-.toolbar-btn {
-    &:first-of-type {
-        margin-right: 4px;
-    }
-
-    &.active {
-        color: $color-text;
-    }
+.toolbar-btn:first-of-type {
+    margin-right: 4px;
 }
 
 .file-input {

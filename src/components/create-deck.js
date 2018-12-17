@@ -2,13 +2,13 @@ import React from "react";
 import Card from "./create-card/create-card";
 
 export default class CreateDeck extends React.Component {
-    constructor(props) {
-        super(props);
+    state = {
+        deck: this.getDeck(this.props.location.state)
+    };
+    messageTimeout = 0;
 
-        this.state = {
-            deck: this.getDeck(props.location.state)
-        };
-        this.messageTimeout = 0;
+    componentWillUnmount() {
+        clearTimeout(this.messageTimeout);
     }
 
     getRandomString() {
@@ -16,12 +16,13 @@ export default class CreateDeck extends React.Component {
     }
 
     getDeck(state = {}) {
-        return Object.assign({
+        return {
             id: this.getRandomString(),
             title: "",
             description: "",
-            cards: [this.getNewCard()]
-        }, state);
+            cards: [this.getNewCard()],
+            ...state
+        };
     }
 
     showMessage(message) {
@@ -33,42 +34,56 @@ export default class CreateDeck extends React.Component {
         }, 3200);
     }
 
-    hasSideContent(side) {
-        return side.text || side.attachment;
+    handleChange = event => {
+        const { name, value } = event.target;
+        const { deck } = this.state;
+        deck[name] = value;
+
+        this.setState({ deck });
     }
 
     handleSubmit = () => {
-        const { value: title } = document.getElementById("js-deck-title");
-        const { value: description } = document.getElementById("js-deck-description");
+        const { deck } = this.state;
 
-        if (!title) {
-            this.showMessage("Please specify deck title");
+        if (!deck.title) {
+            this.showMessage("Title is required");
             return;
         }
-        const deck = { ...this.state.deck };
-        const containsEmptySide = deck.cards.some(({ front, back }) => {
-            const isFrontEmpty = this.hasSideContent(front);
-            const isBackEmpty = this.hasSideContent(back);
+        const valid = this.validateCards(deck.cards);
 
-            return !isFrontEmpty && isBackEmpty || !isBackEmpty && isFrontEmpty;
-        });
-        deck.title = title;
-        deck.description = description;
-
-        if (!containsEmptySide) {
-            deck.cards = deck.cards.filter(({ front, back }) => this.hasSideContent(front) || this.hasSideContent(back));
-
-            if (deck.cards.length < 2) {
-                this.showMessage("Please fill in at least two cards");
-                return;
-            }
+        if (valid) {
             this.props.history.push({
                 pathname: "/decks",
                 state: deck
             });
-            return;
         }
-        this.showMessage("Please fill in both card sides");
+    }
+
+    hasSideContent(side) {
+        return side.text || side.attachment;
+    }
+
+    validateCards(cards) {
+        let validCardCount = 0;
+
+        for (const { front, back } of cards) {
+            const frontSideFull = this.hasSideContent(front);
+            const backSideFull = this.hasSideContent(back);
+
+            if (frontSideFull && backSideFull) {
+                validCardCount += 1;
+            }
+        }
+
+        if (!validCardCount) {
+            this.showMessage("Please fill in at least two cards");
+        }
+        else if (validCardCount !== cards.length) {
+            this.showMessage("Please fill in both card sides");
+        }
+        else {
+            return true;
+        }
     }
 
     getNewCard() {
@@ -110,16 +125,23 @@ export default class CreateDeck extends React.Component {
 
     render() {
         const { deck, message } = this.state;
+
         return (
             <React.Fragment>
                 <div className="create-input-group">
                     <label className="create-input-label">
                         <div className="side-name">title</div>
-                        <input id="js-deck-title" className="input create-title-input" defaultValue={deck.title} />
+                        <input className="input create-title-input"
+                            name="title"
+                            value={deck.title}
+                            onChange={this.handleChange} />
                     </label>
                     <label className="create-input-label">
                         <div className="side-name">description (optional)</div>
-                        <textarea id="js-deck-description" className="input side-text create-description-input" defaultValue={deck.description}></textarea>
+                        <textarea className="input side-text create-description-input"
+                            name="description"
+                            value={deck.description}
+                            onChange={this.handleChange}></textarea>
                     </label>
                 </div>
                 {deck.cards.length ?
