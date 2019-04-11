@@ -29,12 +29,12 @@ export default class StudyCardFront extends React.Component {
 
     render() {
         const { card } = this.props;
-        const { visibleSide } = card;
+        const { frontSideVisible } = card;
         const { attachment, text, textSize } = card[this.sideName];
 
         return (
             <React.Fragment>
-                <div className={`side-container${visibleSide === this.sideName ? " visible" : ""}`}>
+                <div className={`side-container${frontSideVisible ? " visible" : ""}`}>
                     <div className="side-name">{this.sideName}</div>
                     <div className="side">
                         <div className="study-side-content">

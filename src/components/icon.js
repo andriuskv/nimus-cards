@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Icon({ name, className }) {
+export default function Icon({ name, title, className }) {
     const icons = {
         cards: `M21.47,4.35L20.13,3.79V12.82L22.56,6.96C22.97,5.94 22.5,4.77 21.47,4.35M1.97,
             8.05L6.93,20C7.24,20.77 7.97,21.24 8.74,21.26C9,21.26 9.27,21.21 9.53,21.1L16.9,
@@ -30,11 +30,15 @@ export default function Icon({ name, className }) {
             2.89 4.89,2 6,2M9,16A2,2 0 0,0 7,18A2,2 0 0,0 9,20A2,2 0 0,0 11,18V13H14V11H10V16.27C9.71,
             16.1 9.36,16 9,16Z`,
         close: `M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z`,
-        flip: `M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z`
+        flip: `M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z`,
+        text: `M21,6V8H3V6H21M3,18H12V16H3V18M3,13H21V11H3V13Z`,
+        list: `M21,19V17H8V19H21M21,13V11H8V13H21M8,7H21V5H8V7M4,5V7H6V5H4M3,5A1,1 0 0,1 4,4H6A1,1 0 0,1 7,5V7A1,1 0 0,1 6,8H4A1,1 0 0,1 3,7V5M4,11V13H6V11H4M3,11A1,1 0 0,1 4,10H6A1,1 0 0,1 7,11V13A1,1 0 0,1 6,14H4A1,1 0 0,1 3,13V11M4,17V19H6V17H4M3,17A1,1 0 0,1 4,16H6A1,1 0 0,1 7,17V19A1,1 0 0,1 6,20H4A1,1 0 0,1 3,19V17Z`,
+        addListItem: `M2,16H10V14H2M18,14V10H16V14H12V16H16V20H18V16H22V14M14,6H2V8H14M14,10H2V12H14V10Z`
     };
 
     return (
         <svg viewBox="0 0 24 24" className={className}>
+            {title && <title>{title}</title>}
             <path d={icons[name]} />
         </svg>
     );

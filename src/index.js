@@ -19,20 +19,19 @@ import { initServiceWorker } from "./services/service-worker";
 
 render(
     <HashRouter>
-        <React.Fragment>
-            <Header />
-            <main className="main">
-                <Switch>
-                    <Route path="/" exact component={Home}></Route>
-                    <Route path="/decks" exact component={Decks}></Route>
-                    <Route path="/decks/create" component={CreateDeck}></Route>
-                    <Route path="/decks/:id" component={StudyDeck}></Route>
-                    <Route path="/settings" component={Settings}></Route>
-                    <Route component={NoMatch}></Route>
-                </Switch>
-                <ServiceWorkerPopup />
-            </main>
-        </React.Fragment>
+        <Header />
+        <main className="main">
+            <Switch>
+                <Route path="/" exact component={Home}></Route>
+                <Route path="/decks" exact component={Decks}></Route>
+                <Route path="/decks/create" component={CreateDeck} key="create"></Route>
+                <Route path="/decks/:id" exact component={StudyDeck}></Route>
+                <Route path="/decks/:id/edit" component={CreateDeck} key="edit"></Route>
+                <Route path="/settings" component={Settings}></Route>
+                <Route component={NoMatch}></Route>
+            </Switch>
+            <ServiceWorkerPopup />
+        </main>
     </HashRouter>,
     document.getElementById("app")
 );

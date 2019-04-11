@@ -18,12 +18,12 @@ export default function StudyDeckHeader({ score, mode }) {
                 <div className="study-score-table">
                     <div className="study-score-table-cell">
                         <div className="study-score-table-cell-name">Level</div>
-                        <div>Card Count</div>
+                        <div>Cards</div>
                     </div>
                     {score.levels.map((level, index) => (
                         <div className={`study-score-table-cell${score.currentLevel === index ? " active" : ""}`} key={index}>
                             <div className="study-score-table-cell-name">
-                                {index === 4 ? "Memorized" : index + 1}
+                                {index === 4 ? "Learned" : index + 1}
                             </div>
                             <div>{level.length}</div>
                         </div>
