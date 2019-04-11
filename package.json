@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dist": "rm -rf dist && mkdir dist && cp -R src/assets src/sw.js src/favicon.png dist",
+    "dist": "rm -rf dist && mkdir dist && cp -R src/sw.js src/favicon.png dist",
     "webpack": "webpack --progress --colors",
     "start": "npm run dist && live-server dist & npm run webpack -- --watch",
     "build": "npm run dist && npm run webpack -- --env.prod"
@@ -26,6 +26,7 @@
     "autoprefixer": "^9.5.1",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
+    "clean-webpack-plugin": "^2.0.1",
     "core-js": "^3.0.1",
     "css-loader": "^2.1.1",
     "css-mqpacker": "^7.0.0",
@@ -42,7 +43,8 @@
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.3",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "webpack-cli": "^3.3.0",
+    "workbox-webpack-plugin": "^4.2.0"
   },
   "browserslist": [
     "last 4 chrome versions",

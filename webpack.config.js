@@ -3,6 +3,8 @@ const { DefinePlugin } = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const workboxPlugin = require("workbox-webpack-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 module.exports = function(env = {}) {
     const mode = env.prod ? "production" : "development";
@@ -17,6 +19,15 @@ module.exports = function(env = {}) {
         }),
         new HtmlWebpackPlugin({
             template: "./src/index.html"
+        }),
+        new workboxPlugin.InjectManifest({
+            swSrc: "./src/sw.js",
+            swDest: "./sw.js",
+            globDirectory: "./dist",
+            globPatterns: ["./favicon.png"]
+        }),
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: ["precache*"]
         })
     ];
 
