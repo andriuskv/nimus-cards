@@ -1,7 +1,8 @@
 .side-name {
     margin-bottom: 8px;
-    color: $color-text-alt;
+    color: $color-text-dark;
     text-transform: uppercase;
+    font-weight: bold;
     font-size: 0.875em;
 }
 
@@ -20,6 +21,7 @@
 
 .side {
     overflow: hidden;
+    border-radius: 4px;
     background-color: $background-color-dark;
     box-shadow: $box-shadow;
 }
@@ -27,9 +29,9 @@
 .side-panel-container {
     position: relative;
     height: 60%;
+    padding-top: 4px;
     padding-bottom: 4px;
-    background-color: $background-color;
-    box-shadow: $box-shadow;
+    border-bottom: 1px solid $background-color-darkest;
 
     & + .side-text {
         height: 40%;
@@ -37,6 +39,7 @@
 
     &.full {
         height: 100%;
+        padding-top: 0;
         padding-bottom: 0;
     }
 }

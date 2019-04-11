@@ -1,109 +1,90 @@
-import React from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getDecks, addDeck, removeDeck } from "../../services/db";
+import { fetchDecks, saveDeck, deleteDeck } from "../../services/db";
 import DeckRemovalDialog from "./deck-removal-dialog";
 import Deck from "./deck";
 
-export default class Decks extends React.Component {
-    constructor(props) {
-        super(props);
+export default function Decks(props) {
+    const [decks, updateDecks] = useState([]);
+    const [dialog, toggleDialog] = useState({ visible: false });
+    const [loading, setLoadingState] = useState(true);
 
-        this.state = {
-            decks: [],
-            loading: true
-        };
-    }
-
-    componentDidMount() {
-        this.getDecks(this.props.location.state).then(decks => {
-            this.setState({
-                decks,
-                loading: false
-            });
+    useEffect(() => {
+        getDecks(props.location.state).then(decks => {
+            updateDecks(decks);
+            setLoadingState(false);
         });
-    }
+    }, []);
 
-    async getDecks(deck) {
-        const decks = await getDecks();
+    async function getDecks(deck) {
+        const decks = await fetchDecks();
 
         if (deck) {
-            const index = this.findDeckIndex(decks, deck.id);
+            const index = findDeckIndex(decks, deck.id);
 
             if (index === -1) {
                 decks.push(deck);
             }
             else {
+                // Replace deck
                 decks.splice(index, 1, deck);
             }
-            addDeck(deck);
+            saveDeck(deck);
         }
         return decks;
     }
 
-    editDeck = deck => {
-        this.props.history.push({
-            pathname: "/decks/create",
+    function findDeckIndex(decks, deckId) {
+        return decks.findIndex(({ id }) => id === deckId);
+    }
+
+    function editDeck(deck) {
+        props.history.push({
+            pathname: `/decks/${deck.id}/edit`,
             state: deck
         });
     }
 
-    removeDeck = () => {
-        const { decks, deckToRemove } = this.state;
-        const index = this.findDeckIndex(decks, deckToRemove.id);
+    function removeDeck() {
+        const index = findDeckIndex(decks, dialog.deck.id);
 
-        removeDeck(deckToRemove._id);
         decks.splice(index, 1);
-        this.setState({
-            decks,
-            dialogVisible: false,
-            deckToRemove: null
-        });
+        updateDecks([...decks]);
+        deleteDeck(dialog.deck._id);
+        hideDialog();
     }
 
-    findDeckIndex(decks, deckId) {
-        return decks.findIndex(({ id }) => id === deckId);
+    function showDialog(deck) {
+        toggleDialog({ visible: true, deck });
     }
 
-    showDialog = deck => {
-        this.setState({
-            dialogVisible: true,
-            deckToRemove: deck
-        });
+    function hideDialog() {
+        toggleDialog({ visible: false, deck: null });
     }
 
-    hideDialog = () => {
-        this.setState({
-            dialogVisible: false,
-            deckToRemove: null
-        });
+    function renderDecks(decks) {
+        return decks.map(deck => (
+            <Deck key={deck.id} deck={deck}
+                showDialog={showDialog}
+                editDeck={editDeck} />
+        ));
     }
 
-    renderDecks(decks) {
-        return decks.map(deck => <Deck key={deck.id} deck={deck}
-            showDialog={this.showDialog} editDeck={this.editDeck} />);
-    }
-
-    render() {
-        const { decks, dialogVisible, loading } = this.state;
-
-        return (
-            <React.Fragment>
-                <div className="component-header deck-list-header">
-                    <h1 className="deck-list-title">Your Decks</h1>
-                    <Link to="/decks/create" className="btn deck-list-btn">Create</Link>
-                </div>
-                {loading ?
-                    <img src="./assets/ring-alt.svg" className="deck-loading-indicator" /> :
-                    decks.length ?
-                        <ul>{this.renderDecks(decks)}</ul> :
-                        <h2 className="deck-list-message">You have no decks</h2>
-                }
-                {dialogVisible && <DeckRemovalDialog
-                    deckTitle={this.state.deckToRemove.title}
-                    removeDeck={this.removeDeck}
-                    cancelRemoval={this.hideDialog} />
-                }
-            </React.Fragment>
-        );
-    }
+    return (
+        <Fragment>
+            <div className="component-header deck-list-header">
+                <h1 className="deck-list-title">Your Decks</h1>
+                <Link to="/decks/create" className="btn deck-list-btn">Create</Link>
+            </div>
+            {loading ? "" : decks.length ?
+                <ul>{renderDecks(decks)}</ul> :
+                <h2 className="deck-list-message">You have no decks</h2>
+            }
+            {dialog.visible && <DeckRemovalDialog
+                deckTitle={dialog.deck.title}
+                removeDeck={removeDeck}
+                cancelRemoval={hideDialog} />
+            }
+        </Fragment>
+    );
 }

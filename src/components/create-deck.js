@@ -1,163 +1,198 @@
-import React from "react";
+import React, { Fragment, useState, useEffect } from "react";
+import { getRandomString } from "../helpers";
+import { fetchDecks } from "../services/db";
 import Card from "./create-card/create-card";
 
-export default class CreateDeck extends React.Component {
-    state = {
-        deck: this.getDeck(this.props.location.state)
-    };
-    messageTimeout = 0;
+export default function CreateDeck(props) {
+    const [deck, setDeck] = useState(getDeck(props.location.state));
+    const [formMessage, setFormMessage] = useState("");
+    let messageTimeout = 0;
 
-    componentWillUnmount() {
-        clearTimeout(this.messageTimeout);
+    useEffect(() => {
+        clearTimeout(messageTimeout);
+        messageTimeout = setTimeout(() => {
+            setFormMessage("");
+        }, 3200);
+
+        return () => {
+            clearTimeout(messageTimeout);
+        };
+    }, [formMessage]);
+
+    useEffect(() => {
+        const { id } = props.match.params;
+
+        if (id && !props.location.state) {
+            fetchDecks().then(decks => {
+                const deck = findDeck(decks, id);
+
+                if (deck) {
+                    setDeck(deck);
+                }
+            });
+        }
+    }, []);
+
+    function findDeck(decks, deckId) {
+        return decks.find(({ id }) => id === deckId);
     }
 
-    getRandomString() {
-        return Math.random().toString(32).slice(2, 10);
-    }
-
-    getDeck(state = {}) {
+    function getDeck(deck = {}) {
         return {
-            id: this.getRandomString(),
+            id: getRandomString(),
             title: "",
             description: "",
-            cards: [this.getNewCard()],
-            ...state
+            cards: [getNewCard()],
+            ...deck
         };
     }
 
-    showMessage(message) {
-        this.setState({ message });
-
-        clearTimeout(this.messageTimeout);
-        this.messageTimeout = setTimeout(() => {
-            this.setState({ message: "" });
-        }, 3200);
+    function getNewCard() {
+        return {
+            id: getRandomString(),
+            front: {
+                text: "",
+                textSize: 16
+            },
+            back: {
+                type: "text",
+                text: "",
+                textSize: 16,
+                correct: 0,
+                options: [
+                    { id: getRandomString() },
+                    { id: getRandomString() }
+                ]
+            }
+        };
     }
 
-    handleChange = event => {
-        const { name, value } = event.target;
-        const { deck } = this.state;
-        deck[name] = value;
+    function addCard() {
+        const lastCard = deck.cards[deck.cards.length - 1];
+        const card = getNewCard();
 
-        this.setState({ deck });
-    }
-
-    handleSubmit = () => {
-        const { deck } = this.state;
-
-        if (!deck.title) {
-            this.showMessage("Title is required");
-            return;
+        if (lastCard) {
+            card.front.textSize = lastCard.front.textSize;
+            card.back.textSize = lastCard.back.textSize;
+            card.back.type = lastCard.back.type;
         }
-        const valid = this.validateCards(deck.cards);
-
-        if (valid) {
-            this.props.history.push({
-                pathname: "/decks",
-                state: deck
-            });
-        }
+        deck.cards.push(card);
+        setDeck({ ...deck });
     }
 
-    hasSideContent(side) {
+    function removeCard(index) {
+        deck.cards.splice(index, 1);
+        setDeck({ ...deck });
+    }
+
+    function isFrontValid(side) {
         return side.text || side.attachment;
     }
 
-    validateCards(cards) {
+    function isBackValid(side) {
+        if (side.type === "text") {
+            return side.text.length > 0;
+        }
+        const validOptionCount = side.options.reduce((acc, { text }) => {
+            if (text) {
+                acc += 1;
+            }
+            return acc;
+        }, 0);
+        return validOptionCount > 1;
+    }
+
+    function validateCards(cards) {
         let validCardCount = 0;
 
         for (const { front, back } of cards) {
-            const frontSideFull = this.hasSideContent(front);
-            const backSideFull = this.hasSideContent(back);
-
-            if (frontSideFull && backSideFull) {
+            if (isFrontValid(front) && isBackValid(back)) {
                 validCardCount += 1;
             }
         }
 
-        if (!validCardCount) {
-            this.showMessage("Please fill in at least two cards");
+        if (validCardCount !== cards.length) {
+            setFormMessage("Please fill in both card sides");
         }
-        else if (validCardCount !== cards.length) {
-            this.showMessage("Please fill in both card sides");
+        else if (validCardCount < 2) {
+            setFormMessage("Please fill in at least two cards");
         }
         else {
             return true;
         }
     }
 
-    getNewCard() {
-        return {
-            id: this.getRandomString(),
-            front: {
-                text: "",
-                textSize: 16
-            },
-            back: {
-                text: "",
-                textSize: 16
-            }
-        };
+    function handleChange({ target }) {
+        const { name, value } = target;
+        deck[name] = value;
+        setDeck({ ...deck });
     }
 
-    addCard = ({ target }) => {
-        const deck = { ...this.state.deck };
-        const lastCard = deck.cards[deck.cards.length - 1];
-        const card = this.getNewCard();
-
-        if (lastCard) {
-            card.front.textSize = lastCard.front.textSize;
-            card.back.textSize = lastCard.back.textSize;
-        }
-        deck.cards.push(card);
-
-        this.setState({ deck }, () => {
-            target.scrollIntoView();
+    function cleanupCards(cards) {
+        return cards.map(card => {
+            if (card.back.type === "text") {
+                card.back.correct = 0;
+                card.back.options = card.back.options.slice(0, 2).map((option => {
+                    option.text = "";
+                    return option;
+                }));
+            }
+            else {
+                card.back.text = "";
+                card.back.options = card.back.options.filter(({ text }) => text);
+            }
+            return card;
         });
     }
 
-    removeCard = index => {
-        const deck = { ...this.state.deck };
+    function handleSubmit() {
+        if (!deck.title) {
+            setFormMessage("Title is required");
+            return;
+        }
+        const valid = validateCards(deck.cards);
 
-        deck.cards.splice(index, 1);
-        this.setState({ deck });
+        if (valid) {
+            deck.cards = cleanupCards(deck.cards);
+            props.history.push({
+                pathname: "/decks",
+                state: deck
+            });
+        }
     }
 
-    render() {
-        const { deck, message } = this.state;
-
-        return (
-            <React.Fragment>
-                <div className="create-input-group">
-                    <label className="create-input-label">
-                        <div className="side-name">title</div>
-                        <input className="input create-title-input"
-                            name="title"
-                            value={deck.title}
-                            onChange={this.handleChange} />
-                    </label>
-                    <label className="create-input-label">
-                        <div className="side-name">description (optional)</div>
-                        <textarea className="input side-text create-description-input"
-                            name="description"
-                            value={deck.description}
-                            onChange={this.handleChange}></textarea>
-                    </label>
-                </div>
-                {deck.cards.length ?
-                    <ul>
-                        {deck.cards.map((card, index) => (
-                            <Card key={card.id} index={index} card={card} removeCard={this.removeCard} />
-                        ))}
-                    </ul> :
-                    <p className="create-deck-message">Deck is empty</p>
-                }
-                <div className="container-footer create-footer">
-                    <button className="btn" onClick={this.addCard}>New Card</button>
-                    {message && <span className="create-message">{message}</span>}
-                    <button className="btn" onClick={this.handleSubmit}>Create</button>
-                </div>
-            </React.Fragment>
-        );
-    }
+    return (
+        <Fragment>
+            <div className="create-input-group">
+                <label className="create-input-label">
+                    <div className="side-name">title</div>
+                    <input className="input create-title-input"
+                        name="title"
+                        value={deck.title}
+                        onChange={handleChange} />
+                </label>
+                <label className="create-input-label">
+                    <div className="side-name">description (optional)</div>
+                    <textarea className="input side-text create-description-input"
+                        name="description"
+                        value={deck.description}
+                        onChange={handleChange}></textarea>
+                </label>
+            </div>
+            {deck.cards.length ?
+                <ul>
+                    {deck.cards.map((card, index) => (
+                        <Card key={card.id} index={index} card={card}
+                            removeCard={removeCard} />
+                    ))}
+                </ul> :
+                <p className="create-deck-message">Deck is empty</p>
+            }
+            <div className="container-footer create-footer">
+                <button className="btn" onClick={addCard}>New Card</button>
+                {formMessage && <span className="create-message">{formMessage}</span>}
+                <button className="btn" onClick={handleSubmit}>Create</button>
+            </div>
+        </Fragment>
+    );
 }

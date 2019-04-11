@@ -16,11 +16,13 @@
         "worker": true
     },
     "plugins": [
-        "react"
+        "react",
+        "react-hooks"
     ],
     "extends": ["eslint:recommended", "plugin:react/recommended"],
     "rules": {
         "react/prop-types": 0,
+        "react-hooks/rules-of-hooks": "error",
         "array-callback-return": 2,
         "arrow-spacing": [2, {
             "before": true,
@@ -47,9 +49,6 @@
         "no-duplicate-case": 2,
         "no-empty": 2,
         "no-extra-boolean-cast": 2,
-        "no-extra-parens": [2, "all", {
-            "ignoreJSX": "all"
-        }],
         "no-extra-semi": 2,
         "no-obj-calls": 2,
         "no-tabs": 2,

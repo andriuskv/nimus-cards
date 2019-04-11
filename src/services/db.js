@@ -1,31 +1,31 @@
 import Dexie from "dexie";
 
-const db = new Dexie("nimus-cards-sets");
+const db = new Dexie("nimus-cards-decks");
 
 db.version(1).stores({
-    sets: "++_id"
+    decks: "++_id"
 });
 
-function getDecks() {
-    return db.sets.toArray().catch(error => {
+function fetchDecks() {
+    return db.decks.toArray().catch(error => {
         console.log(error);
     });
 }
 
-function addDeck(set) {
-    db.sets.put(set).catch(error => {
+function saveDeck(set) {
+    db.decks.put(set).catch(error => {
         console.log(error);
     });
 }
 
-function removeDeck(id) {
-    db.sets.delete(id).catch(error => {
+function deleteDeck(id) {
+    db.decks.delete(id).catch(error => {
         console.log(error);
     });
 }
 
 export {
-    getDecks,
-    addDeck,
-    removeDeck
+    fetchDecks,
+    saveDeck,
+    deleteDeck
 };

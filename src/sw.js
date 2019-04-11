@@ -1,4 +1,4 @@
-const cacheName = "nimus-cards-12";
+const cacheName = "nimus-cards-13";
 const toCache = [
     "./index.html",
     "./main.css",
@@ -34,6 +34,5 @@ self.addEventListener("fetch", event => {
     event.respondWith(
         caches.match(event.request)
             .then(response => response || fetch(event.request))
-            .catch(() => caches.match("index.html"))
     );
 });

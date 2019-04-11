@@ -1,127 +1,115 @@
-import React from "react";
-import { getDecks } from "../../services/db";
+import React, { Fragment, useEffect, useReducer } from "react";
+import { shuffleArray } from "../../helpers";
+import { fetchDecks } from "../../services/db";
 import { getSettings } from "../../services/settings";
 import StudyDeckHeader from "./study-deck-header";
 import StudyDeckScore from "./study-deck-score";
 import Card from "../study-card/study-card";
 import Timer from "./study-deck-timer";
 
-export default class StudyDeck extends React.Component {
-    constructor(props) {
-        super(props);
+function reducer(currentState, newState) {
+    return { ...currentState, ...newState };
+}
 
-        this.deckTitle = "";
-        this.cards = [];
-        this.initialCards = [];
-        this.state = {
-            front: null,
-            back: null
-        };
-        this.score = null;
-    }
+export default function StudyDeck(props) {
+    const [state, setState] = useReducer(reducer, {
+        card: null,
+        score: null,
+        cards: [],
+        initialCards: [],
+        title: "",
+        selectedOption: 0,
+        wasLastCard: false
+    });
+    const { cards, card, score, initialCards, title } = state;
+    const settings = getSettings();
 
-    componentDidMount() {
-        getDecks().then(decks => {
-            const { id } = this.props.match.params;
+    useEffect(() => {
+        fetchDecks().then(decks => {
+            const { id } = props.match.params;
             const deck = decks.find(deck => deck.id === id);
 
             if (deck) {
-                this.initDeck(deck);
+                initDeck(deck);
             }
             else {
-                this.props.history.replace("/decks");
+                props.history.replace("/decks");
             }
         });
+    }, []);
+
+    function initDeck({ title, cards }) {
+        const initialCards = getInitialCards(cards);
+
+        setState({
+            title,
+            initialCards,
+            cards: [...initialCards],
+            card: getCard(initialCards),
+            score: initScore(initialCards)
+        });
     }
 
-    initDeck({ title, cards }) {
-        const settings = getSettings();
-
-        this.mode = settings.studyMode.value;
-        this.randomizeCards = settings.randomize.value;
-        this.timeoutDuration = parseInt(settings.timeoutDuration.value, 10) || 0;
-        this.deckTitle = title;
-        this.cards = this.getCards(cards, settings);
-        this.score = this.resetScoreCounter({
+    function initScore(cards) {
+        const score = resetScoreCounter({
             currentLevel: 0,
-            session: this.resetScoreCounter()
+            session: resetScoreCounter()
         });
 
-        if (this.mode === "standard") {
-            this.score.incorrectIds = [];
+        if (settings.studyMode.value === "standard") {
+            score.incorrectIds = [];
         }
         else {
-            const cardIds = this.cards.map(card => card.id);
-
-            this.initialCards = [].concat(this.cards);
-            this.score.levels = [cardIds, [], [], [], []];
+            const cardIds = cards.map(card => card.id);
+            score.levels = [cardIds, [], [], [], []];
         }
-        this.setState(this.getCard());
+        return score;
     }
 
-    getCards(cards, settings) {
-        const cardCount = parseInt(settings.cardCount.value, 10);
-        cards = settings.randomize.value ? this.shuffleArray(cards) : cards;
+    function getInitialCards(initialCards) {
+        const count = settings.cardCount.value;
+        const cards = settings.randomize.value ? shuffleArray(initialCards) : initialCards;
 
-        if (cardCount) {
-            return cards.slice(0, cardCount);
+        if (count) {
+            return cards.slice(0, count);
         }
         return cards;
     }
 
-    shuffleArray(array) {
-        const arrayCopy = [].concat(array);
-        let index = arrayCopy.length;
-
-        while (index) {
-            const randomIndex = Math.floor(Math.random() * index);
-
-            index -= 1;
-            [arrayCopy[index], arrayCopy[randomIndex]] = [arrayCopy[randomIndex], arrayCopy[index]];
-        }
-        return arrayCopy;
-    }
-
-    revealBack = () => {
-        this.setState({
-            isBackSideRevealed: true,
-            visibleSide: "back"
-        });
-    }
-
-    flipSide = () => {
-        if (this.state.isBackSideRevealed) {
-            this.setState(({ visibleSide }) => ({
-                visibleSide: visibleSide === "front" ? "back" : "front"
-            }));
-        }
-    }
-
-    getCard(index = 0) {
-        const { id, front, back } = this.cards[index];
+    function getCard(cards, index = 0) {
+        const { id, front, back } = cards[index];
 
         return {
             index,
             id,
             front,
             back,
-            isBackSideRevealed: false,
-            visibleSide: "front"
+            answerRevealed: false,
+            frontSideVisible: true
         };
     }
 
-    updateStandardScore(score, answer) {
-        if (!answer) {
-            score.incorrectIds.push(this.state.id);
+    function resetScoreCounter(score = {}) {
+        return {
+            ...score,
+            right: 0,
+            wrong: 0,
+            total: 0
+        };
+    }
+
+    function updateStandardScore(correct, score) {
+        if (!correct) {
+            score.incorrectIds.push(card.id);
         }
         score.isLast = score.right === score.total;
         return score;
     }
 
-    updateLeitnerScore(score, answer) {
+    function updateLeitnerScore(correct, score) {
         let levelNum = score.currentLevel;
 
-        if (answer) {
+        if (correct) {
             levelNum += 1;
         }
         else {
@@ -131,16 +119,16 @@ export default class StudyDeck extends React.Component {
             levelNum -= 1;
         }
         const currentLevel = score.levels[score.currentLevel];
-        const index = currentLevel.findIndex(id => id === this.state.id);
+        const index = currentLevel.findIndex(id => id === card.id);
         const [id] = currentLevel.splice(index, 1);
 
         score.levels[levelNum].push(id);
-        score.isLast = score.levels[4].length === this.initialCards.length;
+        score.isLast = score.levels[4].length === initialCards.length;
         return score;
     }
 
-    updateScoreCounter(answer, score) {
-        if (answer) {
+    function updateScoreCounter(correct, score) {
+        if (correct) {
             score.right += 1;
         }
         else {
@@ -149,90 +137,133 @@ export default class StudyDeck extends React.Component {
         score.total = score.right + score.wrong;
     }
 
-    updateScore(answer, mode, score) {
-        this.updateScoreCounter(answer, score);
-        this.updateScoreCounter(answer, score.session);
+    function updateScore(correct) {
+        updateScoreCounter(correct, score);
+        updateScoreCounter(correct, score.session);
 
-        if (mode === "standard") {
-            return this.updateStandardScore(score, answer);
+        if (settings.studyMode.value === "standard") {
+            return updateStandardScore(correct, score);
         }
-        return this.updateLeitnerScore(score, answer);
+        return updateLeitnerScore(correct, score);
     }
 
-    resetScoreCounter(score = {}) {
-        return Object.assign(score, {
-            right: 0,
-            wrong: 0,
-            total: 0
+    function getNextLevelCards(cards, cardIds) {
+        return cards.filter(card => cardIds.includes(card.id));
+    }
+
+    function initNextLevel(oldScore, nextCards) {
+        const cards = settings.randomize.value ? shuffleArray(nextCards) : nextCards;
+
+        setState({
+            score: resetScoreCounter(oldScore),
+            card: getCard(cards),
+            cards,
+            wasLastCard: false
         });
     }
 
-    getNextCard = answer => {
-        const index = this.state.index + 1;
+    function initNextStandardRound() {
+        const nextCards = getNextLevelCards(cards, score.incorrectIds);
 
-        this.score = this.updateScore(answer, this.mode, this.score);
-        this.setState(index === this.cards.length ? { last: true } : this.getCard(index));
+        score.currentLevel += 1;
+        score.incorrectIds.length = 0;
+        initNextLevel(score, nextCards);
     }
 
-    getNextLevelCards(cards, cardIds) {
-        return cards.filter(card => cardIds.indexOf(card.id) !== -1);
-    }
-
-    initNextLevel(score, cards) {
-        this.score = this.resetScoreCounter(score);
-        this.cards = this.randomizeCards ? this.shuffleArray(cards) : cards;
-        this.setState(Object.assign({ last: false }, this.getCard()));
-    }
-
-    initNextStandardRound = () => {
-        const cards = this.getNextLevelCards(this.cards, this.score.incorrectIds);
-
-        this.score.currentLevel += 1;
-        this.score.incorrectIds.length = 0;
-        this.initNextLevel(this.score, cards);
-    }
-
-    initNextLeitnerLevel = () => {
-        const { levels } = this.score;
+    function initNextLeitnerLevel() {
+        const { levels } = score;
         const index = levels.findIndex(level => level.length);
-        const cards = this.getNextLevelCards(this.initialCards, levels[index]);
+        const cards = getNextLevelCards(initialCards, levels[index]);
+        score.currentLevel = index;
 
-        this.score.currentLevel = index;
-        this.initNextLevel(this.score, cards);
+        initNextLevel(score, cards);
     }
 
-    render() {
-        if (!this.state.front || !this.state.back) {
-            return null;
+    function revealAnswer() {
+        let newScore = score;
+        card.answerRevealed = true;
+        card.frontSideVisible = false;
+
+        if (card.back.type === "multi") {
+            newScore = updateScore(card.back.correct === state.selectedOption);
         }
-        return this.state.last ?
-            <StudyDeckScore
-                title={this.deckTitle}
-                score={this.score}
-                mode={this.mode}
-                initNextStandardRound={this.initNextStandardRound}
-                initNextLeitnerLevel={this.initNextLeitnerLevel} /> :
-            <React.Fragment>
-                <h1 className="component-header study-deck-title">{this.deckTitle}</h1>
-                <div className="study-container">
-                    <StudyDeckHeader score={this.score} mode={this.mode} />
-                    <Card card={this.state} revealBack={this.revealBack} flipSide={this.flipSide} />
-                </div>
-                <div className="container-footer">
-                    <span className="study-progress">Progress: {this.state.index + 1}/{this.cards.length}</span>
-                    {this.state.isBackSideRevealed ?
-                        <React.Fragment>
-                            <button className="btn-danger study-footer-btn"
-                                onClick={() => this.getNextCard(0)}>I Was Wrong</button>
-                            <button className="btn-success study-footer-btn"
-                                onClick={() => this.getNextCard(1)}>I Got It Right</button>
-                        </React.Fragment> :
-                        <React.Fragment>
-                            {this.timeoutDuration > 0 && <Timer duration={this.timeoutDuration} callback={this.revealBack} />}
-                            <button className="btn" onClick={this.revealBack}>Reveal</button>
-                        </React.Fragment>
-                    }
-                </div>
-            </React.Fragment>;
+        setState({ card, score: newScore });
     }
+
+    function selectOption({ target }) {
+        setState({ selectedOption: parseInt(target.getAttribute("data-index"), 10) });
+    }
+
+    function nextStep(correct) {
+        const index = card.index + 1;
+        const wasLastCard = index === cards.length;
+        let nextCard = null;
+        let newScore = score;
+
+        if (!wasLastCard) {
+            nextCard = getCard(cards, index);
+        }
+
+        if (typeof correct === "boolean") {
+            newScore = updateScore(correct);
+        }
+        setState({
+            wasLastCard,
+            score: newScore,
+            card: nextCard
+        });
+    }
+
+    function flipSide() {
+        card.frontSideVisible = !card.frontSideVisible;
+        setState({ card });
+    }
+
+    if (state.wasLastCard) {
+        return (
+            <StudyDeckScore
+                score={score}
+                title={title}
+                mode={settings.studyMode.value}
+                initNextStandardRound={initNextStandardRound}
+                initNextLeitnerLevel={initNextLeitnerLevel}>
+            </StudyDeckScore>
+        );
+    }
+    else if (!card) {
+        return null;
+    }
+    return (
+        <Fragment>
+            <h1 className="component-header study-deck-title">{title}</h1>
+            <div className="study-container">
+                <StudyDeckHeader score={score} mode={settings.studyMode.value} />
+                <Card card={card}
+                    revealAnswer={revealAnswer}
+                    flipSide={flipSide}
+                    selectOption={selectOption}
+                />
+            </div>
+            <div className="container-footer">
+                <span className="study-progress">Progress: {card.index + 1}/{cards.length}</span>
+                {card.answerRevealed ?
+                    card.back.type === "text" ? (
+                        <Fragment>
+                            <button className="btn-danger study-footer-btn"
+                                onClick={() => nextStep(false)}>I Was Wrong</button>
+                            <button className="btn-success study-footer-btn"
+                                onClick={() => nextStep(true)}>I Got It Right</button>
+                        </Fragment>
+
+                    ) : <button className="btn" onClick={nextStep}>Next</button> :
+                    <Fragment>
+                        {settings.timeoutDuration.value > 0 && (
+                            <Timer duration={settings.timeoutDuration.value} callback={revealAnswer} />
+                        )}
+                        <button className="btn" onClick={revealAnswer}>Reveal</button>
+                    </Fragment>
+                }
+            </div>
+        </Fragment>
+    );
 }

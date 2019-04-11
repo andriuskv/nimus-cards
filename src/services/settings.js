@@ -1,3 +1,5 @@
+let settings = JSON.parse(localStorage.getItem("nimus-cards-settings")) || getDefault();
+
 function getDefault() {
     return {
         studyMode: {
@@ -16,13 +18,11 @@ function getDefault() {
 }
 
 function getSettings() {
-    const defaultSettings = getDefault();
-    const storedSettings = JSON.parse(localStorage.getItem("nimus-cards-settings")) || {};
-
-    return Object.assign(defaultSettings, storedSettings);
+    return settings;
 }
 
-function saveSettings(settings) {
+function saveSettings(newSettings) {
+    settings = { ...settings, ...newSettings };
     localStorage.setItem("nimus-cards-settings", JSON.stringify(settings));
 }
 
