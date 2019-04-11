@@ -1,33 +1,16 @@
-const cacheName = "nimus-cards-13";
-const toCache = [
-    "./index.html",
-    "./main.css",
-    "./main.js",
-    "./vendor.js",
-    "./favicon.png",
-    "./assets/ring-alt.svg"
-];
+/* global workbox */
+
+workbox.setConfig({
+    debug: false
+});
+workbox.precaching.precacheAndRoute(self.__precacheManifest);
 
 self.addEventListener("install", event => {
-    event.waitUntil(
-        caches.open(cacheName)
-            .then(cache => cache.addAll(toCache))
-            .then(() => self.skipWaiting())
-    );
+    event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener("activate", event => {
     event.waitUntil(self.clients.claim());
-    event.waitUntil(
-        caches.keys().then(keys => {
-            return Promise.all(keys.map(key => {
-                if (key.startsWith("nimus-cards") && key !== cacheName) {
-                    return caches.delete(key);
-                }
-                return key;
-            }));
-        })
-    );
 });
 
 self.addEventListener("fetch", event => {
