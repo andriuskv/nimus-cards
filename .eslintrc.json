@@ -22,6 +22,7 @@
     "extends": ["eslint:recommended", "plugin:react/recommended"],
     "rules": {
         "react/prop-types": 0,
+        "react/display-name": 0,
         "react-hooks/rules-of-hooks": "error",
         "array-callback-return": 2,
         "arrow-spacing": [2, {

@@ -1,10 +1,11 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useReducer, useEffect } from "react";
+import { CreateDeckContext, reducer } from "../context/CreateDeckContext";
 import { getRandomString } from "../helpers";
 import { fetchDecks } from "../services/db";
 import Card from "./create-card/create-card";
 
 export default function CreateDeck(props) {
-    const [deck, setDeck] = useState(getDeck(props.location.state));
+    const [state, dispatch] = useReducer(reducer, getDeck(props.location.state));
     const [formMessage, setFormMessage] = useState("");
     let messageTimeout = 0;
 
@@ -27,7 +28,7 @@ export default function CreateDeck(props) {
                 const deck = findDeck(decks, id);
 
                 if (deck) {
-                    setDeck(deck);
+                    dispatch({ type: "RESET_DECK", deck });
                 }
             });
         }
@@ -68,7 +69,7 @@ export default function CreateDeck(props) {
     }
 
     function addCard() {
-        const lastCard = deck.cards[deck.cards.length - 1];
+        const lastCard = state.cards[state.cards.length - 1];
         const card = getNewCard();
 
         if (lastCard) {
@@ -76,13 +77,7 @@ export default function CreateDeck(props) {
             card.back.textSize = lastCard.back.textSize;
             card.back.type = lastCard.back.type;
         }
-        deck.cards.push(card);
-        setDeck({ ...deck });
-    }
-
-    function removeCard(index) {
-        deck.cards.splice(index, 1);
-        setDeck({ ...deck });
+        dispatch({ type: "ADD_CARD", card });
     }
 
     function isFrontValid(side) {
@@ -124,8 +119,8 @@ export default function CreateDeck(props) {
 
     function handleChange({ target }) {
         const { name, value } = target;
-        deck[name] = value;
-        setDeck({ ...deck });
+
+        dispatch({ type: "UPDATE_DECK", name, value });
     }
 
     function cleanupCards(cards) {
@@ -146,46 +141,41 @@ export default function CreateDeck(props) {
     }
 
     function handleSubmit() {
-        if (!deck.title) {
+        if (!state.title) {
             setFormMessage("Title is required");
             return;
         }
-        const valid = validateCards(deck.cards);
+        const valid = validateCards(state.cards);
 
         if (valid) {
-            deck.cards = cleanupCards(deck.cards);
+            state.cards = cleanupCards(state.cards);
             props.history.push({
                 pathname: "/decks",
-                state: deck
+                state
             });
         }
     }
 
     return (
-        <Fragment>
+        <CreateDeckContext.Provider value={{ state, dispatch }}>
             <div className="create-input-group">
                 <label className="create-input-label">
                     <div className="side-name">title</div>
                     <input className="input create-title-input"
                         name="title"
-                        value={deck.title}
+                        value={state.title}
                         onChange={handleChange} />
                 </label>
                 <label className="create-input-label">
                     <div className="side-name">description (optional)</div>
                     <textarea className="input side-text create-description-input"
                         name="description"
-                        value={deck.description}
+                        value={state.description}
                         onChange={handleChange}></textarea>
                 </label>
             </div>
-            {deck.cards.length ?
-                <ul>
-                    {deck.cards.map((card, index) => (
-                        <Card key={card.id} index={index} card={card}
-                            removeCard={removeCard} />
-                    ))}
-                </ul> :
+            {state.cards.length ?
+                <ul>{state.cards.map(({ id }, index) => <Card key={id} index={index} />)}</ul> :
                 <p className="create-deck-message">Deck is empty</p>
             }
             <div className="container-footer create-footer">
@@ -193,6 +183,6 @@ export default function CreateDeck(props) {
                 {formMessage && <span className="create-message">{formMessage}</span>}
                 <button className="btn" onClick={handleSubmit}>Create</button>
             </div>
-        </Fragment>
+        </CreateDeckContext.Provider>
     );
 }

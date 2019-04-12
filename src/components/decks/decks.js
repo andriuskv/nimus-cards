@@ -7,12 +7,12 @@ import Deck from "./deck";
 export default function Decks(props) {
     const [decks, updateDecks] = useState([]);
     const [dialog, toggleDialog] = useState({ visible: false });
-    const [loading, setLoadingState] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getDecks(props.location.state).then(decks => {
             updateDecks(decks);
-            setLoadingState(false);
+            setLoading(false);
         });
     }, []);
 
