@@ -1,16 +1,26 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
+import { CreateDeckContext } from "../../context/CreateDeckContext";
 import TextSizeSelect from "./create-card-text-size-select";
 import UploadPanel from "./create-card-upload-panel";
 import Attachment from "../attachment";
 import Icon from "../icon";
 
-export default function CreateCardFrontSide(props) {
-    const [card, updateCard] = useState({ ...props.card });
+export default function CreateCardFrontSide({ index, visible, handleChange }) {
+    const { state, dispatch } = useContext(CreateDeckContext);
     const [uploadPanel, toggleUploadPanel] = useState({ type: "", visible: false });
+    const { front } = state.cards[index];
+
+    function addAttachment(file, type) {
+        dispatch({
+            type: "ADD_ATTACHMENT",
+            index,
+            attachment: { file, type }
+        });
+        hideUploadPanel();
+    }
 
     function removeAttachment() {
-        delete card.front.attachment;
-        updateCard({ ...card });
+        dispatch({ type: "REMOVE_ATTACHMENT", index });
     }
 
     function showUploadPanel(type) {
@@ -19,12 +29,6 @@ export default function CreateCardFrontSide(props) {
 
     function hideUploadPanel() {
         toggleUploadPanel({ visible: false, type: "" });
-    }
-
-    function addAttachment(file, type) {
-        card.front.attachment = { file, type };
-        updateCard({ ...card });
-        hideUploadPanel();
     }
 
     function renderToolbarBtns() {
@@ -51,23 +55,21 @@ export default function CreateCardFrontSide(props) {
 
     return (
         <Fragment>
-            <div className={`side-container ${props.visible ? " visible" : ""}`}>
+            <div className={`side-container ${visible ? " visible" : ""}`}>
                 <div className="side-name">front</div>
                 <div className="side">
                     <div className="create-side-toolbar">
                         {renderToolbarBtns()}
                         <TextSizeSelect
-                            sideName="front"
-                            textSize={card.front.textSize}
-                            handleTextSizeSelect={props.handleTextSizeSelect} />
+                            textSize={front.textSize}
+                            handleChange={event => handleChange(event, "front", "textSize")} />
                     </div>
                     <div className="side-content create-side-content">
-                        {card.front.attachment && renderAttachment(card.front.attachment)}
+                        {front.attachment && renderAttachment(front.attachment)}
                         <textarea className="input create-side-text-input side-text"
-                            name="front"
-                            value={card.front.text}
-                            style={{ fontSize: `${card.front.textSize}px` }}
-                            onChange={props.handleChange}></textarea>
+                            value={front.text}
+                            style={{ fontSize: `${front.textSize}px` }}
+                            onChange={event => handleChange(event, "front", "text")}></textarea>
                     </div>
                 </div>
             </div>

@@ -1,98 +1,53 @@
-import React, { useState } from "react";
-import { getRandomString } from "../../helpers";
+import React, { useState, useContext } from "react";
+import { CreateDeckContext } from "../../context/CreateDeckContext";
 import Icon from "../icon";
 import CardFront from "./create-card-front";
 import CardBack from "./create-card-back";
 
-export default function CreateCard({ card: initialCard, index, removeCard }) {
-    const [card, setCard] = useState(initialCard);
+export default function CreateCard({ index }) {
+    const { state, dispatch } = useContext(CreateDeckContext);
     const [frontSideVisible, setSideVisibility] = useState(true);
+    const card = state.cards[index];
 
     function flipSide() {
         setSideVisibility(!frontSideVisible);
     }
 
-    function handleChange({ target }) {
-        const { name, value } = target;
-        const side = card[name];
+    function removeCard() {
+        dispatch({ type: "REMOVE_CARD", id: card.id });
+    }
 
-        if (value !== side.text) {
-            side.text = value;
-            setCard({ ...card });
+    function handleChange({ target }, name, key) {
+        const { value } = target;
+
+        if (value !== card[name][key]) {
+            dispatch({
+                type: "UPDATE_SIDE_VALUE",
+                index,
+                side: name,
+                key,
+                value
+            });
         }
-    }
-
-    function handleTextSizeSelect({ target }) {
-        const { name, value } = target;
-        const side = card[name];
-
-        side.textSize = value;
-        setCard({ ...card });
-    }
-
-    function handleTypeChange({ target }) {
-        card.back.type = target.value;
-        setCard({ ...card });
-    }
-
-    function handleAChange({ target }) {
-        const { name, value } = target;
-
-        if (value !== card.back.text) {
-            card.back.options[name].text = value;
-            setCard({ ...card });
-        }
-    }
-
-    function addOption() {
-        card.back.options.push({
-            id: getRandomString()
-        });
-        setCard({ ...card });
-    }
-
-    function removeOption(index) {
-        if (index === card.back.correct) {
-            card.back.correct = 0;
-        }
-        card.back.options.splice(index, 1);
-        setCard({ ...card });
-    }
-
-    function markAnswerAsCorrect(index) {
-        card.back.correct = index;
-        setCard({ ...card });
     }
 
     return (
         <li className="create-list-item">
             <div className="create-card-index">{index + 1}.</div>
             <div className="create-input-group create-card">
-                <CardFront
+                <CardFront index={index}
                     visible={frontSideVisible}
-                    side={card.front}
-                    card={card}
-                    handleChange={handleChange}
-                    handleTextSizeSelect={handleTextSizeSelect} />
-                <CardBack
+                    handleChange={handleChange} />
+                <CardBack index={index}
                     visible={!frontSideVisible}
-                    card={card}
-                    handleChange={handleChange}
-                    handleTextSizeSelect={handleTextSizeSelect}
-                    handleTypeChange={handleTypeChange}
-                    handleAChange={handleAChange}
-                    addOption={addOption}
-                    removeOption={removeOption}
-                    markAnswerAsCorrect={markAnswerAsCorrect} />
+                    handleChange={handleChange} />
             </div>
             <div className="create-card-btns">
                 <button className="btn-icon create-card-flip-btn" title="Flip side"
                     onClick={flipSide}>
                     <Icon name="flip" />
                 </button>
-                <button className="btn-icon"
-                    title="Remove card"
-                    onClick={() => removeCard(index)}>
+                <button className="btn-icon" title="Remove card" onClick={removeCard}>
                     <Icon name="remove" />
                 </button>
             </div>

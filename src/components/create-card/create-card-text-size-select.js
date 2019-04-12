@@ -1,11 +1,9 @@
 import React from "react";
 
-export default function TextSizeSelect({ sideName, textSize, handleTextSizeSelect }) {
+export default function TextSizeSelect({ textSize, handleChange }) {
     return (
         <select className="input create-side-select" title="Text size"
-            value={textSize}
-            name={sideName}
-            onChange={handleTextSizeSelect}>
+            defaultValue={textSize} onChange={handleChange}>
             <option value="16">16px</option>
             <option value="24">24px</option>
             <option value="36">36px</option>
