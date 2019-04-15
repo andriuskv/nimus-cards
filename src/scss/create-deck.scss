@@ -35,10 +35,7 @@
 
 .create-title-input {
     width: 100%;
-
-    @include breakpoint-smallest {
-        margin-bottom: 16px;
-    }
+    margin-bottom: 16px;
 }
 
 .create-deck-message {
@@ -50,6 +47,13 @@
     display: flex;
     align-items: flex-start;
     margin-bottom: 16px;
+
+    @include breakpoint-smallest {
+        &:not(:last-of-type) {
+            padding-bottom: 16px;
+            border-bottom: 1px solid $background-color-darker;
+        }
+    }
 }
 
 .create-card-index,
@@ -76,6 +80,13 @@
 .create-card {
     flex: 1;
     margin: 0;
+}
+
+.create-side-name {
+    margin-bottom: 8px;
+    color: $color-text-dark;
+    font-weight: bold;
+    font-size: 0.875em;
 }
 
 .create-side-toolbar {
@@ -160,14 +171,6 @@
 
     @include breakpoint-smallest {
         width: 50%;
-    }
-}
-
-.create-card-flip-btn {
-    display: none;
-
-    @include breakpoint-smallest {
-        display: block;
     }
 }
 

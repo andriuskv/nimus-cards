@@ -3,7 +3,7 @@ import { CreateDeckContext } from "../../context/CreateDeckContext";
 import Icon from "../icon";
 import TextSizeSelect from "./create-card-text-size-select";
 
-export default function CreateCardBackSide({ index, visible, handleChange }) {
+export default function CreateCardBackSide({ index, handleChange }) {
     const { state, dispatch } = useContext(CreateDeckContext);
     const { back, id: cardId } = state.cards[index];
     const { type, text, textSize, options, correct } = back;
@@ -80,8 +80,8 @@ export default function CreateCardBackSide({ index, visible, handleChange }) {
     }
 
     return (
-        <div className={`side-container ${visible ? " visible" : ""}`}>
-            <div className="side-name">back</div>
+        <div className="side-container">
+            <div className="create-side-name">BACK</div>
             <div className="side">
                 <div className="create-side-toolbar">
                     <ul className="create-side-types" onChange={handleTypeChange}>

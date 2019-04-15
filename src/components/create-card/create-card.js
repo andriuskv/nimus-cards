@@ -1,17 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { CreateDeckContext } from "../../context/CreateDeckContext";
 import Icon from "../icon";
 import CardFront from "./create-card-front";
 import CardBack from "./create-card-back";
 
-export default function CreateCard({ index }) {
-    const { state, dispatch } = useContext(CreateDeckContext);
-    const [frontSideVisible, setSideVisibility] = useState(true);
-    const card = state.cards[index];
-
-    function flipSide() {
-        setSideVisibility(!frontSideVisible);
-    }
+export default function CreateCard({ index, card }) {
+    const { dispatch } = useContext(CreateDeckContext);
 
     function removeCard() {
         dispatch({ type: "REMOVE_CARD", id: card.id });
@@ -35,18 +29,10 @@ export default function CreateCard({ index }) {
         <li className="create-list-item">
             <div className="create-card-index">{index + 1}.</div>
             <div className="create-input-group create-card">
-                <CardFront index={index}
-                    visible={frontSideVisible}
-                    handleChange={handleChange} />
-                <CardBack index={index}
-                    visible={!frontSideVisible}
-                    handleChange={handleChange} />
+                <CardFront index={index} side={card.front} handleChange={handleChange} />
+                <CardBack index={index} handleChange={handleChange} />
             </div>
             <div className="create-card-btns">
-                <button className="btn-icon create-card-flip-btn" title="Flip side"
-                    onClick={flipSide}>
-                    <Icon name="flip" />
-                </button>
                 <button className="btn-icon" title="Remove card" onClick={removeCard}>
                     <Icon name="remove" />
                 </button>

@@ -1,20 +1,10 @@
 import React from "react";
 
-export default function StudyCardBack({ card, revealAnswer, selectOption }) {
-    const { id, back, frontSideVisible, answerRevealed } = card;
+export default function StudyCardBack({ card, selectOption }) {
+    const { id, back, answerRevealed } = card;
     const { text, textSize, type, options, correct } = back;
 
-    function renderContent() {
-        if (type === "text") {
-            if (answerRevealed) {
-                return (
-                    <div className="side-text study-side-text">
-                        <div style={{ fontSize: `${textSize}px` }}>{text}</div>
-                    </div>
-                );
-            }
-            return <button className="btn study-reveal-btn" onClick={revealAnswer}>Reveal</button>;
-        }
+    function renderMultiTypeContent() {
         return (
             <ul onChange={selectOption} className={`study-options ${answerRevealed ? "revealed" : ""}`}>
                 {options.map(({ text }, index) => (
@@ -35,10 +25,13 @@ export default function StudyCardBack({ card, revealAnswer, selectOption }) {
     }
 
     return (
-        <div className={`side-container${!frontSideVisible ? " visible" : ""}`}>
-            <div className="side-name">back</div>
+        <div className="side-container">
             <div className="side">
-                <div className="study-side-content">{renderContent()}</div>
+                <div className="study-side-content">{type === "text" ? (
+                    <div className="side-text study-side-text">
+                        <div style={{ fontSize: `${textSize}px` }}>{text}</div>
+                    </div>
+                ) : renderMultiTypeContent()}</div>
             </div>
         </div>
     );

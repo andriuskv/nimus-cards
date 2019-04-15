@@ -17,8 +17,16 @@
 .study-score-bar-name-container {
     display: flex;
     justify-content: space-between;
+    padding: 0 2px;
     margin-bottom: 4px;
     color: $color-text-dark;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.study-score-bar-container {
+    overflow: hidden;
+    border-radius: 2px;
 }
 
 .score-bar {
@@ -93,21 +101,30 @@
     justify-content: space-between;
     margin: auto 0;
 
-    @include breakpoint-smallest {
-        width: 100%;
-        max-width: 492px;
-        margin: auto;
+    &.text {
+        justify-content: center;
+        align-items: center;
+
+        .side-container {
+            width: 100%;
+            max-width: 600px;
+        }
     }
-}
-
-.study-card-flip-btn {
-    position: absolute;
-    top: -2px;
-    right: 0;
-    display: none;
 
     @include breakpoint-smallest {
-        display: block;
+        flex-direction: column;
+        width: 100%;
+        margin: auto;
+
+        &.multi {
+            .study-side-content {
+                height: auto;
+            }
+
+            .side-image {
+                height: 180px;
+            }
+        }
     }
 }
 
