@@ -10,7 +10,7 @@ export default function StudyDeckHeader({ score, mode }) {
                         <span>Right</span>
                         <span>Wrong</span>
                     </div>
-                    <div>
+                    <div className="study-score-bar-container">
                         <StudyScoreBar score={score} name="right" />
                         <StudyScoreBar score={score} name="wrong" />
                     </div>

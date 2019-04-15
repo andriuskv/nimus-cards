@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { CreateDeckContext, reducer } from "../context/CreateDeckContext";
 import { getRandomString } from "../helpers";
 import { fetchDecks } from "../services/db";
@@ -160,14 +160,14 @@ export default function CreateDeck(props) {
         <CreateDeckContext.Provider value={{ state, dispatch }}>
             <div className="create-input-group">
                 <label className="create-input-label">
-                    <div className="side-name">title</div>
+                    <div className="create-side-name">TITLE</div>
                     <input className="input create-title-input"
                         name="title"
                         value={state.title}
                         onChange={handleChange} />
                 </label>
                 <label className="create-input-label">
-                    <div className="side-name">description (optional)</div>
+                    <div className="create-side-name">DESCRIPTION (OPTIONAL)</div>
                     <textarea className="input side-text create-description-input"
                         name="description"
                         value={state.description}
@@ -175,7 +175,7 @@ export default function CreateDeck(props) {
                 </label>
             </div>
             {state.cards.length ?
-                <ul>{state.cards.map(({ id }, index) => <Card key={id} index={index} />)}</ul> :
+                <ul>{state.cards.map((card, index) => <Card key={card.id} index={index} card={card} />)}</ul> :
                 <p className="create-deck-message">Deck is empty</p>
             }
             <div className="container-footer create-footer">

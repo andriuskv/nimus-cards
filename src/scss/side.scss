@@ -1,20 +1,11 @@
-.side-name {
-    margin-bottom: 8px;
-    color: $color-text-dark;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 0.875em;
-}
-
 .side-container {
     width: calc(50% - 4px);
 
     @include breakpoint-smallest {
-        display: none;
         width: 100%;
 
-        &.visible {
-            display: block;
+        &:first-of-type {
+            margin-bottom: 8px;
         }
     }
 }
@@ -45,6 +36,7 @@
 }
 
 .side-image {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: scale-down;

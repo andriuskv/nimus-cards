@@ -84,8 +84,7 @@ export default function StudyDeck(props) {
             id,
             front,
             back,
-            answerRevealed: false,
-            frontSideVisible: true
+            answerRevealed: false
         };
     }
 
@@ -182,7 +181,6 @@ export default function StudyDeck(props) {
     function revealAnswer() {
         let newScore = score;
         card.answerRevealed = true;
-        card.frontSideVisible = false;
 
         if (card.back.type === "multi") {
             newScore = updateScore(card.back.correct === state.selectedOption);
@@ -214,11 +212,6 @@ export default function StudyDeck(props) {
         });
     }
 
-    function flipSide() {
-        card.frontSideVisible = !card.frontSideVisible;
-        setState({ card });
-    }
-
     if (state.wasLastCard) {
         return (
             <StudyDeckScore
@@ -238,11 +231,7 @@ export default function StudyDeck(props) {
             <h1 className="component-header study-deck-title">{title}</h1>
             <div className="study-container">
                 <StudyDeckHeader score={score} mode={settings.studyMode.value} />
-                <Card card={card}
-                    revealAnswer={revealAnswer}
-                    flipSide={flipSide}
-                    selectOption={selectOption}
-                />
+                <Card card={card} selectOption={selectOption} />
             </div>
             <div className="container-footer">
                 <span className="study-progress">Progress: {card.index + 1}/{cards.length}</span>

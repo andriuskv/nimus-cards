@@ -1,19 +1,23 @@
 import React from "react";
 import CardFront from "./study-card-front";
 import CardBack from "./study-card-back";
-import Icon from "../icon";
 
-export default function StudyCard({ card, revealAnswer, flipSide, selectOption }) {
+export default function StudyCard({ card, selectOption }) {
+    function renderSides() {
+        if (card.back.type === "multi") {
+            return (
+                <React.Fragment>
+                    <CardFront side={card.front} />
+                    <CardBack card={card} selectOption={selectOption} />
+                </React.Fragment>
+            );
+        }
+        else if (card.answerRevealed) {
+            return <CardBack card={card} selectOption={selectOption} />;
+        }
+        return <CardFront side={card.front} />;
+    }
     return (
-        <div className="study-card">
-            {(card.answerRevealed || card.back.type === "multi") && (
-                <button className="btn-icon study-card-flip-btn"
-                    onClick={flipSide} title="Flip side">
-                    <Icon name="flip" />
-                </button>
-            )}
-            <CardFront card={card} />
-            <CardBack card={card} revealAnswer={revealAnswer} selectOption={selectOption} />
-        </div>
+        <div className={`study-card ${card.back.type}`}>{renderSides()}</div>
     );
 }

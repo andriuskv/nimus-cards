@@ -5,10 +5,10 @@ import UploadPanel from "./create-card-upload-panel";
 import Attachment from "../attachment";
 import Icon from "../icon";
 
-export default function CreateCardFrontSide({ index, visible, handleChange }) {
-    const { state, dispatch } = useContext(CreateDeckContext);
+export default function CreateCardFrontSide({ index, side, handleChange }) {
+    const { dispatch } = useContext(CreateDeckContext);
     const [uploadPanel, toggleUploadPanel] = useState({ type: "", visible: false });
-    const { front } = state.cards[index];
+    const { text, textSize, attachment } = side;
 
     function addAttachment(file, type) {
         dispatch({
@@ -55,20 +55,20 @@ export default function CreateCardFrontSide({ index, visible, handleChange }) {
 
     return (
         <Fragment>
-            <div className={`side-container ${visible ? " visible" : ""}`}>
-                <div className="side-name">front</div>
+            <div className="side-container">
+                <div className="create-side-name">FRONT</div>
                 <div className="side">
                     <div className="create-side-toolbar">
                         {renderToolbarBtns()}
                         <TextSizeSelect
-                            textSize={front.textSize}
+                            textSize={textSize}
                             handleChange={event => handleChange(event, "front", "textSize")} />
                     </div>
                     <div className="side-content create-side-content">
-                        {front.attachment && renderAttachment(front.attachment)}
+                        {attachment && renderAttachment(attachment)}
                         <textarea className="input create-side-text-input side-text"
-                            value={front.text}
-                            style={{ fontSize: `${front.textSize}px` }}
+                            value={text}
+                            style={{ fontSize: `${textSize}px` }}
                             onChange={event => handleChange(event, "front", "text")}></textarea>
                     </div>
                 </div>
