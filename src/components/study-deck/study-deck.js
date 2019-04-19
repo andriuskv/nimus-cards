@@ -150,11 +150,11 @@ export default function StudyDeck(props) {
         return cards.filter(card => cardIds.includes(card.id));
     }
 
-    function initNextLevel(oldScore, nextCards) {
+    function setNextLevel(nextCards) {
         const cards = settings.randomize.value ? shuffleArray(nextCards) : nextCards;
 
         setState({
-            score: resetScoreCounter(oldScore),
+            score: resetScoreCounter(score),
             card: getCard(cards),
             cards,
             wasLastCard: false
@@ -163,19 +163,28 @@ export default function StudyDeck(props) {
 
     function initNextStandardRound() {
         const nextCards = getNextLevelCards(cards, score.incorrectIds);
-
         score.currentLevel += 1;
         score.incorrectIds.length = 0;
-        initNextLevel(score, nextCards);
+        setNextLevel(nextCards);
     }
 
     function initNextLeitnerLevel() {
         const { levels } = score;
+
+        // Find first level with cards
         const index = levels.findIndex(level => level.length);
         const cards = getNextLevelCards(initialCards, levels[index]);
         score.currentLevel = index;
+        setNextLevel(cards);
+    }
 
-        initNextLevel(score, cards);
+    function initNextLevel() {
+        if (settings.studyMode.value === "standard") {
+            initNextStandardRound();
+        }
+        else {
+            initNextLeitnerLevel();
+        }
     }
 
     function revealAnswer() {
@@ -212,47 +221,48 @@ export default function StudyDeck(props) {
         });
     }
 
-    if (state.wasLastCard) {
-        return (
-            <StudyDeckScore
-                score={score}
-                title={title}
-                mode={settings.studyMode.value}
-                initNextStandardRound={initNextStandardRound}
-                initNextLeitnerLevel={initNextLeitnerLevel}>
-            </StudyDeckScore>
-        );
-    }
-    else if (!card) {
+    if (!cards.length) {
         return null;
     }
     return (
         <Fragment>
-            <h1 className="component-header study-deck-title">{title}</h1>
-            <div className="study-container">
-                <StudyDeckHeader score={score} mode={settings.studyMode.value} />
-                <Card card={card} selectOption={selectOption} />
-            </div>
-            <div className="container-footer">
-                <span className="study-progress">Progress: {card.index + 1}/{cards.length}</span>
-                {card.answerRevealed ?
-                    card.back.type === "text" ? (
-                        <Fragment>
-                            <button className="btn-danger study-footer-btn"
-                                onClick={() => nextStep(false)}>I Was Wrong</button>
-                            <button className="btn-success study-footer-btn"
-                                onClick={() => nextStep(true)}>I Got It Right</button>
-                        </Fragment>
+            <h1 className="component-header study-deck-title">
+                <div className="study-progress" style={{ transform: `scaleX(${card ? card.index / cards.length : 1})` }}></div>
+                <span>{title}</span>
+            </h1>
+            {state.wasLastCard ? (
+                <StudyDeckScore
+                    score={score}
+                    mode={settings.studyMode.value}
+                    initNextLevel={initNextLevel}>
+                </StudyDeckScore>
+            ) : (
+                <Fragment>
+                    <div className="study-container">
+                        <StudyDeckHeader score={score} mode={settings.studyMode.value} />
+                        <Card card={card} selectOption={selectOption} />
+                    </div>
+                    <div className="container-footer study-footer">
+                        {card.answerRevealed ?
+                            card.back.type === "text" ? (
+                                <Fragment>
+                                    <button className="btn-danger study-footer-btn"
+                                        onClick={() => nextStep(false)}>I Was Wrong</button>
+                                    <button className="btn-success study-footer-btn"
+                                        onClick={() => nextStep(true)}>I Got It Right</button>
+                                </Fragment>
 
-                    ) : <button className="btn" onClick={nextStep}>Next</button> :
-                    <Fragment>
-                        {settings.timeoutDuration.value > 0 && (
-                            <Timer duration={settings.timeoutDuration.value} callback={revealAnswer} />
-                        )}
-                        <button className="btn" onClick={revealAnswer}>Reveal</button>
-                    </Fragment>
-                }
-            </div>
+                            ) : <button className="btn" onClick={nextStep}>Next</button> :
+                            <Fragment>
+                                {settings.timeoutDuration.value > 0 && (
+                                    <Timer duration={settings.timeoutDuration.value} callback={revealAnswer} />
+                                )}
+                                <button className="btn" onClick={revealAnswer}>Reveal</button>
+                            </Fragment>
+                        }
+                    </div>
+                </Fragment>
+            )}
         </Fragment>
     );
 }

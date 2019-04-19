@@ -1,6 +1,16 @@
 .study-deck-title {
+    overflow: hidden;
+    padding: 0 0 8px 0;
     font-size: 1.5em;
     text-align: center;
+}
+
+.study-progress {
+    height: 4px;
+    margin-bottom: 4px;
+    background-color: $secondary-accent-color;
+    transform-origin: left;
+    transition: 0.2s transform;
 }
 
 .study-container {
@@ -208,10 +218,8 @@
     border-radius: 4px;
 }
 
-.study-progress {
-    margin-right: auto;
-    color: $color-text-dark;
-    font-size: 0.875em;
+.study-footer {
+    justify-content: flex-end;
 }
 
 .study-timer {
