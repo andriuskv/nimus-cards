@@ -13,15 +13,10 @@ function reducer(currentState, newState) {
 
 export default function StudyDeck(props) {
     const [state, setState] = useReducer(reducer, {
-        card: null,
-        score: null,
         cards: [],
-        initialCards: [],
-        title: "",
-        selectedOption: 0,
-        wasLastCard: false
+        initialSessionCards: []
     });
-    const { cards, card, score, initialCards, title } = state;
+    const { cards, card, score, initialSessionCards, title } = state;
     const settings = getSettings();
 
     useEffect(() => {
@@ -39,14 +34,24 @@ export default function StudyDeck(props) {
     }, []);
 
     function initDeck({ title, cards }) {
-        const initialCards = getInitialCards(cards);
+        const cardCount = settings.cardCount.value;
+        const initialCards = settings.randomize.value ? shuffleArray(cards) : cards;
+        let initialSessionCards = initialCards;
+        let numberOfSessions = -1;
 
+        if (cardCount) {
+            numberOfSessions = Math.ceil(cards.length / cardCount);
+            initialSessionCards = initialCards.slice(0, cardCount);
+        }
         setState({
+            currentSession: 0,
+            numberOfSessions,
             title,
             initialCards,
-            cards: [...initialCards],
-            card: getCard(initialCards),
-            score: initScore(initialCards)
+            initialSessionCards,
+            cards: [...initialSessionCards],
+            card: getCard(initialSessionCards),
+            score: initScore(initialSessionCards)
         });
     }
 
@@ -64,16 +69,6 @@ export default function StudyDeck(props) {
             score.levels = [cardIds, [], [], [], []];
         }
         return score;
-    }
-
-    function getInitialCards(initialCards) {
-        const count = settings.cardCount.value;
-        const cards = settings.randomize.value ? shuffleArray(initialCards) : initialCards;
-
-        if (count) {
-            return cards.slice(0, count);
-        }
-        return cards;
     }
 
     function getCard(cards, index = 0) {
@@ -122,7 +117,7 @@ export default function StudyDeck(props) {
         const [id] = currentLevel.splice(index, 1);
 
         score.levels[levelNum].push(id);
-        score.isLast = score.levels[4].length === initialCards.length;
+        score.isLast = score.levels[4].length === initialSessionCards.length;
         return score;
     }
 
@@ -173,7 +168,7 @@ export default function StudyDeck(props) {
 
         // Find first level with cards
         const index = levels.findIndex(level => level.length);
-        const cards = getNextLevelCards(initialCards, levels[index]);
+        const cards = getNextLevelCards(initialSessionCards, levels[index]);
         score.currentLevel = index;
         setNextLevel(cards);
     }
@@ -201,21 +196,34 @@ export default function StudyDeck(props) {
         setState({ selectedOption: parseInt(target.getAttribute("data-index"), 10) });
     }
 
+    function initNextSession() {
+        const cardCount = settings.cardCount.value;
+        const offset = cardCount * state.currentSession;
+        const newCards = state.initialCards.slice(offset, offset + cardCount);
+
+        setNextLevel(newCards);
+    }
+
     function nextStep(correct) {
         const index = card.index + 1;
         const wasLastCard = index === cards.length;
         let nextCard = null;
         let newScore = score;
-
-        if (!wasLastCard) {
-            nextCard = getCard(cards, index);
-        }
+        let { currentSession } = state;
 
         if (typeof correct === "boolean") {
             newScore = updateScore(correct);
         }
+
+        if (!wasLastCard) {
+            nextCard = getCard(cards, index);
+        }
+        else if (newScore.isLast) {
+            currentSession += 1;
+        }
         setState({
             wasLastCard,
+            currentSession,
             score: newScore,
             card: nextCard
         });
@@ -234,7 +242,9 @@ export default function StudyDeck(props) {
                 <StudyDeckScore
                     score={score}
                     mode={settings.studyMode.value}
-                    initNextLevel={initNextLevel}>
+                    initNextLevel={initNextLevel}
+                    notLastSession={state.numberOfSessions - state.currentSession > 0}
+                    initNextSession={initNextSession}>
                 </StudyDeckScore>
             ) : (
                 <Fragment>
