@@ -1,11 +1,11 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { CreateDeckContext, reducer } from "../context/CreateDeckContext";
+import React, { useEffect, useContext, useState } from "react";
+import { CreateDeckContext, CreateDeckProvider } from "../context/CreateDeckContext";
 import { getRandomString } from "../helpers";
 import { fetchDecks } from "../services/db";
 import Card from "./create-card/create-card";
 
-export default function CreateDeck(props) {
-    const [state, dispatch] = useReducer(reducer, getDeck(props.location.state));
+function CreateDeck(props) {
+    const { state, dispatch } = useContext(CreateDeckContext);
     const [formMessage, setFormMessage] = useState("");
     let messageTimeout = 0;
 
@@ -31,6 +31,9 @@ export default function CreateDeck(props) {
                     dispatch({ type: "RESET_DECK", deck });
                 }
             });
+        }
+        else {
+            dispatch({ type: "RESET_DECK", deck: getDeck(props.location.state) });
         }
     }, []);
 
@@ -157,7 +160,7 @@ export default function CreateDeck(props) {
     }
 
     return (
-        <CreateDeckContext.Provider value={{ state, dispatch }}>
+        <React.Fragment>
             <div className="create-input-group">
                 <label className="create-input-label">
                     <div className="create-side-name">TITLE</div>
@@ -174,15 +177,20 @@ export default function CreateDeck(props) {
                         onChange={handleChange}></textarea>
                 </label>
             </div>
-            {state.cards.length ?
-                <ul>{state.cards.map((card, index) => <Card key={card.id} index={index} card={card} />)}</ul> :
-                <p className="create-deck-message">Deck is empty</p>
-            }
+            <ul>{state.cards.map((card, index) => <Card key={card.id} index={index} card={card} />)}</ul>
             <div className="container-footer create-footer">
                 <button className="btn" onClick={addCard}>New Card</button>
                 {formMessage && <span className="create-message">{formMessage}</span>}
                 <button className="btn" onClick={handleSubmit}>Create</button>
             </div>
-        </CreateDeckContext.Provider>
+        </React.Fragment>
+    );
+}
+
+export default function CreateDeckContainer(props) {
+    return (
+        <CreateDeckProvider>
+            <CreateDeck {...props} />
+        </CreateDeckProvider>
     );
 }

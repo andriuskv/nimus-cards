@@ -41,14 +41,14 @@ export default function CreateCardFrontSide({ index, side, handleChange }) {
         ));
     }
 
-    function renderAttachment(attachment) {
+    function renderAttachment() {
         return (
             <div className="side-panel-container">
                 <button type="button" className="btn-icon create-side-panel-btn"
                     onClick={removeAttachment} title="Remove attachment">
                     <Icon name="remove" />
                 </button>
-                <Attachment {...attachment}></Attachment>
+                <Attachment {...attachment} />
             </div>
         );
     }
@@ -65,7 +65,7 @@ export default function CreateCardFrontSide({ index, side, handleChange }) {
                             handleChange={event => handleChange(event, "front", "textSize")} />
                     </div>
                     <div className="side-content create-side-content">
-                        {attachment && renderAttachment(attachment)}
+                        {attachment && renderAttachment()}
                         <textarea className="input create-side-text-input side-text"
                             value={text}
                             style={{ fontSize: `${textSize}px` }}

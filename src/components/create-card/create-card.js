@@ -5,10 +5,10 @@ import CardFront from "./create-card-front";
 import CardBack from "./create-card-back";
 
 export default function CreateCard({ index, card }) {
-    const { dispatch } = useContext(CreateDeckContext);
+    const { state, dispatch } = useContext(CreateDeckContext);
 
     function removeCard() {
-        dispatch({ type: "REMOVE_CARD", id: card.id });
+        dispatch({ type: "REMOVE_CARD", index });
     }
 
     function handleChange({ target }, name, key) {
@@ -33,9 +33,11 @@ export default function CreateCard({ index, card }) {
                 <CardBack index={index} handleChange={handleChange} />
             </div>
             <div className="create-card-btns">
-                <button className="btn-icon" title="Remove card" onClick={removeCard}>
-                    <Icon name="remove" />
-                </button>
+                {state.cards.length > 1 && (
+                    <button className="btn-icon" title="Remove card" onClick={removeCard}>
+                        <Icon name="remove" />
+                    </button>
+                )}
             </div>
         </li>
     );
