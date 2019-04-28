@@ -1,7 +1,21 @@
-import { createContext } from "react";
+import React, { createContext, useReducer } from "react";
 import { getRandomString } from "../helpers";
 
 const CreateDeckContext = createContext(null);
+
+function CreateDeckProvider({ children }) {
+    const [state, dispatch] = useReducer(reducer, {
+        title: "",
+        description: "",
+        cards: []
+    });
+
+    return (
+        <CreateDeckContext.Provider value={{ state, dispatch }}>
+            {children}
+        </CreateDeckContext.Provider>
+    );
+}
 
 function reducer(state, action) {
     const card = state.cards[action.index];
@@ -48,5 +62,6 @@ function reducer(state, action) {
 
 export {
     CreateDeckContext,
+    CreateDeckProvider,
     reducer
 };
