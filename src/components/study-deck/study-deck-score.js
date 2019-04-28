@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import StudyScoreBar from "./study-deck-score-bar";
 
-export default function StudyDeckScore({ score, mode, initNextLevel }) {
+export default function StudyDeckScore({ score, mode, notLastSession, initNextLevel, initNextSession }) {
     const { session } = score;
 
     function getLeitnerBtnText() {
@@ -36,7 +36,9 @@ export default function StudyDeckScore({ score, mode, initNextLevel }) {
                 </div>
             </div>
             <div className="deck-score-btn-container">
-                {!score.isLast && (
+                {score.isLast ? notLastSession && (
+                    <button className="btn deck-score-btn" onClick={initNextSession}>Next Session</button>
+                ) : (
                     <button className="btn deck-score-btn" onClick={initNextLevel}>
                         {mode === "standard" ? "Next Round" : getLeitnerBtnText()}
                     </button>
