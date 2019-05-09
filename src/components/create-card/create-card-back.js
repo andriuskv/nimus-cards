@@ -46,6 +46,17 @@ export default function CreateCardBackSide({ index, handleChange }) {
         }
     }
 
+    function handleInputChange({ target }) {
+        const { name, value, checked } = target;
+
+        dispatch({
+            type: "UPDATE_EXACT_ANSWER",
+            name,
+            value: name === "caseSensitive" ? checked : value,
+            index
+        });
+    }
+
     function renderAnswerType(type) {
         if (type === "text") {
             return (
@@ -54,6 +65,25 @@ export default function CreateCardBackSide({ index, handleChange }) {
                     style={{ fontSize: `${textSize}px` }}
                     onChange={event => handleChange(event, "back", "text")}>
                 </textarea>
+            );
+        }
+        else if (type === "exact") {
+            return (
+                <div onChange={handleInputChange}>
+                    <label className="creact-exact-input-container">
+                        <div className="creact-exact-input-title">Provide answer:</div>
+                        <input type="text" className="input creact-exact-input" name="input" autoComplete="off"
+                            defaultValue={back.input}/>
+                    </label>
+                    <label className="creact-exact-checkbox-container">
+                        <input type="checkbox" className="checkbox-input" name="caseSensitive"
+                            defaultChecked={back.caseSensitive} />
+                        <div className="checkbox creact-exact-checkbox">
+                            <div className="checkbox-tick"></div>
+                        </div>
+                        <span>Case sensitive</span>
+                    </label>
+                </div>
             );
         }
         return (
@@ -101,6 +131,14 @@ export default function CreateCardBackSide({ index, handleChange }) {
                                 <Icon name="list" title="Multiple choice" className="create-option-type-icon" />
                             </label>
                         </li>
+                        <li className="create-side-type">
+                            <label>
+                                <input type="radio" className="radio-input" value="exact"
+                                    name={`type-${cardId}`}
+                                    defaultChecked={type === "exact"} />
+                                <Icon name="text-short" title="Exact answer" className="create-option-type-icon" />
+                            </label>
+                        </li>
                     </ul>
                     {type === "text" && <TextSizeSelect
                         textSize={textSize}
@@ -108,11 +146,11 @@ export default function CreateCardBackSide({ index, handleChange }) {
                     }
                     {type === "multi" && (
                         <button className="btn-icon" onClick={addOption} title="Add option">
-                            <Icon name="addListItem" />
+                            <Icon name="add-list-item" />
                         </button>
                     )}
                 </div>
-                <div className="side-content create-side-content">
+                <div className="create-side-content">
                     {renderAnswerType(type)}
                 </div>
             </div>

@@ -12,10 +12,10 @@ export default function Header() {
                 </Link>
                 <ul className="header-nav-items">
                     <li className="header-nav-item">
-                        <NavLink to="/decks/create" className="header-link" activeClassName="active">Create</NavLink>
+                        <NavLink to="/decks" exact className="header-link" activeClassName="active">Decks</NavLink>
                     </li>
                     <li className="header-nav-item">
-                        <NavLink to="/decks" exact className="header-link" activeClassName="active">Decks</NavLink>
+                        <NavLink to="/decks/create" className="header-link" activeClassName="active">Create</NavLink>
                     </li>
                     <li className="header-nav-item">
                         <NavLink to="/settings" className="header-link" activeClassName="active">Settings</NavLink>

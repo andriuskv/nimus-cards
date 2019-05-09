@@ -121,18 +121,20 @@
         }
     }
 
+    &.exact .back {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     @include breakpoint-smallest {
         flex-direction: column;
         width: 100%;
         margin: auto;
 
-        &.multi {
-            .study-side-content {
+        &.multi, &.exact {
+            .study-side-content.back {
                 height: auto;
-            }
-
-            .side-image {
-                height: 180px;
             }
         }
     }
@@ -191,6 +193,18 @@
     display: flex;
     align-items: center;
     padding: 8px;
+
+    &.correct {
+        border-radius: 2px;
+        box-shadow: $box-shadow;
+        background-color: $success-color;
+        color: $color-text-light;
+
+        .study-option-radio {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
 }
 
 .study-option-radio {
@@ -200,16 +214,32 @@
     background-color: $background-color;
 }
 
-.study-option-correct {
-    border-radius: 2px;
-    box-shadow: $box-shadow;
-    background-color: $success-color;
-    color: $color-text-light;
+.study-exact-container {
+    width: 100%;
+    padding: 8px;
+}
 
-    .study-option-radio {
-        opacity: 0;
-        visibility: hidden;
-    }
+.study-exact-title {
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.study-exact-input {
+    width: 100%;
+    background-color: $background-color-darker;
+}
+
+.study-exact-notice-container {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    color: $color-text;
+    font-size: 13px;
+}
+
+.study-exact-notice {
+    margin-left: 4px;
 }
 
 .study-expaned-image {

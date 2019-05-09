@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useMemo } from "react";
 import { getRandomString } from "../helpers";
 
 const CreateDeckContext = createContext(null);
@@ -9,9 +9,10 @@ function CreateDeckProvider({ children }) {
         description: "",
         cards: []
     });
+    const value = useMemo(() => ({ state, dispatch }), [state]);
 
     return (
-        <CreateDeckContext.Provider value={{ state, dispatch }}>
+        <CreateDeckContext.Provider value={value}>
             {children}
         </CreateDeckContext.Provider>
     );
@@ -54,6 +55,9 @@ function reducer(state, action) {
             return { ...state };
         case "UPDATE_OPTION_TEXT":
             card.back.options[action.optionIndex].text = action.value;
+            return { ...state };
+        case "UPDATE_EXACT_ANSWER":
+            card.back[action.name] = action.value;
             return { ...state };
         default:
             return state;

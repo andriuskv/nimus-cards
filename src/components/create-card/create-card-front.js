@@ -64,7 +64,7 @@ export default function CreateCardFrontSide({ index, side, handleChange }) {
                             textSize={textSize}
                             handleChange={event => handleChange(event, "front", "textSize")} />
                     </div>
-                    <div className="side-content create-side-content">
+                    <div className="create-side-content">
                         {attachment && renderAttachment()}
                         <textarea className="input create-side-text-input side-text"
                             value={text}
