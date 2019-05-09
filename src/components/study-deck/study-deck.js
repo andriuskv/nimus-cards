@@ -16,7 +16,7 @@ export default function StudyDeck(props) {
         cards: [],
         initialSessionCards: []
     });
-    const { cards, card, score, initialSessionCards, title } = state;
+    const { cards, card, score, initialSessionCards } = state;
     const settings = getSettings();
 
     useEffect(() => {
@@ -183,13 +183,26 @@ export default function StudyDeck(props) {
     }
 
     function revealAnswer() {
-        let newScore = score;
+        const newState = {};
         card.answerRevealed = true;
 
         if (card.back.type === "multi") {
-            newScore = updateScore(card.back.correct === state.selectedOption);
+            newState.score = updateScore(card.back.correct === state.selectedOption);
+            newState.selectedOption = 0;
         }
-        setState({ card, score: newScore });
+        else if (card.back.type === "exact") {
+            const { answer } = state;
+            let isCorrect = false;
+
+            if (card.back.caseSensitive) {
+                isCorrect = answer === card.back.input;
+            }
+            else {
+                isCorrect = answer.toLowerCase() === card.back.input.toLowerCase();
+            }
+            newState.score = updateScore(isCorrect);
+        }
+        setState({ card, ...newState });
     }
 
     function selectOption({ target }) {
@@ -229,6 +242,10 @@ export default function StudyDeck(props) {
         });
     }
 
+    function handleChange({ target }) {
+        setState({ answer: target.value });
+    }
+
     if (!cards.length) {
         return null;
     }
@@ -236,7 +253,7 @@ export default function StudyDeck(props) {
         <Fragment>
             <h1 className="component-header study-deck-title">
                 <div className="study-progress" style={{ transform: `scaleX(${card ? card.index / cards.length : 1})` }}></div>
-                <span>{title}</span>
+                <span>{state.title}</span>
             </h1>
             {state.wasLastCard ? (
                 <StudyDeckScore
@@ -250,7 +267,7 @@ export default function StudyDeck(props) {
                 <Fragment>
                     <div className="study-container">
                         <StudyDeckHeader score={score} mode={settings.studyMode.value} />
-                        <Card card={card} selectOption={selectOption} />
+                        <Card card={card} selectOption={selectOption} handleChange={handleChange} />
                     </div>
                     <div className="container-footer study-footer">
                         {card.answerRevealed ?

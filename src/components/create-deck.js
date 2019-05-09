@@ -62,6 +62,7 @@ function CreateDeck(props) {
                 type: "text",
                 text: "",
                 textSize: 16,
+                input: "",
                 correct: 0,
                 options: [
                     { id: getRandomString() },
@@ -90,6 +91,9 @@ function CreateDeck(props) {
     function isBackValid(side) {
         if (side.type === "text") {
             return side.text.length > 0;
+        }
+        else if (side.type === "exact") {
+            return side.input.length > 0;
         }
         const validOptionCount = side.options.reduce((acc, { text }) => {
             if (text) {
@@ -128,16 +132,26 @@ function CreateDeck(props) {
 
     function cleanupCards(cards) {
         return cards.map(card => {
-            if (card.back.type === "text") {
-                card.back.correct = 0;
-                card.back.options = card.back.options.slice(0, 2).map((option => {
-                    option.text = "";
-                    return option;
-                }));
-            }
-            else {
+            if (card.back.type === "multi") {
                 card.back.text = "";
+                card.back.input = "";
+                card.back.caseSensitive = false;
                 card.back.options = card.back.options.filter(({ text }) => text);
+                return card;
+            }
+            card.back.correct = 0;
+            card.back.options = card.back.options.slice(0, 2).map((option => {
+                option.text = "";
+                return option;
+            }));
+
+            if (card.back.type === "text") {
+                card.back.input = "";
+                card.back.caseSensitive = false;
+            }
+            else if (card.back.type === "exact") {
+                card.back.input = card.back.input.trim();
+                card.back.text = "";
             }
             return card;
         });

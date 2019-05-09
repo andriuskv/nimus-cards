@@ -114,12 +114,12 @@
     margin-right: auto;
 }
 
-.create-side-type:first-of-type {
+.create-side-type:not(:last-of-type) {
     margin-right: 8px;
 }
 
 .create-option-type-icon {
-    color: $color-text-mid;
+    color: $color-text;
     cursor: pointer;
 }
 
@@ -167,6 +167,35 @@
     @include breakpoint-smallest {
         width: 50%;
     }
+}
+
+.creact-exact-input-container {
+    display: block;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+.creact-exact-input-title {
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.creact-exact-input {
+    width: 100%;
+    background-color: $background-color-darker;
+}
+
+.creact-exact-checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+.creact-exact-checkbox {
+    margin-right: 8px;
+    background-color: $background-color-darker;
 }
 
 .upload-panel {
