@@ -4,12 +4,8 @@ import Icon from "../icon";
 import CardFront from "./create-card-front";
 import CardBack from "./create-card-back";
 
-export default function CreateCard({ index, card }) {
+export default function CreateCard({ index, card, removeCard }) {
     const { state, dispatch } = useContext(CreateDeckContext);
-
-    function removeCard() {
-        dispatch({ type: "REMOVE_CARD", index });
-    }
 
     function handleChange({ target }, name, key) {
         const { value } = target;
@@ -34,7 +30,7 @@ export default function CreateCard({ index, card }) {
             </div>
             <div className="create-card-btns">
                 {state.cards.length > 1 && (
-                    <button className="btn-icon" title="Remove card" onClick={removeCard}>
+                    <button className="btn btn-icon" title="Remove card" onClick={() => removeCard(index)}>
                         <Icon name="remove" />
                     </button>
                 )}

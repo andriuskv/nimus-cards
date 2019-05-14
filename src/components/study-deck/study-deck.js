@@ -273,9 +273,9 @@ export default function StudyDeck(props) {
                         {card.answerRevealed ?
                             card.back.type === "text" ? (
                                 <Fragment>
-                                    <button className="btn-danger study-footer-btn"
+                                    <button className="btn btn-danger study-footer-btn"
                                         onClick={() => nextStep(false)}>I Was Wrong</button>
-                                    <button className="btn-success study-footer-btn"
+                                    <button className="btn btn-success study-footer-btn"
                                         onClick={() => nextStep(true)}>I Got It Right</button>
                                 </Fragment>
 
