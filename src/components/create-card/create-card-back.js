@@ -99,7 +99,7 @@ export default function CreateCardBackSide({ index, handleChange }) {
                         </label>
                         <input type="text" className="input create-option-input" name={index}
                             defaultValue={text} autoComplete="off" onChange={handleOptionTextChange} />
-                        <button className="btn-icon" title="Remove answer"
+                        <button className="btn btn-icon" title="Remove answer"
                             onClick={() => removeOption(index, id)}>
                             <Icon name="remove" />
                         </button>
@@ -145,7 +145,7 @@ export default function CreateCardBackSide({ index, handleChange }) {
                         handleChange={event => handleChange(event, "back", "textSize")} />
                     }
                     {type === "multi" && (
-                        <button className="btn-icon" onClick={addOption} title="Add option">
+                        <button className="btn btn-icon" onClick={addOption} title="Add option">
                             <Icon name="add-list-item" />
                         </button>
                     )}

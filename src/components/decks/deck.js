@@ -19,12 +19,12 @@ export default function Deck({ deck, showDialog, editDeck }) {
                 {deck.cards.length} card{deck.cards.length > 1 && "s"}
             </div>
             <div className="deck-btn-container">
-                <button className="btn-icon deck-btn" title="Edit"
+                <button className="btn btn-icon deck-btn" title="Edit"
                     onClick={handleEditButtonClick}>
                     <Icon name="edit" />
                     <span>Edit</span>
                 </button>
-                <button className="btn-icon deck-btn" title="Remove"
+                <button className="btn btn-icon deck-btn" title="Remove"
                     onClick={handleRemoveButtonClick}>
                     <Icon name="remove" />
                     <span>Remove</span>

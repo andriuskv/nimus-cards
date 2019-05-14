@@ -7,18 +7,9 @@ import Card from "./create-card/create-card";
 function CreateDeck(props) {
     const { state, dispatch } = useContext(CreateDeckContext);
     const [formMessage, setFormMessage] = useState("");
+    const [pendingCards, setPendingCards] = useState([]);
     let messageTimeout = 0;
-
-    useEffect(() => {
-        clearTimeout(messageTimeout);
-        messageTimeout = setTimeout(() => {
-            setFormMessage("");
-        }, 3200);
-
-        return () => {
-            clearTimeout(messageTimeout);
-        };
-    }, [formMessage]);
+    let undoTimeout = 0;
 
     useEffect(() => {
         const { id } = props.match.params;
@@ -36,6 +27,30 @@ function CreateDeck(props) {
             dispatch({ type: "RESET_DECK", deck: getDeck(props.location.state) });
         }
     }, []);
+
+    useEffect(() => {
+        clearTimeout(messageTimeout);
+        messageTimeout = setTimeout(() => {
+            setFormMessage("");
+        }, 3200);
+
+        return () => {
+            clearTimeout(messageTimeout);
+        };
+    }, [formMessage]);
+
+    useEffect(() => {
+        clearTimeout(undoTimeout);
+
+        if (pendingCards.length > 0) {
+            undoTimeout = setTimeout(() => {
+                setPendingCards([]);
+            }, 8000);
+        }
+        return () => {
+            clearTimeout(undoTimeout);
+        };
+    }, [pendingCards.length]);
 
     function findDeck(decks, deckId) {
         return decks.find(({ id }) => id === deckId);
@@ -82,6 +97,27 @@ function CreateDeck(props) {
             card.back.type = lastCard.back.type;
         }
         dispatch({ type: "ADD_CARD", card });
+    }
+
+    function removeCard(index) {
+        const card = state.cards[index];
+
+        if (isFrontValid(card.front) || isBackValid(card.back)) {
+            setPendingCards([...pendingCards, card]);
+        }
+        dispatch({ type: "REMOVE_CARD", index });
+    }
+
+    function undoCardRemoval() {
+        clearTimeout(undoTimeout);
+        setPendingCards([]);
+        dispatch({
+            type: "RESET_DECK",
+            deck: {
+                ...state,
+                cards: state.cards.concat(pendingCards)
+            }
+        });
     }
 
     function isFrontValid(side) {
@@ -191,7 +227,15 @@ function CreateDeck(props) {
                         onChange={handleChange}></textarea>
                 </label>
             </div>
-            <ul>{state.cards.map((card, index) => <Card key={card.id} index={index} card={card} />)}</ul>
+            <ul>{state.cards.map((card, index) => (
+                <Card key={card.id} index={index} card={card} removeCard={removeCard} />
+            ))}</ul>
+            {pendingCards.length > 0 && (
+                <div className="deck-form-dialog">
+                    <span>Removed {pendingCards.length} card{pendingCards.length > 1 ? "s" : ""}</span>
+                    <button className="btn btn-text" onClick={undoCardRemoval}>UNDO</button>
+                </div>
+            )}
             <div className="container-footer create-footer">
                 <button className="btn" onClick={addCard}>New Card</button>
                 {formMessage && <span className="create-message">{formMessage}</span>}

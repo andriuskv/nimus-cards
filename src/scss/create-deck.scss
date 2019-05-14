@@ -268,3 +268,19 @@
     position: relative;
     justify-content: space-between;
 }
+
+.deck-form-dialog {
+    z-index: 2;
+    position: fixed;
+    right: 8px;
+    bottom: 42px;
+    padding: 8px 8px 8px 16px;
+    border-radius: 4px;
+    background-color: $background-color-darker;
+    box-shadow: 0 1px 1px $color-black-20;
+    font-size: 14px;
+
+    .btn {
+        margin-left: 8px;
+    }
+}

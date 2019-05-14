@@ -34,7 +34,7 @@ export default function CreateCardFrontSide({ index, side, handleChange }) {
     function renderToolbarBtns() {
         return ["image", "audio"].map((type, index) => (
             <button key={index}
-                className="btn-icon toolbar-btn"
+                className="btn btn-icon toolbar-btn"
                 title={`Upload ${type}`} onClick={() => showUploadPanel(type)}>
                 <Icon name={type} />
             </button>
@@ -44,7 +44,7 @@ export default function CreateCardFrontSide({ index, side, handleChange }) {
     function renderAttachment() {
         return (
             <div className="side-panel-container">
-                <button type="button" className="btn-icon create-side-panel-btn"
+                <button type="button" className="btn btn-icon create-side-panel-btn"
                     onClick={removeAttachment} title="Remove attachment">
                     <Icon name="remove" />
                 </button>

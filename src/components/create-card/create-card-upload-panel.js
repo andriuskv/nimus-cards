@@ -97,7 +97,7 @@ export default class CreateCardUploadPanel extends React.Component {
                     </div>
                     <div className="upload-panel-footer">
                         {message && <div className="upload-panel-message">{message}</div>}
-                        <button type="button" className="btn-secondary" onClick={this.hide}>Cancel</button>
+                        <button type="button" className="btn btn-text" onClick={this.hide}>Cancel</button>
                     </div>
                 </div>
             </div>
