@@ -87,6 +87,9 @@ function CreateDeck(props) {
                     { id: getRandomString() },
                     { id: getRandomString() }
                 ]
+            },
+            notes: {
+                value: ""
             }
         };
     }
@@ -101,12 +104,15 @@ function CreateDeck(props) {
             card.back.type = lastCard.back.type;
         }
         dispatch({ type: "ADD_CARD", card });
+        requestAnimationFrame(() => {
+            newCardBtnRef.current.scrollIntoView();
+        });
     }
 
     function removeCard(index) {
         const card = state.cards[index];
 
-        if (isFrontValid(card.front) || isBackValid(card.back)) {
+        if (isFrontValid(card.front) || isBackValid(card.back) || card.notes.value) {
             setPendingCards([...pendingCards, card]);
         }
         dispatch({ type: "REMOVE_CARD", index });
