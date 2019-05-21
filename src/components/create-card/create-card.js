@@ -24,7 +24,7 @@ export default function CreateCard({ index, card, removeCard }) {
     return (
         <li className="create-list-item">
             <div className="create-card-index">{index + 1}.</div>
-            <div className="create-input-group create-card">
+            <div className="deck-form-field-group create-card">
                 <CardFront index={index} side={card.front} handleChange={handleChange} />
                 <CardBack index={index} handleChange={handleChange} />
             </div>

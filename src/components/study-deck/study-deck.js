@@ -191,7 +191,7 @@ export default function StudyDeck(props) {
             newState.selectedOption = 0;
         }
         else if (card.back.type === "exact") {
-            const { answer } = state;
+            const { answer = "" } = state;
             let isCorrect = false;
 
             if (card.back.caseSensitive) {

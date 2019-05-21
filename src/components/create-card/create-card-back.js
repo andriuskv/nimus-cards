@@ -60,7 +60,7 @@ export default function CreateCardBackSide({ index, handleChange }) {
     function renderAnswerType(type) {
         if (type === "text") {
             return (
-                <textarea className="input create-side-text-input side-text"
+                <textarea className="input create-side-text-input"
                     value={text}
                     style={{ fontSize: `${textSize}px` }}
                     onChange={event => handleChange(event, "back", "text")}>
@@ -110,49 +110,47 @@ export default function CreateCardBackSide({ index, handleChange }) {
     }
 
     return (
-        <div className="side-container">
-            <div className="create-side-name">BACK</div>
-            <div className="side">
-                <div className="create-side-toolbar">
-                    <ul className="create-side-types" onChange={handleTypeChange}>
-                        <li className="create-side-type">
-                            <label>
-                                <input type="radio" className="radio-input" value="text"
-                                    name={`type-${cardId}`}
-                                    defaultChecked={type === "text"} />
-                                <Icon name="text" title="Text" className="create-option-type-icon" />
-                            </label>
-                        </li>
-                        <li className="create-side-type">
-                            <label>
-                                <input type="radio" className="radio-input" value="multi"
-                                    name={`type-${cardId}`}
-                                    defaultChecked={type === "multi"} />
-                                <Icon name="list" title="Multiple choice" className="create-option-type-icon" />
-                            </label>
-                        </li>
-                        <li className="create-side-type">
-                            <label>
-                                <input type="radio" className="radio-input" value="exact"
-                                    name={`type-${cardId}`}
-                                    defaultChecked={type === "exact"} />
-                                <Icon name="text-short" title="Exact answer" className="create-option-type-icon" />
-                            </label>
-                        </li>
-                    </ul>
-                    {type === "text" && <TextSizeSelect
-                        textSize={textSize}
-                        handleChange={event => handleChange(event, "back", "textSize")} />
-                    }
-                    {type === "multi" && (
-                        <button className="btn btn-icon" onClick={addOption} title="Add option">
-                            <Icon name="add-list-item" />
-                        </button>
-                    )}
-                </div>
-                <div className="create-side-content">
-                    {renderAnswerType(type)}
-                </div>
+        <div>
+            <div className="deck-form-field-title">BACK</div>
+            <div className="create-side-toolbar">
+                <ul className="create-side-types" onChange={handleTypeChange}>
+                    <li className="create-side-type">
+                        <label>
+                            <input type="radio" className="radio-input" value="text"
+                                name={`type-${cardId}`}
+                                defaultChecked={type === "text"} />
+                            <Icon name="text" title="Text" className="create-option-type-icon" />
+                        </label>
+                    </li>
+                    <li className="create-side-type">
+                        <label>
+                            <input type="radio" className="radio-input" value="multi"
+                                name={`type-${cardId}`}
+                                defaultChecked={type === "multi"} />
+                            <Icon name="list" title="Multiple choice" className="create-option-type-icon" />
+                        </label>
+                    </li>
+                    <li className="create-side-type">
+                        <label>
+                            <input type="radio" className="radio-input" value="exact"
+                                name={`type-${cardId}`}
+                                defaultChecked={type === "exact"} />
+                            <Icon name="text-short" title="Exact answer" className="create-option-type-icon" />
+                        </label>
+                    </li>
+                </ul>
+                {type === "text" && <TextSizeSelect
+                    textSize={textSize}
+                    handleChange={event => handleChange(event, "back", "textSize")} />
+                }
+                {type === "multi" && (
+                    <button className="btn btn-icon" onClick={addOption} title="Add option">
+                        <Icon name="add-list-item" />
+                    </button>
+                )}
+            </div>
+            <div className="create-side-content">
+                {renderAnswerType(type)}
             </div>
         </div>
     );

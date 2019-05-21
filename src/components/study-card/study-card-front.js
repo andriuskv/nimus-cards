@@ -23,22 +23,18 @@ export default function StudyCardFront({ side }) {
 
     return (
         <Fragment>
-            <div className="side-container">
-                <div className="side">
-                    <div className="study-side-content">
-                        {attachment && (
-                            <div className={`side-panel-container${text ? "" : " full"}`}
-                                onClick={showImage}>
-                                <Attachment {...attachment}></Attachment>
-                            </div>
-                        )}
-                        {text && (
-                            <div className="side-text study-side-text">
-                                <div style={{ fontSize: `${textSize}px` }}>{text}</div>
-                            </div>
-                        )}
+            <div className="study-card-content">
+                {attachment && (
+                    <div className={`study-side-panel${text ? "" : " full"}`}
+                        onClick={showImage}>
+                        <Attachment {...attachment}></Attachment>
                     </div>
-                </div>
+                )}
+                {text && (
+                    <div className="study-side-text">
+                        <div className="study-side-text-inner" style={{ fontSize: `${textSize}px` }}>{text}</div>
+                    </div>
+                )}
             </div>
             {imageExpanded && (
                 <div className="mask" onClick={hideImage}>
