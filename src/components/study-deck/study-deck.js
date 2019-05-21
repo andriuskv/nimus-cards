@@ -72,14 +72,16 @@ export default function StudyDeck(props) {
     }
 
     function getCard(cards, index = 0) {
-        const { id, front, back } = cards[index];
+        const card = cards[index];
 
         return {
+            ...card,
             index,
-            id,
-            front,
-            back,
-            answerRevealed: false
+            answerRevealed: false,
+            notes: {
+                ...card.notes,
+                visible: false
+            }
         };
     }
 
@@ -209,6 +211,11 @@ export default function StudyDeck(props) {
         setState({ selectedOption: parseInt(target.getAttribute("data-index"), 10) });
     }
 
+    function toggleNotes() {
+        card.notes.visible = !card.notes.visible;
+        setState({ card });
+    }
+
     function initNextSession() {
         const cardCount = settings.cardCount.value;
         const offset = cardCount * state.currentSession;
@@ -265,10 +272,11 @@ export default function StudyDeck(props) {
                 </StudyDeckScore>
             ) : (
                 <Fragment>
-                    <div className="study-container">
-                        <StudyDeckHeader score={score} mode={settings.studyMode.value} />
-                        <Card card={card} selectOption={selectOption} handleChange={handleChange} />
-                    </div>
+                    <StudyDeckHeader score={score} mode={settings.studyMode.value} />
+                    <Card card={card}
+                        handleChange={handleChange}
+                        selectOption={selectOption}
+                        toggleNotes={toggleNotes} />
                     <div className="container-footer study-footer">
                         {card.answerRevealed ?
                             card.back.type === "text" ? (

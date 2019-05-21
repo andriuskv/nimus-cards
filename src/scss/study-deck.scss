@@ -256,6 +256,18 @@
     border-radius: 4px;
 }
 
+.study-notes-toggle-btn {
+    display: block;
+    padding: 2px;
+}
+
+.study-notes {
+    max-height: 200px;
+    padding: 8px;
+    margin-top: 4px;
+    white-space: pre-wrap;
+}
+
 .study-footer {
     justify-content: flex-end;
 }

@@ -31,8 +31,8 @@ function reducer(state, action) {
         case "REMOVE_CARD":
             state.cards.splice(action.index, 1);
             return { ...state };
-        case "UPDATE_SIDE_VALUE":
-            card[action.side][action.key] = action.value;
+        case "UPDATE_CARD_VALUE":
+            card[action.name][action.key] = action.value;
             return { ...state };
         case "ADD_ATTACHMENT":
             card.front.attachment = action.attachment;
