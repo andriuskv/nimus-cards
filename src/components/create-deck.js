@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useRef, useEffect, useContext, useState } from "react";
 import { CreateDeckContext, CreateDeckProvider } from "../context/CreateDeckContext";
 import { getRandomString } from "../helpers";
 import { fetchDecks } from "../services/db";
@@ -8,6 +8,7 @@ function CreateDeck(props) {
     const { state, dispatch } = useContext(CreateDeckContext);
     const [formMessage, setFormMessage] = useState("");
     const [pendingCards, setPendingCards] = useState([]);
+    const newCardBtnRef = useRef();
     let messageTimeout = 0;
     let undoTimeout = 0;
 
@@ -19,12 +20,15 @@ function CreateDeck(props) {
                 const deck = findDeck(decks, id);
 
                 if (deck) {
+                    deck.cards = deck.cards.map(card => ({ ...getNewCard(), ...card }));
                     dispatch({ type: "RESET_DECK", deck });
                 }
             });
         }
         else {
-            dispatch({ type: "RESET_DECK", deck: getDeck(props.location.state) });
+            const deck = getDeck(props.location.state);
+            deck.cards = deck.cards.map(card => ({ ...getNewCard(), ...card }));
+            dispatch({ type: "RESET_DECK", deck });
         }
     }, []);
 
@@ -211,17 +215,17 @@ function CreateDeck(props) {
 
     return (
         <React.Fragment>
-            <div className="create-input-group">
-                <label className="create-input-label">
-                    <div className="create-side-name">TITLE</div>
+            <div className="deck-form-field-group">
+                <label>
+                    <div className="deck-form-field-title">TITLE</div>
                     <input className="input create-title-input"
                         name="title"
                         value={state.title}
                         onChange={handleChange} />
                 </label>
-                <label className="create-input-label">
-                    <div className="create-side-name">DESCRIPTION (OPTIONAL)</div>
-                    <textarea className="input side-text create-description-input"
+                <label>
+                    <div className="deck-form-field-title">DESCRIPTION (OPTIONAL)</div>
+                    <textarea className="input create-description-input"
                         name="description"
                         value={state.description}
                         onChange={handleChange}></textarea>
@@ -237,7 +241,7 @@ function CreateDeck(props) {
                 </div>
             )}
             <div className="container-footer create-footer">
-                <button className="btn" onClick={addCard}>New Card</button>
+                <button className="btn" onClick={addCard} ref={newCardBtnRef}>New Card</button>
                 {formMessage && <span className="create-message">{formMessage}</span>}
                 <button className="btn" onClick={handleSubmit}>Create</button>
             </div>

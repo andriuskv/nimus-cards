@@ -43,7 +43,7 @@ export default function CreateCardFrontSide({ index, side, handleChange }) {
 
     function renderAttachment() {
         return (
-            <div className="side-panel-container">
+            <div className="create-side-panel">
                 <button type="button" className="btn btn-icon create-side-panel-btn"
                     onClick={removeAttachment} title="Remove attachment">
                     <Icon name="remove" />
@@ -55,22 +55,20 @@ export default function CreateCardFrontSide({ index, side, handleChange }) {
 
     return (
         <Fragment>
-            <div className="side-container">
-                <div className="create-side-name">FRONT</div>
-                <div className="side">
-                    <div className="create-side-toolbar">
-                        {renderToolbarBtns()}
-                        <TextSizeSelect
-                            textSize={textSize}
-                            handleChange={event => handleChange(event, "front", "textSize")} />
-                    </div>
-                    <div className="create-side-content">
-                        {attachment && renderAttachment()}
-                        <textarea className="input create-side-text-input side-text"
-                            value={text}
-                            style={{ fontSize: `${textSize}px` }}
-                            onChange={event => handleChange(event, "front", "text")}></textarea>
-                    </div>
+            <div>
+                <div className="deck-form-field-title">FRONT</div>
+                <div className="create-side-toolbar">
+                    {renderToolbarBtns()}
+                    <TextSizeSelect
+                        textSize={textSize}
+                        handleChange={event => handleChange(event, "front", "textSize")} />
+                </div>
+                <div className="create-side-content">
+                    {attachment && renderAttachment()}
+                    <textarea className="input create-side-text-input"
+                        value={text}
+                        style={{ fontSize: `${textSize}px` }}
+                        onChange={event => handleChange(event, "front", "text")}></textarea>
                 </div>
             </div>
             {uploadPanel.visible &&

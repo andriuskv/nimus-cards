@@ -8,8 +8,8 @@ export default function StudyCardBack({ card, selectOption, handleChange }) {
     function renderContent() {
         if (type === "text") {
             return (
-                <div className="side-text study-side-text">
-                    <div style={{ fontSize: `${textSize}px` }}>{text}</div>
+                <div className="study-side-text">
+                    <div className="study-side-text-inner" style={{ fontSize: `${textSize}px` }}>{text}</div>
                 </div>
             );
         }
@@ -30,7 +30,7 @@ export default function StudyCardBack({ card, selectOption, handleChange }) {
             );
         }
         return (
-            <ul onChange={selectOption} className={`study-options ${answerRevealed ? "revealed" : ""}`}>
+            <ul onChange={selectOption} className={`study-options${answerRevealed ? " revealed" : ""}`}>
                 {options.map(({ text }, index) => (
                     <li key={id + index}>
                         <label className={`study-option-radio-container ${answerRevealed && correct === index ? "correct" : ""}`}>
@@ -47,11 +47,5 @@ export default function StudyCardBack({ card, selectOption, handleChange }) {
         );
     }
 
-    return (
-        <div className="side-container">
-            <div className="side">
-                <div className="study-side-content back">{renderContent()}</div>
-            </div>
-        </div>
-    );
+    return <div className="study-card-content">{renderContent()}</div>;
 }
