@@ -182,7 +182,6 @@
 
     &:not(.revealed) .study-option-radio-container {
         &:hover {
-            border-radius: 2px;
             box-shadow: $box-shadow;
             background-color: $background-color;
             cursor: pointer;
@@ -192,15 +191,62 @@
             }
         }
     }
+
+    &.grid {
+        --cell-size: 96px;
+
+        display: grid;
+        grid-template-columns: repeat(auto-fill, var(--cell-size));
+        align-content: center;
+        grid-gap: 8px;
+
+        .study-option-radio-container {
+            justify-content: center;
+            width: var(--cell-size);
+            height: var(--cell-size);
+            box-shadow: $box-shadow;
+            background-color: $background-color;
+            font-size: 14px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $background-color-light;
+            }
+
+            &.selected {
+                background-color: $background-color-light;
+            }
+
+            &.correct {
+                background-color: $success-color;
+            }
+
+            span {
+                text-align: center;
+            }
+        }
+
+        &.revealed .study-option-radio-container {
+            cursor: default;
+
+            &:not(.selected):not(.correct):hover {
+                background-color: $background-color;
+            }
+        }
+
+        .study-option-radio {
+            display: none;
+        }
+    }
 }
 
 .study-option-radio-container {
     display: flex;
     align-items: center;
     padding: 8px;
+    border-radius: 2px;
 
     &.correct {
-        border-radius: 2px;
         box-shadow: $box-shadow;
         background-color: $success-color;
         color: $color-text-light;

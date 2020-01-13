@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
-import { CreateDeckContext } from "../../context/CreateDeckContext";
+import React, { Fragment } from "react";
+import { useStore } from "../../context/CreateDeckContext";
 import Icon from "../icon";
 import TextSizeSelect from "./create-card-text-size-select";
 
 export default function CreateCardBackSide({ index, handleChange }) {
-    const { state, dispatch } = useContext(CreateDeckContext);
+    const { state, dispatch } = useStore();
     const { back, id: cardId } = state.cards[index];
     const { type, text, textSize, options, correct } = back;
 
@@ -22,6 +22,10 @@ export default function CreateCardBackSide({ index, handleChange }) {
             index,
             optionIndex
         });
+    }
+
+    function toggleUseGrid() {
+        dispatch({ type: "TOGGLE_USE_GRID", index });
     }
 
     function handleTypeChange({ target }) {
@@ -57,56 +61,82 @@ export default function CreateCardBackSide({ index, handleChange }) {
         });
     }
 
+    function renderTextAnswerType() {
+        return (
+            <textarea className="input create-side-text-input"
+                value={text}
+                style={{ fontSize: `${textSize}px` }}
+                onChange={event => handleChange(event, "back", "text")}>
+            </textarea>
+        );
+    }
+
+    function renderExactAnswerType() {
+        return (
+            <div onChange={handleInputChange}>
+                <label className="creact-exact-input-container">
+                    <div className="creact-exact-input-title">Provide answer:</div>
+                    <input type="text" className="input creact-exact-input" name="input"
+                        autoComplete="off"
+                        defaultValue={back.input}/>
+                </label>
+                <label className="creact-exact-checkbox-container">
+                    <input type="checkbox" className="checkbox-input" name="caseSensitive"
+                        defaultChecked={back.caseSensitive} />
+                    <div className="checkbox creact-exact-checkbox">
+                        <div className="checkbox-tick"></div>
+                    </div>
+                    <span>Case sensitive</span>
+                </label>
+            </div>
+        );
+    }
+
+    function renderMultiAnswerType() {
+        return (
+            <Fragment>
+                <label onInput={toggleUseGrid} className="creact-multi-checkbox-container">
+                    <input type="checkbox" className="checkbox-input" name="caseSensitive"
+                        defaultChecked={back.useGrid} />
+                    <div className="checkbox creact-multi-checkbox">
+                        <div className="checkbox-tick"></div>
+                    </div>
+                    <span>Use grid to display choices</span>
+                </label>
+                <ul>
+                    {options.map(({ text, id }, index) => (
+                        <li className="create-option" key={id}>
+                            <label>
+                                <input type="radio" className="radio-input" name={cardId}
+                                    checked={correct === index}
+                                    onChange={() => markAnswerAsCorrect(index)} />
+                                <div className="radio create-option-radio"
+                                    title="Mark answer as correct"></div>
+                            </label>
+                            <input type="text" className="input create-option-input" name={index}
+                                defaultValue={text} autoComplete="off" onChange={handleOptionTextChange} />
+                            <button className="btn btn-icon" title="Remove answer"
+                                onClick={() => removeOption(index, id)}>
+                                <Icon name="remove" />
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </Fragment>
+        );
+    }
+
     function renderAnswerType(type) {
         if (type === "text") {
-            return (
-                <textarea className="input create-side-text-input"
-                    value={text}
-                    style={{ fontSize: `${textSize}px` }}
-                    onChange={event => handleChange(event, "back", "text")}>
-                </textarea>
-            );
+            return renderTextAnswerType();
+        }
+        else if (type === "multi") {
+            return renderMultiAnswerType();
         }
         else if (type === "exact") {
-            return (
-                <div onChange={handleInputChange}>
-                    <label className="creact-exact-input-container">
-                        <div className="creact-exact-input-title">Provide answer:</div>
-                        <input type="text" className="input creact-exact-input" name="input" autoComplete="off"
-                            defaultValue={back.input}/>
-                    </label>
-                    <label className="creact-exact-checkbox-container">
-                        <input type="checkbox" className="checkbox-input" name="caseSensitive"
-                            defaultChecked={back.caseSensitive} />
-                        <div className="checkbox creact-exact-checkbox">
-                            <div className="checkbox-tick"></div>
-                        </div>
-                        <span>Case sensitive</span>
-                    </label>
-                </div>
-            );
+            return renderExactAnswerType();
         }
-        return (
-            <ul>
-                {options.map(({ text, id }, index) => (
-                    <li className="create-option" key={id}>
-                        <label>
-                            <input type="radio" className="radio-input" name={cardId}
-                                checked={correct === index}
-                                onChange={() => markAnswerAsCorrect(index)} />
-                            <div className="radio create-option-radio"
-                                title="Mark answer as correct"></div>
-                        </label>
-                        <input type="text" className="input create-option-input" name={index}
-                            defaultValue={text} autoComplete="off" onChange={handleOptionTextChange} />
-                        <button className="btn btn-icon" title="Remove answer"
-                            onClick={() => removeOption(index, id)}>
-                            <Icon name="remove" />
-                        </button>
-                    </li>
-                ))}
-            </ul>
-        );
+        return null;
     }
 
     return (

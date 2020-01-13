@@ -189,8 +189,8 @@ export default function StudyDeck(props) {
         card.answerRevealed = true;
 
         if (card.back.type === "multi") {
-            newState.score = updateScore(card.back.correct === state.selectedOption);
-            newState.selectedOption = 0;
+            newState.score = updateScore(card.back.correct === card.back.selectedOption);
+            delete card.back.selectedOption;
         }
         else if (card.back.type === "exact") {
             const { answer = "" } = state;
@@ -208,7 +208,8 @@ export default function StudyDeck(props) {
     }
 
     function selectOption({ target }) {
-        setState({ selectedOption: parseInt(target.getAttribute("data-index"), 10) });
+        card.back.selectedOption = parseInt(target.getAttribute("data-index"), 10);
+        setState({ card });
     }
 
     function toggleNotes() {

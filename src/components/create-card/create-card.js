@@ -1,12 +1,12 @@
-import React, { useState, useContext } from "react";
-import { CreateDeckContext } from "../../context/CreateDeckContext";
+import React, { useState } from "react";
+import { useStore } from "../../context/CreateDeckContext";
 import Icon from "../icon";
 import CardFront from "./create-card-front";
 import CardBack from "./create-card-back";
 import CardNotes from "./create-card-notes";
 
 export default function CreateCard({ index, card, removeCard }) {
-    const { state, dispatch } = useContext(CreateDeckContext);
+    const { state, dispatch } = useStore();
     const [notesVisible, setNotesVisibility] = useState(card.notes && !!card.notes.value);
 
     function toggleNotes() {

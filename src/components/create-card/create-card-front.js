@@ -1,12 +1,12 @@
-import React, { Fragment, useState, useContext } from "react";
-import { CreateDeckContext } from "../../context/CreateDeckContext";
+import React, { Fragment, useState } from "react";
+import { useStore } from "../../context/CreateDeckContext";
 import TextSizeSelect from "./create-card-text-size-select";
 import UploadPanel from "./create-card-upload-panel";
 import Attachment from "../attachment";
 import Icon from "../icon";
 
 export default function CreateCardFrontSide({ index, side, handleChange }) {
-    const { dispatch } = useContext(CreateDeckContext);
+    const { dispatch } = useStore();
     const [uploadPanel, toggleUploadPanel] = useState({ type: "", visible: false });
     const { text, textSize, attachment } = side;
 

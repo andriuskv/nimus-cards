@@ -1,11 +1,11 @@
-import React, { useRef, useEffect, useContext, useState } from "react";
-import { CreateDeckContext, CreateDeckProvider } from "../context/CreateDeckContext";
+import React, { useRef, useEffect, useState } from "react";
+import { useStore, CreateDeckProvider } from "../context/CreateDeckContext";
 import { getRandomString } from "../helpers";
 import { fetchDecks } from "../services/db";
 import Card from "./create-card/create-card";
 
 function CreateDeck(props) {
-    const { state, dispatch } = useContext(CreateDeckContext);
+    const { state, dispatch } = useStore();
     const [formMessage, setFormMessage] = useState("");
     const [pendingCards, setPendingCards] = useState([]);
     const newCardBtnRef = useRef();

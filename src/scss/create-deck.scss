@@ -145,6 +145,18 @@
     height: 100%;
 }
 
+.creact-multi-checkbox-container {
+    display: flex;
+    align-items: center;
+    margin: 8px;
+    font-size: 14px;
+}
+
+.creact-multi-checkbox {
+    margin-right: 8px;
+    background-color: $background-color-darker;
+}
+
 .create-option {
     display: flex;
     align-items: center;
