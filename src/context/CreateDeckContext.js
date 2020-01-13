@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useMemo } from "react";
+import React, { createContext, useContext, useReducer, useMemo } from "react";
 import { getRandomString } from "../helpers";
 
 const CreateDeckContext = createContext(null);
@@ -16,6 +16,10 @@ function CreateDeckProvider({ children }) {
             {children}
         </CreateDeckContext.Provider>
     );
+}
+
+function useStore() {
+    return useContext(CreateDeckContext);
 }
 
 function reducer(state, action) {
@@ -53,6 +57,9 @@ function reducer(state, action) {
         case "CHANGE_CORRECT_ANSWER":
             card.back.correct = action.optionIndex;
             return { ...state };
+        case "TOGGLE_USE_GRID":
+            card.back.useGrid = !card.back.useGrid;
+            return { ...state };
         case "UPDATE_OPTION_TEXT":
             card.back.options[action.optionIndex].text = action.value;
             return { ...state };
@@ -65,7 +72,6 @@ function reducer(state, action) {
 }
 
 export {
-    CreateDeckContext,
     CreateDeckProvider,
-    reducer
+    useStore
 };
