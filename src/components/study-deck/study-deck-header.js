@@ -3,7 +3,7 @@ import StudyScoreBar from "./study-deck-score-bar";
 
 export default function StudyDeckHeader({ score, mode }) {
     return (
-        <div className="study-header">
+        <div className="study-score">
             {mode === "standard" ?
                 <React.Fragment>
                     <div className="study-score-bar-name-container">

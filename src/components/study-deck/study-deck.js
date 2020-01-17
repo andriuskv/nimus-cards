@@ -5,7 +5,7 @@ import { getSettings } from "../../services/settings";
 import StudyDeckHeader from "./study-deck-header";
 import StudyDeckScore from "./study-deck-score";
 import Card from "../study-card/study-card";
-import Timer from "./study-deck-timer";
+import Timer from "./Timer";
 
 function reducer(currentState, newState) {
     return { ...currentState, ...newState };
@@ -74,13 +74,15 @@ export default function StudyDeck(props) {
     function getCard(cards, index = 0) {
         const card = cards[index];
 
+        if (card.back.type === "multi") {
+            card.back.options = shuffleArray(card.back.options);
+        }
         return {
             ...card,
             index,
             answerRevealed: false,
             notes: {
-                ...card.notes,
-                visible: false
+                ...card.notes
             }
         };
     }
@@ -184,37 +186,20 @@ export default function StudyDeck(props) {
         }
     }
 
+    function timerRevealAnswer() {
+        nextStep(false, { timerReveal: true });
+    }
+
     function revealAnswer() {
-        const newState = {};
         card.answerRevealed = true;
-
-        if (card.back.type === "multi") {
-            newState.score = updateScore(card.back.correct === card.back.selectedOption);
-            delete card.back.selectedOption;
-        }
-        else if (card.back.type === "exact") {
-            const { answer = "" } = state;
-            let isCorrect = false;
-
-            if (card.back.caseSensitive) {
-                isCorrect = answer === card.back.input;
-            }
-            else {
-                isCorrect = answer.toLowerCase() === card.back.input.toLowerCase();
-            }
-            newState.score = updateScore(isCorrect);
-        }
-        setState({ card, ...newState });
-    }
-
-    function selectOption({ target }) {
-        card.back.selectedOption = parseInt(target.getAttribute("data-index"), 10);
         setState({ card });
     }
 
-    function toggleNotes() {
-        card.notes.visible = !card.notes.visible;
-        setState({ card });
+    function selectOption(id) {
+        if (card.answerRevealed) {
+            return;
+        }
+        nextStep(id === card.back.correctId);
     }
 
     function initNextSession() {
@@ -225,16 +210,19 @@ export default function StudyDeck(props) {
         setNextLevel(newCards);
     }
 
-    function nextStep(correct) {
+    function nextStep(correct, params = {}) {
         const index = card.index + 1;
         const wasLastCard = index === cards.length;
+        const newScore = updateScore(correct);
+        const currentCard = {
+            ...card,
+            ...params,
+            correct,
+            answerRevealed: true,
+            finished: true
+        };
         let nextCard = null;
-        let newScore = score;
         let { currentSession } = state;
-
-        if (typeof correct === "boolean") {
-            newScore = updateScore(correct);
-        }
 
         if (!wasLastCard) {
             nextCard = getCard(cards, index);
@@ -242,16 +230,33 @@ export default function StudyDeck(props) {
         else if (newScore.isLast) {
             currentSession += 1;
         }
-        setState({
-            wasLastCard,
-            currentSession,
-            score: newScore,
-            card: nextCard
-        });
+        setState({ card: currentCard, score: newScore });
+
+        setTimeout(() => {
+            setState({
+                wasLastCard,
+                currentSession,
+                card: nextCard
+            });
+        }, 1600);
     }
 
-    function handleChange({ target }) {
-        setState({ answer: target.value });
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        if (card.answerRevealed) {
+            return;
+        }
+        const answer = event.target.elements.answer.value;
+        let isCorrect = false;
+
+        if (card.back.caseSensitive) {
+            isCorrect = answer === card.back.input;
+        }
+        else {
+            isCorrect = answer.toLowerCase() === card.back.input.toLowerCase();
+        }
+        nextStep(isCorrect);
     }
 
     if (!cards.length) {
@@ -259,44 +264,31 @@ export default function StudyDeck(props) {
     }
     return (
         <Fragment>
-            <h1 className="component-header study-deck-title">
+            <div className="study-header">
                 <div className="study-progress" style={{ transform: `scaleX(${card ? card.index / cards.length : 1})` }}></div>
-                <span>{state.title}</span>
-            </h1>
+                <h1 className="study-header-title">{state.title}</h1>
+                {!state.wasLastCard && settings.timeoutDuration.value > 0 && (
+                    <Timer id={card.id}
+                        revealed={card.answerRevealed}
+                        initDuration={settings.timeoutDuration.value}
+                        callback={timerRevealAnswer}/>
+                )}
+            </div>
             {state.wasLastCard ? (
                 <StudyDeckScore
                     score={score}
                     mode={settings.studyMode.value}
                     initNextLevel={initNextLevel}
                     notLastSession={state.numberOfSessions - state.currentSession > 0}
-                    initNextSession={initNextSession}>
-                </StudyDeckScore>
+                    initNextSession={initNextSession}/>
             ) : (
                 <Fragment>
                     <StudyDeckHeader score={score} mode={settings.studyMode.value} />
                     <Card card={card}
-                        handleChange={handleChange}
+                        handleSubmit={handleSubmit}
                         selectOption={selectOption}
-                        toggleNotes={toggleNotes} />
-                    <div className="container-footer study-footer">
-                        {card.answerRevealed ?
-                            card.back.type === "text" ? (
-                                <Fragment>
-                                    <button className="btn btn-danger study-footer-btn"
-                                        onClick={() => nextStep(false)}>I Was Wrong</button>
-                                    <button className="btn btn-success study-footer-btn"
-                                        onClick={() => nextStep(true)}>I Got It Right</button>
-                                </Fragment>
-
-                            ) : <button className="btn" onClick={nextStep}>Next</button> :
-                            <Fragment>
-                                {settings.timeoutDuration.value > 0 && (
-                                    <Timer duration={settings.timeoutDuration.value} callback={revealAnswer} />
-                                )}
-                                <button className="btn" onClick={revealAnswer}>Reveal</button>
-                            </Fragment>
-                        }
-                    </div>
+                        revealAnswer={revealAnswer}
+                        nextStep={nextStep}/>
                 </Fragment>
             )}
         </Fragment>

@@ -55,7 +55,7 @@ function reducer(state, action) {
             card.back.options.splice(action.optionIndex, 1);
             return { ...state };
         case "CHANGE_CORRECT_ANSWER":
-            card.back.correct = action.optionIndex;
+            card.back.correctId = action.id;
             return { ...state };
         case "TOGGLE_USE_GRID":
             card.back.useGrid = !card.back.useGrid;

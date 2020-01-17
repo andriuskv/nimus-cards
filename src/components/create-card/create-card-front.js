@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { useStore } from "../../context/CreateDeckContext";
 import TextSizeSelect from "./create-card-text-size-select";
 import UploadPanel from "./create-card-upload-panel";
-import Attachment from "../attachment";
+import Attachment from "./create-card-attachment";
 import Icon from "../icon";
 
 export default function CreateCardFrontSide({ index, side, handleChange }) {

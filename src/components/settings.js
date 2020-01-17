@@ -30,34 +30,36 @@ export default function Settings() {
         <div onChange={handleChange}>
             <div className="settings-item">
                 <div className="settings-item-title">Study mode</div>
-                <label className="settings-label settings-radio-label">
+                <label className="radio-container settings-radio-container">
                     <input type="radio" name="study-mode"
-                        className="radio-input"
+                        className="sr-only radio-input"
                         data-name="studyMode"
                         data-study-mode="standard"
-                        defaultChecked={settings.studyMode.value === "standard"} />
-                    <div className="radio settings-radio"></div>
-                    <span>Standard</span>
+                        defaultChecked={settings.studyMode.value === "standard"}/>
+                    <div className="radio"></div>
+                    <span className="radio-label">Standard</span>
                 </label>
-                <label className="settings-label settings-radio-label">
+                <label className="radio-container settings-radio-container">
                     <input type="radio" name="study-mode"
-                        className="radio-input"
+                        className="sr-only radio-input"
                         data-name="studyMode"
                         data-study-mode="leitner"
-                        defaultChecked={settings.studyMode.value === "leitner"} />
-                    <div className="radio settings-radio"></div>
-                    <span>Leitner system</span>
+                        defaultChecked={settings.studyMode.value === "leitner"}/>
+                    <div className="radio"></div>
+                    <span className="radio-label">Leitner system</span>
                 </label>
             </div>
-            <label className="settings-item settings-label">
-                <input type="checkbox" className="checkbox-input"
-                    data-name="randomize"
-                    defaultChecked={settings.randomize.value} />
-                <div className="checkbox settings-checkbox">
-                    <div className="checkbox-tick"></div>
-                </div>
-                <span>Randomize cards</span>
-            </label>
+            <div className="settings-item">
+                <label className="checkbox-container">
+                    <input type="checkbox" className="sr-only checkbox-input"
+                        data-name="randomize"
+                        defaultChecked={settings.randomize.value}/>
+                    <div className="checkbox">
+                        <div className="checkbox-tick"></div>
+                    </div>
+                    <span className="checkbox-label">Randomize cards</span>
+                </label>
+            </div>
             <label className="settings-item">
                 <span>Use</span>
                 <input type="text" className="input settings-input"

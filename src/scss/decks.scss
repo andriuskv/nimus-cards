@@ -8,10 +8,13 @@
     margin-bottom: 16px;
     background-color: $background-color;
     box-shadow: $box-shadow;
+    border-radius: 4px;
+    color: $color-text;
 }
 
 .deck-list-title {
-    font-size: 1.5em;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 .deck-list-btn {

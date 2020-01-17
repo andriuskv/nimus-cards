@@ -72,7 +72,7 @@ export default function Decks(props) {
 
     return (
         <Fragment>
-            <div className="component-header deck-list-header">
+            <div className="deck-list-header">
                 <h1 className="deck-list-title">Your Decks</h1>
                 <Link to="/decks/create" className="btn deck-list-btn">Create</Link>
             </div>

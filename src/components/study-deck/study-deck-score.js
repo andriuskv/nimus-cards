@@ -20,7 +20,10 @@ export default function StudyDeckScore({ score, mode, notLastSession, initNextLe
     return (
         <div className="deck-score-container">
             <h3 className="deck-score-title">Session Results</h3>
-            <div className="deck-score-in-percent">{Math.round(session.right / session.total * 100)}%</div>
+            <div className="deck-score-accuracy">
+                <span className="deck-score-accuracy-name">Accuracy</span>
+                <span className="deck-score-accuracy-value">{Math.round(session.right / session.total * 100)}%</span>
+            </div>
             <div className="deck-score-bars">
                 <div className="deck-score-bar-container">
                     <span className="deck-score-bar-name">Right</span>
