@@ -1,0 +1,13 @@
+@import "../../../scss/variables";
+
+.timer {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background-color: $background-color-dark;
+    box-shadow: inset 0 1px 1px 0 $color-black-20;
+    font-size: 14px;
+    transform: translateY(-50%);
+}

@@ -6,7 +6,7 @@ import TextSizeSelect from "./create-card-text-size-select";
 export default function CreateCardBackSide({ index, handleChange }) {
     const { state, dispatch } = useStore();
     const { back, id: cardId } = state.cards[index];
-    const { type, text, textSize, options, correct } = back;
+    const { type, text, textSize, options, correctId } = back;
 
     function addOption() {
         dispatch({ type: "ADD_OPTION", index });
@@ -16,11 +16,11 @@ export default function CreateCardBackSide({ index, handleChange }) {
         dispatch({ type: "REMOVE_OPTION", index, optionIndex, id });
     }
 
-    function markAnswerAsCorrect(optionIndex) {
+    function markAnswerAsCorrect(id) {
         dispatch({
             type: "CHANGE_CORRECT_ANSWER",
             index,
-            optionIndex
+            id
         });
     }
 
@@ -80,13 +80,14 @@ export default function CreateCardBackSide({ index, handleChange }) {
                         autoComplete="off"
                         defaultValue={back.input}/>
                 </label>
-                <label className="creact-exact-checkbox-container">
-                    <input type="checkbox" className="checkbox-input" name="caseSensitive"
-                        defaultChecked={back.caseSensitive} />
-                    <div className="checkbox creact-exact-checkbox">
+                <label className="checkbox-container creact-exact-checkbox-container">
+                    <input type="checkbox" className="sr-only checkbox-input"
+                        name="caseSensitive"
+                        defaultChecked={back.caseSensitive}/>
+                    <div className="checkbox create-checkbox">
                         <div className="checkbox-tick"></div>
                     </div>
-                    <span>Case sensitive</span>
+                    <span className="checkbox-label">Case sensitive</span>
                 </label>
             </div>
         );
@@ -95,21 +96,22 @@ export default function CreateCardBackSide({ index, handleChange }) {
     function renderMultiAnswerType() {
         return (
             <Fragment>
-                <label onInput={toggleUseGrid} className="creact-multi-checkbox-container">
-                    <input type="checkbox" className="checkbox-input" name="caseSensitive"
+                <label onInput={toggleUseGrid}
+                    className="checkbox-container creact-multi-checkbox-container">
+                    <input type="checkbox" className="sr-only checkbox-input"
                         defaultChecked={back.useGrid} />
-                    <div className="checkbox creact-multi-checkbox">
+                    <div className="checkbox create-checkbox">
                         <div className="checkbox-tick"></div>
                     </div>
-                    <span>Use grid to display choices</span>
+                    <span className="checkbox-label">Use grid to display choices</span>
                 </label>
                 <ul>
-                    {options.map(({ text, id }, index) => (
+                    {options.map(({ id, text }, index) => (
                         <li className="create-option" key={id}>
                             <label>
-                                <input type="radio" className="radio-input" name={cardId}
-                                    checked={correct === index}
-                                    onChange={() => markAnswerAsCorrect(index)} />
+                                <input type="radio" className="sr-only radio-input" name={cardId}
+                                    checked={correctId === id}
+                                    onChange={() => markAnswerAsCorrect(id)} />
                                 <div className="radio create-option-radio"
                                     title="Mark answer as correct"></div>
                             </label>
@@ -146,26 +148,26 @@ export default function CreateCardBackSide({ index, handleChange }) {
                 <ul className="create-side-types" onChange={handleTypeChange}>
                     <li className="create-side-type">
                         <label>
-                            <input type="radio" className="radio-input" value="text"
-                                name={`type-${cardId}`}
-                                defaultChecked={type === "text"} />
-                            <Icon name="text" title="Text" className="create-option-type-icon" />
+                            <input type="radio" className="sr-only create-type-radio"
+                                name={`type-${cardId}`} value="text"
+                                defaultChecked={type === "text"}/>
+                            <Icon name="text" title="Text" className="create-option-type-icon"/>
                         </label>
                     </li>
                     <li className="create-side-type">
                         <label>
-                            <input type="radio" className="radio-input" value="multi"
-                                name={`type-${cardId}`}
-                                defaultChecked={type === "multi"} />
-                            <Icon name="list" title="Multiple choice" className="create-option-type-icon" />
+                            <input type="radio" className="sr-only create-type-radio"
+                                name={`type-${cardId}`} value="multi"
+                                defaultChecked={type === "multi"}/>
+                            <Icon name="list" title="Multiple choice" className="create-option-type-icon"/>
                         </label>
                     </li>
                     <li className="create-side-type">
                         <label>
-                            <input type="radio" className="radio-input" value="exact"
-                                name={`type-${cardId}`}
-                                defaultChecked={type === "exact"} />
-                            <Icon name="text-short" title="Exact answer" className="create-option-type-icon" />
+                            <input type="radio" className="sr-only create-type-radio"
+                                name={`type-${cardId}`} value="exact"
+                                defaultChecked={type === "exact"}/>
+                            <Icon name="text-short" title="Exact answer" className="create-option-type-icon"/>
                         </label>
                     </li>
                 </ul>

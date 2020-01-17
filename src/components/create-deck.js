@@ -82,7 +82,8 @@ function CreateDeck(props) {
                 text: "",
                 textSize: 16,
                 input: "",
-                correct: 0,
+                correctId: "",
+                useGrid: true,
                 options: [
                     { id: getRandomString() },
                     { id: getRandomString() }
@@ -147,7 +148,7 @@ function CreateDeck(props) {
             }
             return acc;
         }, 0);
-        return validOptionCount > 1;
+        return validOptionCount > 1 && side.correctId;
     }
 
     function validateCards(cards) {
@@ -185,7 +186,7 @@ function CreateDeck(props) {
                 card.back.options = card.back.options.filter(({ text }) => text);
                 return card;
             }
-            card.back.correct = 0;
+            card.back.correctId = "";
             card.back.options = card.back.options.slice(0, 2).map((option => {
                 option.text = "";
                 return option;
@@ -246,7 +247,7 @@ function CreateDeck(props) {
                     <button className="btn btn-text" onClick={undoCardRemoval}>UNDO</button>
                 </div>
             )}
-            <div className="container-footer create-footer">
+            <div className="create-footer">
                 <button className="btn" onClick={addCard} ref={newCardBtnRef}>New Card</button>
                 {formMessage && <span className="create-message">{formMessage}</span>}
                 <button className="btn" onClick={handleSubmit}>Create</button>

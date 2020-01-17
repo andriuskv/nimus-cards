@@ -1,44 +1,47 @@
-import React, { Fragment, useState } from "react";
-import Attachment from "../attachment";
+import React, { Fragment, useEffect, useState } from "react";
 
-export default function StudyCardFront({ side }) {
-    const [{ imageExpanded, imageSrc }, toggleImage] = useState({});
+export default function StudyCardFront({ id, side }) {
+    const [url, setAttachmentUrl] = useState(null);
+    const [imageExpanded, expandImage] = useState(false);
     const { attachment, text, textSize } = side;
 
-    function showImage() {
-        const { file, type } = attachment;
+    useEffect(() => {
+        if (attachment) {
+            const { file } = attachment;
 
-        if (type !== "image") {
-            return;
+            setAttachmentUrl(typeof file === "string" ? file : URL.createObjectURL(file));
         }
-        toggleImage({
-            imageExpanded: true,
-            imageSrc: typeof file === "string" ? file : URL.createObjectURL(file)
-        });
+    }, [id]);
+
+    function renderAttachment() {
+        const { type } = attachment;
+
+        if (type === "image") {
+            return <img src={url} alt="" className="study-image" onClick={showImage}/>;
+        }
+        else if (type === "audio") {
+            return <audio src={url} className="study-audio" controls></audio>;
+        }
+        return null;
+    }
+
+    function showImage() {
+        expandImage(true);
     }
 
     function hideImage() {
-        toggleImage({ imageExpanded: false });
+        expandImage(false);
     }
 
     return (
         <Fragment>
-            <div className="study-card-content">
-                {attachment && (
-                    <div className={`study-side-panel${text ? "" : " full"}`}
-                        onClick={showImage}>
-                        <Attachment {...attachment}></Attachment>
-                    </div>
-                )}
-                {text && (
-                    <div className="study-side-text">
-                        <div className="study-side-text-inner" style={{ fontSize: `${textSize}px` }}>{text}</div>
-                    </div>
-                )}
-            </div>
+            {attachment && renderAttachment()}
+            {text && (
+                <div className="study-front-text" style={{ fontSize: `${textSize}px` }}>{text}</div>
+            )}
             {imageExpanded && (
                 <div className="mask" onClick={hideImage}>
-                    <img src={imageSrc} className="study-expaned-image" alt="" />
+                    <img src={url} className="study-expaned-image" alt="" />
                 </div>
             )}
         </Fragment>

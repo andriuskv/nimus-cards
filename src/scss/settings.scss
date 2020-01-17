@@ -10,12 +10,8 @@
     font-weight: bold;
 }
 
-.settings-label {
-    display: flex;
-}
-
-.settings-checkbox, .settings-radio {
-    margin-right: 8px;
+.settings-radio-container {
+    margin-top: 8px;
 }
 
 .settings-input {
@@ -35,8 +31,4 @@
     margin-top: 8px;
     font-size: 13px;
     color: $danger-color;
-}
-
-.settings-radio-label {
-    margin-top: 8px;
 }
