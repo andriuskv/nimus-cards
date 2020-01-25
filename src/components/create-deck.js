@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useStore, CreateDeckProvider } from "../context/CreateDeckContext";
 import { getRandomString } from "../helpers";
-import { fetchDecks } from "../services/db";
+import { fetchDeck, saveDeck } from "../services/db";
 import Card from "./create-card/create-card";
 
 function CreateDeck(props) {
@@ -15,20 +15,23 @@ function CreateDeck(props) {
     useEffect(() => {
         const { id } = props.match.params;
 
-        if (id && !props.location.state) {
-            fetchDecks().then(decks => {
-                const deck = findDeck(decks, id);
-
+        if (props.match.path === "/decks/create") {
+            dispatch({ type: "RESET_DECK", deck: getInitialDeck() });
+        }
+        else if (id) {
+            fetchDeck(id).then(deck => {
                 if (deck) {
-                    deck.cards = deck.cards.map(card => ({ ...getNewCard(), ...card }));
+                    deck.cards = deck.cards.map(card => {
+                        const newCard = getNewCard();
+                        newCard.front = card.front;
+                        newCard.back.type = card.back.type;
+                        newCard.back[`${card.back.type}Options`] = card.back.typeOptions;
+                        delete newCard.back.typeOptions;
+                        return newCard;
+                    });
                     dispatch({ type: "RESET_DECK", deck });
                 }
             });
-        }
-        else {
-            const deck = getDeck(props.location.state);
-            deck.cards = deck.cards.map(card => ({ ...getNewCard(), ...card }));
-            dispatch({ type: "RESET_DECK", deck });
         }
     }, []);
 
@@ -56,17 +59,12 @@ function CreateDeck(props) {
         };
     }, [pendingCards.length]);
 
-    function findDeck(decks, deckId) {
-        return decks.find(({ id }) => id === deckId);
-    }
-
-    function getDeck(deck = {}) {
+    function getInitialDeck() {
         return {
             id: getRandomString(),
             title: "",
             description: "",
-            cards: [getNewCard()],
-            ...deck
+            cards: [getNewCard()]
         };
     }
 
@@ -79,15 +77,22 @@ function CreateDeck(props) {
             },
             back: {
                 type: "text",
-                text: "",
-                textSize: 16,
-                input: "",
-                correctId: "",
-                useGrid: true,
-                options: [
-                    { id: getRandomString() },
-                    { id: getRandomString() }
-                ]
+                textOptions: {
+                    value: "",
+                    textSize: 16
+                },
+                multiOptions: {
+                    correctId: "",
+                    useGrid: true,
+                    options: [
+                        { id: getRandomString() },
+                        { id: getRandomString() }
+                    ]
+                },
+                exactOptions: {
+                    caseSensitive: false,
+                    value: ""
+                }
             },
             notes: {
                 value: ""
@@ -99,10 +104,17 @@ function CreateDeck(props) {
         const lastCard = state.cards[state.cards.length - 1];
         const card = getNewCard();
 
-        if (lastCard) {
-            card.front.textSize = lastCard.front.textSize;
-            card.back.textSize = lastCard.back.textSize;
-            card.back.type = lastCard.back.type;
+        card.front.textSize = lastCard.front.textSize;
+        card.back.type = lastCard.back.type;
+
+        if (card.back.type === "text") {
+            card.back.textOptions.textSize = lastCard.back.textOptions.textSize;
+        }
+        else if (card.back.type === "multi") {
+            card.back.multiOptions.useGrid = lastCard.back.multiOptions.useGrid;
+        }
+        else if (card.back.type === "exact") {
+            card.back.exactOptions.caseSensitive = lastCard.back.exactOptions.caseSensitive;
         }
         dispatch({ type: "ADD_CARD", card });
         requestAnimationFrame(() => {
@@ -137,18 +149,18 @@ function CreateDeck(props) {
 
     function isBackValid(side) {
         if (side.type === "text") {
-            return side.text.length > 0;
+            return side.textOptions.value.length > 0;
         }
         else if (side.type === "exact") {
-            return side.input.length > 0;
+            return side.exactOptions.value.length > 0;
         }
-        const validOptionCount = side.options.reduce((acc, { text }) => {
-            if (text) {
+        const validOptionCount = side.multiOptions.options.reduce((acc, { value }) => {
+            if (value) {
                 acc += 1;
             }
             return acc;
         }, 0);
-        return validOptionCount > 1 && side.correctId;
+        return validOptionCount > 1 && side.multiOptions.correctId;
     }
 
     function validateCards(cards) {
@@ -179,27 +191,15 @@ function CreateDeck(props) {
 
     function cleanupCards(cards) {
         return cards.map(card => {
-            if (card.back.type === "multi") {
-                card.back.text = "";
-                card.back.input = "";
-                card.back.caseSensitive = false;
-                card.back.options = card.back.options.filter(({ text }) => text);
-                return card;
-            }
-            card.back.correctId = "";
-            card.back.options = card.back.options.slice(0, 2).map((option => {
-                option.text = "";
-                return option;
-            }));
+            const back = {
+                type: card.back.type,
+                typeOptions: card.back[`${card.back.type}Options`]
+            };
 
-            if (card.back.type === "text") {
-                card.back.input = "";
-                card.back.caseSensitive = false;
+            if (back.type === "multi") {
+                back.typeOptions.options = card.back.multiOptions.options.filter(({ value }) => value);
             }
-            else if (card.back.type === "exact") {
-                card.back.input = card.back.input.trim();
-                card.back.text = "";
-            }
+            card.back = back;
             return card;
         });
     }
@@ -213,10 +213,8 @@ function CreateDeck(props) {
 
         if (valid) {
             state.cards = cleanupCards(state.cards);
-            props.history.push({
-                pathname: "/decks",
-                state
-            });
+            props.history.push("/decks");
+            saveDeck(state);
         }
     }
 

@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useReducer, useMemo } from "react";
-import { getRandomString } from "../helpers";
-
 const CreateDeckContext = createContext(null);
 
 function CreateDeckProvider({ children }) {
@@ -44,27 +42,8 @@ function reducer(state, action) {
         case "REMOVE_ATTACHMENT":
             delete card.front.attachment;
             return { ...state };
-        case "CHANGE_ANSWER_TYPE":
-            card.back.type = action.answerType;
-            return { ...state };
-        case "ADD_OPTION":
-            card.back.options.push({ id: getRandomString() });
-            return { ...state };
-        case "REMOVE_OPTION":
-            card.back.correct = 0;
-            card.back.options.splice(action.optionIndex, 1);
-            return { ...state };
-        case "CHANGE_CORRECT_ANSWER":
-            card.back.correctId = action.id;
-            return { ...state };
-        case "TOGGLE_USE_GRID":
-            card.back.useGrid = !card.back.useGrid;
-            return { ...state };
-        case "UPDATE_OPTION_TEXT":
-            card.back.options[action.optionIndex].text = action.value;
-            return { ...state };
-        case "UPDATE_EXACT_ANSWER":
-            card.back[action.name] = action.value;
+        case "UPDATE_CARD_BACK":
+            card.back = { ...card.back, ...action.payload };
             return { ...state };
         default:
             return state;

@@ -3,10 +3,10 @@ import Icon from "../icon";
 
 export default function StudyCardBack({ card, selectOption, handleSubmit }) {
     const { back, answerRevealed } = card;
-    const { text, textSize, type, options, correctId } = back;
+    const { type, typeOptions } = back;
 
     function renderTextTypeContent() {
-        return <div className="study-card-text-content" style={{ fontSize: `${textSize}px` }}>{text}</div>;
+        return <div className="study-card-text-content" style={{ fontSize: `${typeOptions.textSize}px` }}>{typeOptions.value}</div>;
     }
 
     function renderExactTypeContent() {
@@ -20,7 +20,7 @@ export default function StudyCardBack({ card, selectOption, handleSubmit }) {
                 <label>
                     <div className="study-exact-top">
                         <div className="study-exact-title">Your Answer:</div>
-                        {back.caseSensitive ? (
+                        {back.typeOptions.caseSensitive ? (
                             <div className="study-exact-notice">
                                 <Icon name="info" className="study-exact-notice-icon"/>
                                 <span>Answer is case sensitive</span>
@@ -38,15 +38,15 @@ export default function StudyCardBack({ card, selectOption, handleSubmit }) {
         let containerClassName = "";
         let itemClassName = "study-multi-list-item";
 
-        if (back.useGrid) {
+        if (back.typeOptions.useGrid) {
             containerClassName = " study-multi-grid";
             itemClassName = "study-multi-grid-item";
         }
         return (
             <ul className={`study-multi${containerClassName}${answerRevealed ? " revealed" : ""}`}>
-                {options.map(({ id, text }) => (
+                {typeOptions.options.map(({ id, value }) => (
                     <li key={id}>
-                        <button className={`btn study-multi-item ${itemClassName}${answerRevealed && correctId === id ? " correct" : ""}`} onClick={() => selectOption(id)}>{text}</button>
+                        <button className={`btn study-multi-item ${itemClassName}${answerRevealed && typeOptions.correctId === id ? " correct" : ""}`} onClick={() => selectOption(id)}>{value}</button>
                     </li>
                 ))}
             </ul>

@@ -75,7 +75,7 @@ export default function StudyDeck(props) {
         const card = cards[index];
 
         if (card.back.type === "multi") {
-            card.back.options = shuffleArray(card.back.options);
+            card.back.typeOptions.options = shuffleArray(card.back.typeOptions.options);
         }
         return {
             ...card,
@@ -199,7 +199,7 @@ export default function StudyDeck(props) {
         if (card.answerRevealed) {
             return;
         }
-        nextStep(id === card.back.correctId);
+        nextStep(id === card.back.typeOptions.correctId);
     }
 
     function initNextSession() {
@@ -250,11 +250,11 @@ export default function StudyDeck(props) {
         const answer = event.target.elements.answer.value;
         let isCorrect = false;
 
-        if (card.back.caseSensitive) {
-            isCorrect = answer === card.back.input;
+        if (card.back.typeOptions.caseSensitive) {
+            isCorrect = answer === card.back.typeOptions.value;
         }
         else {
-            isCorrect = answer.toLowerCase() === card.back.input.toLowerCase();
+            isCorrect = answer.toLowerCase() === card.back.typeOptions.value.toLowerCase();
         }
         nextStep(isCorrect);
     }
