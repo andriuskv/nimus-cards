@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchDecks, saveDeck, deleteDeck } from "../../services/db";
+import { fetchDecks, deleteDeck } from "../../services/db";
 import DeckRemovalDialog from "./deck-removal-dialog";
 import Deck from "./deck";
 
@@ -10,39 +10,18 @@ export default function Decks(props) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getDecks(props.location.state).then(decks => {
+        fetchDecks().then(decks => {
             updateDecks(decks);
             setLoading(false);
         });
     }, []);
-
-    async function getDecks(deck) {
-        const decks = await fetchDecks();
-
-        if (deck) {
-            const index = findDeckIndex(decks, deck.id);
-
-            if (index === -1) {
-                decks.push(deck);
-            }
-            else {
-                // Replace deck
-                decks.splice(index, 1, deck);
-            }
-            saveDeck(deck);
-        }
-        return decks;
-    }
 
     function findDeckIndex(decks, deckId) {
         return decks.findIndex(({ id }) => id === deckId);
     }
 
     function editDeck(deck) {
-        props.history.push({
-            pathname: `/decks/${deck.id}/edit`,
-            state: deck
-        });
+        props.history.push(`/decks/${deck.id}/edit`);
     }
 
     function removeDeck() {
@@ -50,7 +29,7 @@ export default function Decks(props) {
 
         decks.splice(index, 1);
         updateDecks([...decks]);
-        deleteDeck(dialog.deck._id);
+        deleteDeck(dialog.deck.id);
         hideDialog();
     }
 

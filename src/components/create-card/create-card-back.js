@@ -1,72 +1,83 @@
 import React, { Fragment } from "react";
+import { getRandomString } from "../../helpers";
 import { useStore } from "../../context/CreateDeckContext";
 import Icon from "../icon";
 import TextSizeSelect from "./create-card-text-size-select";
 
-export default function CreateCardBackSide({ index, handleChange }) {
+export default function CreateCardBackSide({ index }) {
     const { state, dispatch } = useStore();
     const { back, id: cardId } = state.cards[index];
-    const { type, text, textSize, options, correctId } = back;
+    const { type, textOptions, multiOptions, exactOptions } = back;
 
-    function addOption() {
-        dispatch({ type: "ADD_OPTION", index });
-    }
-
-    function removeOption(optionIndex, id) {
-        dispatch({ type: "REMOVE_OPTION", index, optionIndex, id });
-    }
-
-    function markAnswerAsCorrect(id) {
+    function updateCardBack(payload) {
         dispatch({
-            type: "CHANGE_CORRECT_ANSWER",
+            type: "UPDATE_CARD_BACK",
             index,
-            id
+            payload
         });
     }
 
-    function toggleUseGrid() {
-        dispatch({ type: "TOGGLE_USE_GRID", index });
+    function handleChange({ target }, key) {
+        const { value } = target;
+
+        if (value !== back[key]) {
+            textOptions[key] = value;
+            updateCardBack({ textOptions });
+        }
     }
 
     function handleTypeChange({ target }) {
-        dispatch({
-            type: "CHANGE_ANSWER_TYPE",
-            answerType: target.value,
-            index
-        });
+        updateCardBack({ type: target.value });
+    }
+
+    function addOption() {
+        multiOptions.options.push({ id: getRandomString() });
+        updateCardBack({ multiOptions });
+    }
+
+    function removeOption(optionIndex) {
+        multiOptions.options.splice(optionIndex, 1);
+        updateCardBack({ multiOptions });
+    }
+
+    function toggleUseGrid() {
+        multiOptions.useGrid = !multiOptions.useGrid;
+        updateCardBack({ multiOptions });
+    }
+
+    function markAnswerAsCorrect(id) {
+        multiOptions.correctId = id;
+        updateCardBack({ multiOptions });
     }
 
     function handleOptionTextChange({ target }) {
         const { name, value } = target;
-        const option = back.options[name];
+        const option = multiOptions.options[name];
 
-        if (value !== option.text) {
-            dispatch({
-                type: "UPDATE_OPTION_TEXT",
-                optionIndex: parseInt(name, 10),
-                index,
-                value
-            });
+        if (value !== option.value) {
+            option.value = value;
+            updateCardBack({ multiOptions });
         }
     }
 
     function handleInputChange({ target }) {
         const { name, value, checked } = target;
 
-        dispatch({
-            type: "UPDATE_EXACT_ANSWER",
-            name,
-            value: name === "caseSensitive" ? checked : value,
-            index
-        });
+        if (name === "caseSensitive") {
+            exactOptions.caseSensitive = checked;
+        }
+        else {
+            exactOptions.value = value;
+        }
+        updateCardBack({ exactOptions });
     }
 
     function renderTextAnswerType() {
         return (
             <textarea className="input create-side-text-input"
-                value={text}
-                style={{ fontSize: `${textSize}px` }}
-                onChange={event => handleChange(event, "back", "text")}>
+                value={textOptions.value}
+                style={{ fontSize: `${textOptions.textSize}px` }}
+                onChange={event => handleChange(event, "value")}>
             </textarea>
         );
     }
@@ -78,12 +89,12 @@ export default function CreateCardBackSide({ index, handleChange }) {
                     <div className="creact-exact-input-title">Provide answer:</div>
                     <input type="text" className="input creact-exact-input" name="input"
                         autoComplete="off"
-                        defaultValue={back.input}/>
+                        defaultValue={exactOptions.value}/>
                 </label>
                 <label className="checkbox-container creact-exact-checkbox-container">
                     <input type="checkbox" className="sr-only checkbox-input"
                         name="caseSensitive"
-                        defaultChecked={back.caseSensitive}/>
+                        defaultChecked={exactOptions.caseSensitive}/>
                     <div className="checkbox create-checkbox">
                         <div className="checkbox-tick"></div>
                     </div>
@@ -99,26 +110,26 @@ export default function CreateCardBackSide({ index, handleChange }) {
                 <label onInput={toggleUseGrid}
                     className="checkbox-container creact-multi-checkbox-container">
                     <input type="checkbox" className="sr-only checkbox-input"
-                        defaultChecked={back.useGrid} />
+                        defaultChecked={multiOptions.useGrid}/>
                     <div className="checkbox create-checkbox">
                         <div className="checkbox-tick"></div>
                     </div>
                     <span className="checkbox-label">Use grid to display choices</span>
                 </label>
                 <ul>
-                    {options.map(({ id, text }, index) => (
+                    {multiOptions.options.map(({ id, value }, index) => (
                         <li className="create-option" key={id}>
                             <label>
                                 <input type="radio" className="sr-only radio-input" name={cardId}
-                                    checked={correctId === id}
-                                    onChange={() => markAnswerAsCorrect(id)} />
+                                    checked={multiOptions.correctId === id}
+                                    onChange={() => markAnswerAsCorrect(id)}/>
                                 <div className="radio create-option-radio"
                                     title="Mark answer as correct"></div>
                             </label>
                             <input type="text" className="input create-option-input" name={index}
-                                defaultValue={text} autoComplete="off" onChange={handleOptionTextChange} />
+                                defaultValue={value} autoComplete="off" onChange={handleOptionTextChange}/>
                             <button className="btn btn-icon" title="Remove answer"
-                                onClick={() => removeOption(index, id)}>
+                                onClick={() => removeOption(index)}>
                                 <Icon name="remove" />
                             </button>
                         </li>
@@ -172,8 +183,8 @@ export default function CreateCardBackSide({ index, handleChange }) {
                     </li>
                 </ul>
                 {type === "text" && <TextSizeSelect
-                    textSize={textSize}
-                    handleChange={event => handleChange(event, "back", "textSize")} />
+                    textSize={textOptions.textSize}
+                    handleChange={event => handleChange(event, "textSize")}/>
                 }
                 {type === "multi" && (
                     <button className="btn btn-icon" onClick={addOption} title="Add option">

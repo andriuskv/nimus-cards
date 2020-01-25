@@ -31,8 +31,8 @@ export default function CreateCard({ index, card, removeCard }) {
         <li className="create-list-item">
             <div className="create-card-index">{index + 1}.</div>
             <div className="deck-form-field-group create-card">
-                <CardFront index={index} side={card.front} handleChange={handleChange} />
-                <CardBack index={index} handleChange={handleChange} />
+                <CardFront index={index} side={card.front} handleChange={handleChange}/>
+                <CardBack index={index}/>
                 {notesVisible && <CardNotes value={card.notes.value} handleChange={handleChange}/>}
             </div>
             <div className="create-card-btns">
