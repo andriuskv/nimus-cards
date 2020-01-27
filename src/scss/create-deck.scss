@@ -170,9 +170,28 @@
     height: 100%;
 }
 
-.creact-multi-checkbox-container {
-    margin: 8px;
-    font-size: 14px;
+.create-multi-layout {
+    margin: 16px 16px 8px 16px;
+}
+
+.create-multi-layout-title {
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.create-multi-layout-items {
+    display: flex;
+}
+
+.create-multi-layout-item {
+    margin-right: 8px;
+
+    .create-type-radio {
+        &:checked + .create-option-type-icon {
+            background-color: $background-color-darker;
+        }
+    }
 }
 
 .create-checkbox {
@@ -211,7 +230,7 @@
 .creact-exact-input-title {
     margin-bottom: 8px;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .creact-exact-input {

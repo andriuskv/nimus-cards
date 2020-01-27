@@ -35,13 +35,9 @@ export default function StudyCardBack({ card, selectOption, handleSubmit }) {
     }
 
     function renderMultiTypeContent() {
-        let containerClassName = "";
-        let itemClassName = "study-multi-list-item";
+        const containerClassName = ` study-multi-${back.typeOptions.layout}-type`;
+        const itemClassName = `study-multi-${back.typeOptions.layout}-type-item`;
 
-        if (back.typeOptions.useGrid) {
-            containerClassName = " study-multi-grid";
-            itemClassName = "study-multi-grid-item";
-        }
         return (
             <ul className={`study-multi${containerClassName}${answerRevealed ? " revealed" : ""}`}>
                 {typeOptions.options.map(({ id, value }) => (

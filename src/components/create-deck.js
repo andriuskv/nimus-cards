@@ -83,7 +83,7 @@ function CreateDeck(props) {
                 },
                 multiOptions: {
                     correctId: "",
-                    useGrid: true,
+                    layout: "short",
                     options: [
                         { id: getRandomString() },
                         { id: getRandomString() }
@@ -111,7 +111,7 @@ function CreateDeck(props) {
             card.back.textOptions.textSize = lastCard.back.textOptions.textSize;
         }
         else if (card.back.type === "multi") {
-            card.back.multiOptions.useGrid = lastCard.back.multiOptions.useGrid;
+            card.back.multiOptions.layout = lastCard.back.multiOptions.layout;
         }
         else if (card.back.type === "exact") {
             card.back.exactOptions.caseSensitive = lastCard.back.exactOptions.caseSensitive;
