@@ -40,8 +40,8 @@ export default function CreateCardBackSide({ index }) {
         updateCardBack({ multiOptions });
     }
 
-    function toggleUseGrid() {
-        multiOptions.useGrid = !multiOptions.useGrid;
+    function changeOptionLayout({ target }) {
+        multiOptions.layout = target.value;
         updateCardBack({ multiOptions });
     }
 
@@ -107,15 +107,29 @@ export default function CreateCardBackSide({ index }) {
     function renderMultiAnswerType() {
         return (
             <Fragment>
-                <label onInput={toggleUseGrid}
-                    className="checkbox-container creact-multi-checkbox-container">
-                    <input type="checkbox" className="sr-only checkbox-input"
-                        defaultChecked={multiOptions.useGrid}/>
-                    <div className="checkbox create-checkbox">
-                        <div className="checkbox-tick"></div>
+                <div className="create-multi-layout">
+                    <div className="create-multi-layout-title">Layout</div>
+                    <div onInput={changeOptionLayout} className="create-multi-layout-items">
+                        <label className="create-multi-layout-item">
+                            <input type="radio" className="sr-only create-type-radio"
+                                name={`multi-${cardId}`} value="short"
+                                defaultChecked={multiOptions.layout === "short"}/>
+                            <Icon name="grid" className="create-option-type-icon"/>
+                        </label>
+                        <label className="create-multi-layout-item">
+                            <input type="radio" className="sr-only create-type-radio"
+                                name={`multi-${cardId}`} value="medium"
+                                defaultChecked={multiOptions.layout === "medium"}/>
+                            <Icon name="list-2-col" className="create-option-type-icon"/>
+                        </label>
+                        <label className="create-multi-layout-item">
+                            <input type="radio" className="sr-only create-type-radio"
+                                name={`multi-${cardId}`} value="long"
+                                defaultChecked={multiOptions.layout === "long"}/>
+                            <Icon name="menu" className="create-option-type-icon"/>
+                        </label>
                     </div>
-                    <span className="checkbox-label">Use grid to display choices</span>
-                </label>
+                </div>
                 <ul>
                     {multiOptions.options.map(({ id, value }, index) => (
                         <li className="create-option" key={id}>
@@ -170,7 +184,7 @@ export default function CreateCardBackSide({ index }) {
                             <input type="radio" className="sr-only create-type-radio"
                                 name={`type-${cardId}`} value="multi"
                                 defaultChecked={type === "multi"}/>
-                            <Icon name="list" title="Multiple choice" className="create-option-type-icon"/>
+                            <Icon name="list-checkbox" title="Multiple choice" className="create-option-type-icon"/>
                         </label>
                     </li>
                     <li className="create-side-type">
