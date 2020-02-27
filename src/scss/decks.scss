@@ -1,9 +1,4 @@
 .deck-list-header {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 44px;
     padding: 8px;
     margin-bottom: 16px;
     background-color: $background-color;
@@ -13,13 +8,21 @@
 }
 
 .deck-list-title {
-    font-size: 1.2em;
+    font-size: 1em;
     font-weight: bold;
+    text-align: center;
 }
 
-.deck-list-btn {
-    position: absolute;
-    right: 8px;
+.deck-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+.deck-actions-item {
+    padding: 2px;
+    margin-right: 16px;
 }
 
 .deck {
@@ -56,9 +59,7 @@
 }
 
 .deck-btn {
-    &:first-of-type {
-        margin-right: 16px;
-    }
+    margin-right: 16px;
 
     svg {
         margin-right: 4px;
