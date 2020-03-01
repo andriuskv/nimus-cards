@@ -31,8 +31,10 @@ export default function CreateCardBackSide({ index }) {
     }
 
     function addOption() {
-        multiOptions.options.push({ id: getRandomString() });
-        updateCardBack({ multiOptions });
+        if (multiOptions.options.length < 8) {
+            multiOptions.options.push({ id: getRandomString() });
+            updateCardBack({ multiOptions });
+        }
     }
 
     function removeOption(optionIndex) {
@@ -201,8 +203,9 @@ export default function CreateCardBackSide({ index }) {
                     handleChange={event => handleChange(event, "textSize")}/>
                 }
                 {type === "multi" && (
-                    <button className="btn btn-icon" onClick={addOption} title="Add option">
-                        <Icon name="add-list-item" />
+                    <button className="btn btn-icon" onClick={addOption} title="Add option"
+                        disabled={multiOptions.options.length >= 8}>
+                        <Icon name="add-list-item"/>
                     </button>
                 )}
             </div>

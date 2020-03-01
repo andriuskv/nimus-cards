@@ -26,6 +26,7 @@ function CreateDeck(props) {
                         newCard.front = card.front;
                         newCard.back.type = card.back.type;
                         newCard.back[`${card.back.type}Options`] = card.back.typeOptions;
+                        newCard.notes = card.notes;
                         delete newCard.back.typeOptions;
                         return newCard;
                     });

@@ -60,7 +60,7 @@
     width: 50%;
     padding-top: 2px;
     padding-bottom: 2px;
-    color: $color-text-light;
+    color: $color-text-lighter;
     font-size: 14px;
     transition: width 0.4s;
 }
@@ -120,7 +120,6 @@
 
 .study-card {
     width: 100%;
-    max-width: 620px;
     margin: 0 auto;
 }
 
@@ -138,8 +137,14 @@
 }
 
 .study-front-text {
-    margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 620px;
+    min-height: 100px;
+    margin: 0 auto 16px auto;
     text-align: center;
+    line-height: 1.25;
 }
 
 .study-card-text {
@@ -167,7 +172,7 @@
 }
 
 .study-card-text-reveal-btn {
-    margin: auto;
+    margin: 0 auto;
     color: $color-text-dark;
     background-color: $background-color;
 
@@ -184,7 +189,8 @@
 
 .study-multi {
     width: 100%;
-    margin: auto;
+    max-width: 620px;
+    margin: 0 auto auto auto;
 
     &.revealed .study-multi-item {
         cursor: default;
@@ -210,7 +216,7 @@
 
     &.correct {
         background-color: $success-color;
-        color: $color-text-light;
+        color: $color-text-lighter;
         font-weight: bold;
     }
 }
@@ -226,7 +232,7 @@
 .study-multi-medium-type {
     display: grid;
     justify-content: center;
-    grid-template-columns: repeat(auto-fit, 200px);
+    grid-template-columns: repeat(auto-fit, minmax(304px, 1fr));
     grid-auto-rows: 1fr;
     grid-gap: 8px;
 }
@@ -244,6 +250,7 @@
     justify-content: center;
     grid-template-columns: repeat(auto-fit, var(--cell-size));
     grid-gap: 8px;
+    max-width: 408px;
 }
 
 .study-multi-short-type-item {
@@ -254,6 +261,11 @@
     height: var(--cell-size);
     padding: 2px;
     border-radius: 4px;
+}
+
+.study-exact {
+    max-width: 620px;
+    margin: 0 auto;
 }
 
 .study-exact-top {
@@ -294,13 +306,13 @@
     &.wrong {
         background-color: $danger-color;
         font-weight: bold;
-        color: $color-text-light;
+        color: $color-text-lighter;
     }
 
     &.right {
         background-color: $success-color;
         font-weight: bold;
-        color: $color-text-light;
+        color: $color-text-lighter;
     }
 }
 
@@ -334,7 +346,7 @@
     width: 100%;
     max-width: 400px;
     padding: 16px;
-    margin: 0 auto 8px auto;
+    margin: 0 auto;
     border-radius: 4px;
     background-color: $background-color;
     box-shadow: $box-shadow;
