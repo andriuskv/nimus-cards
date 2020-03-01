@@ -66,12 +66,12 @@ textarea {
     flex-direction: column;
     max-width: $max-width;
     min-height: calc(100% - 56px);
-    padding: 16px 16px 8px 16px;
+    padding: 16px;
     margin: 0 auto;
 
     @include breakpoint-smallest {
         min-height: calc(100% - 40px);
-        padding: 16px 8px 8px 8px;
+        padding: 16px 8px;
     }
 }
 
@@ -92,12 +92,16 @@ textarea {
     padding: 6px 12px;
     background-color: $highlight-color;
     font-weight: bold;
-    color: $color-text-light;
+    color: $color-text-lighter;
     transition: 0.2s background-color, 0.2s color;
     cursor: pointer;
 
     &:hover {
         background-color: darken($highlight-color, 4%);
+    }
+
+    &:disabled {
+        cursor: default;
     }
 }
 
@@ -110,7 +114,6 @@ textarea {
 
     &:disabled {
         background-color: $success-color;
-        cursor: default;
     }
 }
 
@@ -123,18 +126,21 @@ textarea {
 
     &:disabled {
         background-color: $danger-color;
-        cursor: default;
     }
 }
 
 .btn-icon, .btn-text {
     background-color: transparent;
     box-shadow: none;
-    color: $color-text-dark;
+    color: $color-text;
 
     &:hover {
         background-color: transparent;
         color: $color-text-darkest;
+    }
+
+    &:disabled {
+        color: $color-text-light;
     }
 }
 
@@ -143,14 +149,6 @@ textarea {
     justify-content: center;
     align-items: center;
     padding: 0;
-
-    &:hover svg {
-        color: inherit;
-    }
-
-    svg {
-        color: $color-text;
-    }
 }
 
 .checkbox-container {
