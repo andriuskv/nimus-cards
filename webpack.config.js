@@ -107,6 +107,7 @@ module.exports = function(env = {}) {
                         presets: [["@babel/preset-env", {
                             modules: false,
                             loose: true,
+                            bugfixes: true,
                             useBuiltIns: "usage",
                             corejs: 3
                         }], "@babel/react"]

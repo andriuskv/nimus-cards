@@ -54,14 +54,18 @@ export default function Decks(props) {
         folder.file("description.txt", deck.description);
 
         deck.cards.forEach((card, index) => {
-            const att = card.front.attachment;
+            let att = card.front.attachment;
 
             if (att) {
+                att = { ...att };
                 folder.file(att.file.name, new Blob([att.file], { type: att.file.type }));
                 att.mimeType = att.file.type;
                 att.file = att.file.name;
             }
-            folder.file(`${index}.json`, JSON.stringify(card, null, 2));
+            folder.file(`${index}.json`, JSON.stringify({
+                ...card,
+                front: { ...card.front, attachment: att }
+            }, null, 2));
         });
         const archive = await zip.generateAsync({ type:"blob" });
         saveAs(archive, `${deck.title}.zip`);
@@ -148,8 +152,7 @@ export default function Decks(props) {
                     deckTitle={dialog.deck.title}
                     removeDeck={removeDeck}
                     cancelRemoval={hideDialog}/>
-            )
-            }
+            )}
         </Fragment>
     );
 }
