@@ -1,6 +1,5 @@
 .header {
     height: 56px;
-    border-top: 4px solid $highlight-color;
     background-color: $background-color;
     box-shadow: $box-shadow;
 
@@ -22,7 +21,9 @@
     flex-shrink: 0;
     padding-left: 8px;
     margin-right: 16px;
-    color: $color-text-darkest;
+    color: $color-text-dark;
+    font-size: 0.875em;
+    font-weight: bold;
 
     @include breakpoint-smallest {
         margin-right: 4px;
