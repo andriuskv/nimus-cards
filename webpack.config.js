@@ -21,7 +21,9 @@ module.exports = function(env = {}) {
             template: "./src/index.html"
         }),
         new CopyPlugin([
-            { from: "./src/favicon.png" }
+            { from: "./src/*.png", to: "[name].[ext]" },
+            { from: "./src/*.ico", to: "[name].[ext]" },
+            { from: "./src/manifest.json"}
         ]),
         new workboxPlugin.GenerateSW({
             swDest:  "./sw.js",
