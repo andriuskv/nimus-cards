@@ -65,6 +65,7 @@ function CreateDeck(props) {
             id: getRandomString(),
             title: "",
             description: "",
+            studyMode: "standard",
             cards: [getNewCard()]
         };
     }
@@ -213,29 +214,56 @@ function CreateDeck(props) {
         const valid = validateCards(state.cards);
 
         if (valid) {
+            const modeElements = document.querySelectorAll(".create-radio-input");
+            state.studyMode = modeElements[0].checked ? "standard" : "leitner";
             state.cards = cleanupCards(state.cards);
             props.history.push("/decks");
             saveDeck(state);
         }
     }
 
+    if (!state) {
+        return null;
+    }
+
     return (
         <React.Fragment>
-            <div className="deck-form-field-group">
-                <label>
+            <div className="deck-form-field-group create-input-group">
+                <label className="deck-form-title-input-container">
                     <div className="deck-form-field-title">TITLE</div>
                     <input className="input create-title-input"
                         name="title"
                         value={state.title}
                         onChange={handleChange} />
                 </label>
-                <label>
+                <label className="deck-form-desc-input-container">
                     <div className="deck-form-field-title">DESCRIPTION (OPTIONAL)</div>
                     <textarea className="input create-description-input"
                         name="description"
                         value={state.description}
                         onChange={handleChange}></textarea>
                 </label>
+                <div className="create-mode-setting">
+                    <div className="deck-form-field-title">STUDY MODE</div>
+                    <div className="create-radio-items">
+                        <label className="radio-container create-radio-container">
+                            <input type="radio" name="study-mode"
+                                className="sr-only radio-input create-radio-input"
+                                value="standard"
+                                defaultChecked={state.studyMode === "standard"}/>
+                            <div className="radio"></div>
+                            <span className="radio-label">Standard</span>
+                        </label>
+                        <label className="radio-container create-radio-container">
+                            <input type="radio" name="study-mode"
+                                className="sr-only radio-input create-radio-input"
+                                value="leitner"
+                                defaultChecked={state.studyMode === "leitner"}/>
+                            <div className="radio"></div>
+                            <span className="radio-label">Leitner system</span>
+                        </label>
+                    </div>
+                </div>
             </div>
             <ul>{state.cards.map((card, index) => (
                 <Card key={card.id} index={index} card={card} removeCard={removeCard} />

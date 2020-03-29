@@ -212,7 +212,7 @@
     }
 
     &.focus-visible {
-        box-shadow: 0 0 2px 1px $highlight-color;
+        box-shadow: 0 0 0 1px $highlight-color;
     }
 
     &.correct {
@@ -317,9 +317,17 @@
     }
 }
 
+.study-expaned-image-mask {
+    display: block;
+}
+
 .study-expaned-image {
-    max-width: 100%;
-    max-height: calc(100% - 48px);
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: calc(100% - 64px);
+    max-height: calc(100% - 64px);
     border-radius: 4px;
 }
 

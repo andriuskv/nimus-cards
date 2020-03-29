@@ -19,36 +19,12 @@ export default function Settings() {
             case "text":
                 setting.value = target.validity.valid ? parseInt(target.value, 10) || 0 : 0;
                 break;
-            case "radio":
-                setting.value = target.getAttribute("data-study-mode");
-                break;
         }
         setState({ ...settings, [settingName]: setting });
     }
 
     return (
         <div onChange={handleChange}>
-            <div className="settings-item">
-                <div className="settings-item-title">Study mode</div>
-                <label className="radio-container settings-radio-container">
-                    <input type="radio" name="study-mode"
-                        className="sr-only radio-input"
-                        data-name="studyMode"
-                        data-study-mode="standard"
-                        defaultChecked={settings.studyMode.value === "standard"}/>
-                    <div className="radio"></div>
-                    <span className="radio-label">Standard</span>
-                </label>
-                <label className="radio-container settings-radio-container">
-                    <input type="radio" name="study-mode"
-                        className="sr-only radio-input"
-                        data-name="studyMode"
-                        data-study-mode="leitner"
-                        defaultChecked={settings.studyMode.value === "leitner"}/>
-                    <div className="radio"></div>
-                    <span className="radio-label">Leitner system</span>
-                </label>
-            </div>
             <div className="settings-item">
                 <label className="checkbox-container">
                     <input type="checkbox" className="sr-only checkbox-input"
