@@ -1,12 +1,9 @@
 import React, { createContext, useContext, useReducer, useMemo } from "react";
+
 const CreateDeckContext = createContext(null);
 
 function CreateDeckProvider({ children }) {
-    const [state, dispatch] = useReducer(reducer, {
-        title: "",
-        description: "",
-        cards: []
-    });
+    const [state, dispatch] = useReducer(reducer, null);
     const value = useMemo(() => ({ state, dispatch }), [state]);
 
     return (
@@ -21,8 +18,6 @@ function useStore() {
 }
 
 function reducer(state, action) {
-    const card = state.cards[action.index];
-
     switch (action.type) {
         case "RESET_DECK":
             return { ...action.deck };
@@ -34,15 +29,16 @@ function reducer(state, action) {
             state.cards.splice(action.index, 1);
             return { ...state };
         case "UPDATE_CARD_VALUE":
-            card[action.name][action.key] = action.value;
+            state.cards[action.index][action.name][action.key] = action.value;
             return { ...state };
         case "ADD_ATTACHMENT":
-            card.front.attachment = action.attachment;
+            state.cards[action.index].front.attachment = action.attachment;
             return { ...state };
         case "REMOVE_ATTACHMENT":
-            delete card.front.attachment;
+            delete state.cards[action.index].front.attachment;
             return { ...state };
         case "UPDATE_CARD_BACK":
+            const card = state.cards[action.index];
             card.back = { ...card.back, ...action.payload };
             return { ...state };
         default:

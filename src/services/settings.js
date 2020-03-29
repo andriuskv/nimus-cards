@@ -2,9 +2,6 @@ let settings = JSON.parse(localStorage.getItem("nimus-cards-settings")) || getDe
 
 function getDefault() {
     return {
-        studyMode: {
-            value: "standard"
-        },
         randomize: {
             value: true
         },

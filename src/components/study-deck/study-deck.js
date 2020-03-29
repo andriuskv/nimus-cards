@@ -16,7 +16,7 @@ export default function StudyDeck(props) {
         cards: [],
         initialSessionCards: []
     });
-    const { cards, card, score, initialSessionCards } = state;
+    const { cards, card, score, initialSessionCards, studyMode } = state;
     const settings = getSettings();
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export default function StudyDeck(props) {
         });
     }, []);
 
-    function initDeck({ title, cards }) {
+    function initDeck({ title, cards, studyMode }) {
         const cardCount = settings.cardCount.value;
         const initialCards = settings.randomize.value ? shuffleArray(cards) : cards;
         let initialSessionCards = initialCards;
@@ -43,25 +43,27 @@ export default function StudyDeck(props) {
             numberOfSessions = Math.ceil(cards.length / cardCount);
             initialSessionCards = initialCards.slice(0, cardCount);
         }
+
         setState({
             currentSession: 0,
             numberOfSessions,
             title,
+            studyMode,
             initialCards,
             initialSessionCards,
             cards: [...initialSessionCards],
             card: getCard(initialSessionCards),
-            score: initScore(initialSessionCards)
+            score: initScore(initialSessionCards, studyMode)
         });
     }
 
-    function initScore(cards) {
+    function initScore(cards, studyMode) {
         const score = resetScoreCounter({
             currentLevel: 0,
             session: resetScoreCounter()
         });
 
-        if (settings.studyMode.value === "standard") {
+        if (studyMode === "standard") {
             score.incorrectIds = [];
         }
         else {
@@ -139,7 +141,7 @@ export default function StudyDeck(props) {
         updateScoreCounter(correct, score);
         updateScoreCounter(correct, score.session);
 
-        if (settings.studyMode.value === "standard") {
+        if (studyMode === "standard") {
             return updateStandardScore(correct, score);
         }
         return updateLeitnerScore(correct, score);
@@ -178,7 +180,7 @@ export default function StudyDeck(props) {
     }
 
     function initNextLevel() {
-        if (settings.studyMode.value === "standard") {
+        if (studyMode === "standard") {
             initNextStandardRound();
         }
         else {
@@ -277,13 +279,13 @@ export default function StudyDeck(props) {
             {state.wasLastCard ? (
                 <StudyDeckScore
                     score={score}
-                    mode={settings.studyMode.value}
+                    mode={studyMode}
                     initNextLevel={initNextLevel}
                     notLastSession={state.numberOfSessions - state.currentSession > 0}
                     initNextSession={initNextSession}/>
             ) : (
                 <Fragment>
-                    <StudyDeckHeader score={score} mode={settings.studyMode.value} />
+                    <StudyDeckHeader score={score} mode={studyMode} />
                     <Card card={card}
                         handleSubmit={handleSubmit}
                         selectOption={selectOption}

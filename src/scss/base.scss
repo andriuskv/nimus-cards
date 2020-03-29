@@ -20,6 +20,11 @@ body {
 
 a {
     text-decoration: none;
+
+    &.focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 1px $highlight-color;
+    }
 }
 
 ul {
@@ -80,6 +85,11 @@ textarea {
     border-radius: 2px;
     box-shadow: $box-shadow;
     font-size: 14px;
+
+    &.focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 1px $highlight-color;
+    }
 }
 
 .input {
@@ -162,7 +172,7 @@ textarea {
     }
 
     &.focus-visible + .checkbox {
-        box-shadow: 0 0 2px 1px $highlight-color;
+        box-shadow: 0 0 0 1px $highlight-color;
     }
 }
 
@@ -201,7 +211,7 @@ textarea {
     }
 
     &.focus-visible + .radio {
-        box-shadow: 0 0 2px 1px $highlight-color;
+        box-shadow: 0 0 0 1px $highlight-color;
     }
 }
 
