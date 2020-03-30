@@ -18,12 +18,10 @@ module.exports = function(env = {}) {
             filename: "main.css"
         }),
         new HtmlWebpackPlugin({
-            template: "./src/index.html"
+            template: "./public/index.html"
         }),
         new CopyPlugin([
-            { from: "./src/*.png", to: "[name].[ext]" },
-            { from: "./src/*.ico", to: "[name].[ext]" },
-            { from: "./src/manifest.json"}
+            { from: "./public"}
         ]),
         new workboxPlugin.GenerateSW({
             swDest:  "./sw.js",
