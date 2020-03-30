@@ -1,22 +1,22 @@
 import "focus-visible";
 
-import "./scss/normalize.css";
-import "./scss/index.scss";
+import "normalize.css";
+import "./scss/base.scss";
 
 import React, { lazy, Suspense } from "react";
 import { render } from "react-dom";
 import { HashRouter, Route, Switch } from "react-router-dom";
-import Header from "./components/header";
-import Home from "./components/home";
-import ServiceWorkerPopup from "./components/service-worker-popup";
-import NoMatch from "./components/no-match";
+import Header from "./components/Header";
+import Home from "./components/Home";
+import ServiceWorkerPopup from "./components/ServiceWorkerPopup";
+import NoMatch from "./components/NoMatch";
 
 import { initServiceWorker } from "./services/service-worker";
 
-const Decks = lazy(() => import("./components/decks/decks"));
-const CreateDeck = lazy(() => import("./components/create-deck"));
-const StudyDeck = lazy(() => import("./components/study-deck/study-deck"));
-const Settings = lazy(() => import("./components/settings"));
+const Decks = lazy(() => import("./components/Decks"));
+const CreateDeck = lazy(() => import("./components/CreateDeck"));
+const StudyDeck = lazy(() => import("./components/StudyDeck"));
+const Settings = lazy(() => import("./components/Settings"));
 
 render(
     <HashRouter>
