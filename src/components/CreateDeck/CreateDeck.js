@@ -150,7 +150,7 @@ function CreateDeck(props) {
         return side.text || side.attachment;
     }
 
-    function isBackValid(side) {
+    function isBackValid(side, checkIfEmpty = false) {
         if (side.type === "text") {
             return side.textOptions.value.length > 0;
         }
@@ -163,6 +163,10 @@ function CreateDeck(props) {
             }
             return acc;
         }, 0);
+
+        if (checkIfEmpty) {
+            return validOptionCount > 0;
+        }
         return validOptionCount > 1 && side.multiOptions.correctId;
     }
 
@@ -207,17 +211,22 @@ function CreateDeck(props) {
         });
     }
 
+    function filterCards(cards) {
+        return cards.filter(card => isFrontValid(card.front) || isBackValid(card.back, true));
+    }
+
     function handleSubmit() {
         if (!state.title) {
             setFormMessage("Title is required");
             return;
         }
-        const valid = validateCards(state.cards);
+        const cards = filterCards(state.cards);
+        const valid = validateCards(cards);
 
         if (valid) {
             const modeElements = document.querySelectorAll(".create-radio-input");
             state.studyMode = modeElements[0].checked ? "standard" : "leitner";
-            state.cards = cleanupCards(state.cards);
+            state.cards = cleanupCards(cards);
             props.history.push("/decks");
             saveDeck(state);
         }
