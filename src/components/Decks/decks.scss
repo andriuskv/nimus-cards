@@ -1,6 +1,7 @@
 @import "../../scss/variables.scss";
 
-.deck-list-header {
+.decks-header {
+    position: relative;
     padding: 8px;
     margin-bottom: 16px;
     background-color: $background-color;
@@ -9,21 +10,33 @@
     color: $color-text;
 }
 
-.deck-list-title {
+.decks-title {
     font-size: 1em;
     font-weight: bold;
     text-align: center;
 }
 
-.deck-actions {
+.deck-create-link {
+    position: absolute;
+    right: 4px;
+    padding: 4px 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.decks-top-bar {
     display: flex;
     align-items: center;
     justify-content: flex-end;
 }
 
-.deck-actions-item {
+.decks-top-bar-item {
     padding: 2px;
-    margin-right: 16px;
+    margin-left: 16px;
+}
+
+.deck-import-input-container:focus-within {
+    box-shadow: 0 0 0 1px $highlight-color;
 }
 
 .deck {
@@ -61,10 +74,6 @@
 
 .deck-btn {
     margin-right: 16px;
-
-    svg {
-        margin-right: 4px;
-    }
 }
 
 .deck-loading-indicator,
