@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useReducer } from "react";
+import React, { Fragment, useEffect, useReducer, useRef } from "react";
 import "./study-deck.scss";
 import { shuffleArray } from "../../helpers";
 import { fetchDecks } from "../../services/db";
@@ -17,6 +17,7 @@ export default function StudyDeck(props) {
         cards: [],
         initialSessionCards: []
     });
+    const nextStepTimeout = useRef(0);
     const { cards, card, score, initialSessionCards, studyMode } = state;
     const settings = getSettings();
 
@@ -214,8 +215,6 @@ export default function StudyDeck(props) {
     }
 
     function nextStep(correct, params = {}) {
-        const index = card.index + 1;
-        const wasLastCard = index === cards.length;
         const newScore = updateScore(correct);
         const currentCard = {
             ...card,
@@ -224,24 +223,35 @@ export default function StudyDeck(props) {
             answerRevealed: true,
             finished: true
         };
+
+        setState({ card: currentCard, score: newScore });
+        nextStepTimeout.current = setTimeout(() => {
+            setState(getNextCard(newScore.isLast));
+        }, 1600);
+    }
+
+    function getNextCard(isLastCard) {
+        const index = card.index + 1;
+        const wasLastCard = index === cards.length;
         let nextCard = null;
         let { currentSession } = state;
 
         if (!wasLastCard) {
             nextCard = getCard(cards, index);
         }
-        else if (newScore.isLast) {
+        else if (isLastCard) {
             currentSession += 1;
         }
-        setState({ card: currentCard, score: newScore });
+        return {
+            wasLastCard,
+            currentSession,
+            card: nextCard
+        };
+    }
 
-        setTimeout(() => {
-            setState({
-                wasLastCard,
-                currentSession,
-                card: nextCard
-            });
-        }, 1600);
+    function skipNextStepTimeout() {
+        clearTimeout(nextStepTimeout.current);
+        setState(getNextCard(state.score.isLast));
     }
 
     function handleSubmit(event) {
@@ -291,6 +301,7 @@ export default function StudyDeck(props) {
                         handleSubmit={handleSubmit}
                         selectOption={selectOption}
                         revealAnswer={revealAnswer}
+                        skipNextStepTimeout={skipNextStepTimeout}
                         nextStep={nextStep}/>
                 </Fragment>
             )}
