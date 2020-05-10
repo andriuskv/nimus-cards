@@ -16,7 +16,6 @@ import { initServiceWorker } from "./services/service-worker";
 const Decks = lazy(() => import("./components/Decks"));
 const CreateDeck = lazy(() => import("./components/CreateDeck"));
 const StudyDeck = lazy(() => import("./components/StudyDeck"));
-const Settings = lazy(() => import("./components/Settings"));
 
 render(
     <HashRouter>
@@ -29,7 +28,6 @@ render(
                     <Route path="/decks/create" component={CreateDeck} key="create" />
                     <Route path="/decks/:id" exact component={StudyDeck} />
                     <Route path="/decks/:id/edit" component={CreateDeck} key="edit" />
-                    <Route path="/settings" component={Settings} />
                     <Route component={NoMatch} />
                 </Switch>
             </Suspense>

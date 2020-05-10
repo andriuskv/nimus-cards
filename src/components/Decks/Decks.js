@@ -5,11 +5,13 @@ import { getRandomString } from "../../helpers";
 import { fetchDecks, deleteDeck, saveDeck } from "../../services/db";
 import Icon from "../Icon";
 import DeckRemovalDialog from "./DeckRemovalDialog";
+import Settings from "./Settings";
 import Deck from "./Deck";
 
 export default function Decks(props) {
     const [decks, updateDecks] = useState([]);
     const [dialog, toggleDialog] = useState({ visible: false });
+    const [settingsModalVisible, setSettingsModalVisible] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -114,10 +116,12 @@ export default function Decks(props) {
         target.value = "";
     }
 
-    function showFileSelection(event) {
-        if (event.key === "Enter" || event.key === " ") {
-            event.currentTarget.lastElementChild.click();
-        }
+    function showSettingsModal() {
+        setSettingsModalVisible(true);
+    }
+
+    function hideSettingsModal() {
+        setSettingsModalVisible(false);
     }
 
     function renderDecks(decks) {
@@ -131,18 +135,20 @@ export default function Decks(props) {
 
     return (
         <Fragment>
-            <div className="deck-list-header">
-                <h1 className="deck-list-title">Your Decks</h1>
+            <div className="decks-header">
+                <h1 className="decks-title">Your Decks</h1>
+                <Link to="/decks/create" className="btn deck-create-link">Create</Link>
             </div>
-            <div className="deck-actions">
-                <label className="btn btn-icon deck-actions-item" tabIndex="0"
-                    onKeyDown={showFileSelection}>
+            <div className="decks-top-bar">
+                <label className="btn btn-icon decks-top-bar-item deck-import-input-container">
                     <Icon name="import"/>
                     <span>Import</span>
-                    <input type="file" style={{ display: "none" }}
-                        onChange={importDeck}/>
+                    <input type="file" className="sr-only" onChange={importDeck}/>
                 </label>
-                <Link to="/decks/create" className="btn">Create</Link>
+                <button className="btn btn-icon decks-top-bar-item" onClick={showSettingsModal}>
+                    <Icon name="settings"/>
+                    <span>Settings</span>
+                </button>
             </div>
             {loading ? "" : decks.length ?
                 <ul>{renderDecks(decks)}</ul> :
@@ -154,6 +160,7 @@ export default function Decks(props) {
                     removeDeck={removeDeck}
                     cancelRemoval={hideDialog}/>
             )}
+            {settingsModalVisible && <Settings hide={hideSettingsModal}/>}
         </Fragment>
     );
 }

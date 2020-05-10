@@ -18,9 +18,6 @@ export default function Header() {
                     <li className="header-nav-item">
                         <NavLink to="/decks/create" className="header-link" activeClassName="active">Create</NavLink>
                     </li>
-                    <li className="header-nav-item">
-                        <NavLink to="/settings" className="header-link" activeClassName="active">Settings</NavLink>
-                    </li>
                 </ul>
             </nav>
         </header>
