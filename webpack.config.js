@@ -21,7 +21,7 @@ module.exports = function(env = {}) {
             template: "./public/index.html"
         }),
         new CopyPlugin([
-            { from: "./public"}
+            { from: "./public" }
         ]),
         new workboxPlugin.GenerateSW({
             swDest:  "./sw.js",
