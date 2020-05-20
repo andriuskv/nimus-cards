@@ -45,24 +45,29 @@
     border-radius: 4px;
     background-color: $background-color;
     box-shadow: $box-shadow;
-}
-
-.deck-title {
-    color: $highlight-color;
-
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.deck-description,
-.deck-card-count {
-    margin-top: 8px;
     color: $color-text-dark;
 }
 
-.deck-card-count {
+.deck-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.deck-title {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.deck-description {
+    margin-top: 8px;
     font-size: 0.875em;
+}
+
+.deck-card-count {
+    margin-top: 8px;
+    font-size: 0.8125em;
+    font-weight: bold;
+    color: $color-text;
 }
 
 .deck-btn-container {

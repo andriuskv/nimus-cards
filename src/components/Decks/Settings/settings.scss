@@ -1,25 +1,5 @@
 @import "../../../scss/variables.scss";
 
-.deck-settings-modal-container {
-    z-index: 1;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: $color-black-40;
-}
-
-.deck-settings-modal {
-    padding: 16px;
-    border-radius: 4px;
-    box-shadow: $box-shadow;
-    background-color: $background-color-dark;
-}
-
 .deck-settings-modal-title {
     margin-bottom: 24px;
     font-size: 1em;

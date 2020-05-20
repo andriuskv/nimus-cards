@@ -8,7 +8,7 @@ import DeckRemovalDialog from "./DeckRemovalDialog";
 import Settings from "./Settings";
 import Deck from "./Deck";
 
-export default function Decks(props) {
+export default function Decks() {
     const [decks, updateDecks] = useState([]);
     const [dialog, toggleDialog] = useState({ visible: false });
     const [settingsModalVisible, setSettingsModalVisible] = useState(false);
@@ -23,10 +23,6 @@ export default function Decks(props) {
 
     function findDeckIndex(decks, deckId) {
         return decks.findIndex(({ id }) => id === deckId);
-    }
-
-    function editDeck(deck) {
-        props.history.push(`/decks/${deck.id}/edit`);
     }
 
     function removeDeck() {
@@ -128,7 +124,6 @@ export default function Decks(props) {
         return decks.map(deck => (
             <Deck key={deck.id} deck={deck}
                 showDialog={showDialog}
-                editDeck={editDeck}
                 exportDeck={exportDeck}/>
         ));
     }

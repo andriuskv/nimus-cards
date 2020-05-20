@@ -37,6 +37,6 @@ render(
     document.getElementById("app")
 );
 
-if ("serviceWorker" in navigator) {
+if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     initServiceWorker();
 }
