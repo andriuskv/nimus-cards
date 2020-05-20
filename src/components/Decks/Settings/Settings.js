@@ -45,8 +45,8 @@ export default function Settings({ hide }) {
     }
 
     return (
-        <div className="deck-settings-modal-container" onClick={handleClick} onKeyDown={handleKeydown}>
-            <div className="deck-settings-modal" onChange={handleChange}>
+        <div className="mask" onClick={handleClick}>
+            <div className="modal" onChange={handleChange}>
                 <h3 className="deck-settings-modal-title">Settings</h3>
                 <div className="deck-settings-item">
                     <label className="checkbox-container">
