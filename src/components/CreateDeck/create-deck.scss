@@ -115,10 +115,6 @@
     margin-right: 8px;
 }
 
-.file-input {
-    display: none;
-}
-
 .create-side-select {
     height: 24px;
     margin-left: auto;
@@ -190,6 +186,11 @@
     width: 100%;
     padding: 0 8px;
     transform: translateY(-50%);
+}
+
+.create-side-video {
+    width: 100%;
+    max-height: 100%;
 }
 
 .create-side-panel-btn {
@@ -274,58 +275,6 @@
 .creact-exact-checkbox-container {
     margin-left: 8px;
     font-size: 14px;
-}
-
-.upload-panel {
-    width: 360px;
-}
-
-.upload-panel-device-target {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.upload-panel-device-target-title {
-    margin-right: 8px;
-}
-.upload-panel-url-target {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.upload-panel-url-target-title {
-    margin-bottom: 8px;
-}
-
-.upload-panel-url-target-input {
-    margin-right: 8px;
-}
-
-.upload-panel-item-separator {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    font-weight: bold;
-    text-align: center;
-}
-
-.upload-panel-footer {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-top: 8px;
-    margin-top: 8px;
-    border-top: 1px solid $background-color-darkest;
-}
-
-.upload-panel-message {
-    padding: 4px 8px;
-    margin-right: 8px;
-    border-radius: 4px;
-    background-color: $danger-color;
-    font-size: 14px;
-    color: $color-text-lighter;
 }
 
 .create-message {

@@ -67,7 +67,7 @@ function CreateDeck(props) {
             title: "",
             description: "",
             studyMode: "standard",
-            cards: [getNewCard()]
+            cards: [getNewCard(), getNewCard()]
         };
     }
 
@@ -227,6 +227,7 @@ function CreateDeck(props) {
             const modeElements = document.querySelectorAll(".create-radio-input");
             state.studyMode = modeElements[0].checked ? "standard" : "leitner";
             state.cards = cleanupCards(cards);
+            state.createdAt = new Date();
             props.history.push("/decks");
             saveDeck(state);
         }

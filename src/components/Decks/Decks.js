@@ -50,20 +50,34 @@ export default function Decks() {
         const zip = new JSZip();
         const folder = zip.folder(deck.title);
 
-        folder.file("description.txt", deck.description);
+        folder.file("metadata.json", JSON.stringify({
+            title:  deck.title,
+            description:  deck.description,
+            studyMode: deck.studyMode
+        }, null, 2));
 
         deck.cards.forEach((card, index) => {
-            let att = card.front.attachment;
+            const currentAttachment = card.front.attachment;
+            let newAttachement = undefined;
 
-            if (att) {
-                att = { ...att };
-                folder.file(att.file.name, new Blob([att.file], { type: att.file.type }));
-                att.mimeType = att.file.type;
-                att.file = att.file.name;
+            if (currentAttachment) {
+                if (currentAttachment.blob) {
+                    newAttachement = {
+                        type: currentAttachment.type,
+                        mimeType: currentAttachment.blob.type,
+                        blobName: currentAttachment.blob.name
+                    };
+                    folder.file(currentAttachment.blob.name, new Blob([currentAttachment.blob], {
+                        type: currentAttachment.blob.type
+                    }));
+                }
+                else {
+                    newAttachement = currentAttachment;
+                }
             }
             folder.file(`${index}.json`, JSON.stringify({
                 ...card,
-                front: { ...card.front, attachment: att }
+                front: { ...card.front, attachment: newAttachement }
             }, null, 2));
         });
         const archive = await zip.generateAsync({ type:"blob" });
@@ -78,30 +92,29 @@ export default function Decks() {
             id: getRandomString(),
             title: "",
             description: "",
+            createdAt: new Date(),
             cards: []
         };
 
         for (const [path, file] of Object.entries(zip.files)) {
-            if (path.endsWith("/")) {
-                deck.title = path.slice(0, -1);
-                const desc = zip.files[`${deck.title}/description.txt`];
+            if (path.endsWith("/metadata.json")) {
+                const metadata = JSON.parse(await file.async("string"));
 
-                if (desc) {
-                    deck.description = await desc.async("string");
-                }
+                Object.assign(deck, metadata);
             }
             else if (path.endsWith(".json")) {
                 const card = JSON.parse(await file.async("string"));
                 const attachment = card.front.attachment;
                 card.id = getRandomString();
 
-                if (attachment) {
-                    const fileName = attachment.file;
-                    const att = zip.files[`${deck.title}/${fileName}`];
+                if (attachment && attachment.blobName) {
+                    const { blobName } = attachment;
+                    const file = zip.files[`${deck.title}/${blobName}`];
 
-                    attachment.file = new File([await att.async("blob")], fileName, {
+                    attachment.blob = new File([await file.async("blob")], blobName, {
                         type: attachment.mimeType
                     });
+                    delete attachment.blobName;
                     delete attachment.mimeType;
                 }
                 deck.cards.push(card);

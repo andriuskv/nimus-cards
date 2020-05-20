@@ -1,20 +1,20 @@
 import React, { Fragment, useState } from "react";
 import { useStore } from "../../../../context/CreateDeckContext";
 import TextSizeSelect from "../TextSizeSelect";
-import UploadPanel from "./CreateCardUploadPanel";
+import UploadPanel from "./UploadPanel";
 import Attachment from "./CreateCardAttachment";
 import Icon from "../../../Icon";
 
 export default function CreateCardFront({ index, side, handleChange }) {
     const { dispatch } = useStore();
-    const [uploadPanel, toggleUploadPanel] = useState({ type: "", visible: false });
+    const [uploadPanelVisible, setUploadPanelVisibility] = useState(false);
     const { text, textSize, attachment } = side;
 
-    function addAttachment(file, type) {
+    function addAttachment(attachment) {
         dispatch({
             type: "ADD_ATTACHMENT",
             index,
-            attachment: { file, type }
+            attachment
         });
         hideUploadPanel();
     }
@@ -23,22 +23,12 @@ export default function CreateCardFront({ index, side, handleChange }) {
         dispatch({ type: "REMOVE_ATTACHMENT", index });
     }
 
-    function showUploadPanel(type) {
-        toggleUploadPanel({ visible: true, type });
+    function showUploadPanel() {
+        setUploadPanelVisibility(true);
     }
 
     function hideUploadPanel() {
-        toggleUploadPanel({ visible: false, type: "" });
-    }
-
-    function renderToolbarBtns() {
-        return ["image", "audio"].map((type, index) => (
-            <button key={index}
-                className="btn btn-icon toolbar-btn"
-                title={`Upload ${type}`} onClick={() => showUploadPanel(type)}>
-                <Icon name={type} />
-            </button>
-        ));
+        setUploadPanelVisibility(false);
     }
 
     function renderAttachment() {
@@ -46,9 +36,9 @@ export default function CreateCardFront({ index, side, handleChange }) {
             <div className="create-side-panel">
                 <button type="button" className="btn btn-icon create-side-panel-btn"
                     onClick={removeAttachment} title="Remove attachment">
-                    <Icon name="remove" />
+                    <Icon name="remove"/>
                 </button>
-                <Attachment {...attachment} />
+                <Attachment {...attachment}/>
             </div>
         );
     }
@@ -58,10 +48,13 @@ export default function CreateCardFront({ index, side, handleChange }) {
             <div>
                 <div className="deck-form-field-title">FRONT</div>
                 <div className="create-side-toolbar">
-                    {renderToolbarBtns()}
+                    <button className="btn btn-icon toolbar-btn"
+                        title="Add attachment" onClick={showUploadPanel}>
+                        <Icon name="add-file"/>
+                    </button>
                     <TextSizeSelect
                         textSize={textSize}
-                        handleChange={event => handleChange(event, "front", "textSize")} />
+                        handleChange={event => handleChange(event, "front", "textSize")}/>
                 </div>
                 <div className="create-side-content">
                     {attachment && renderAttachment()}
@@ -71,12 +64,7 @@ export default function CreateCardFront({ index, side, handleChange }) {
                         onChange={event => handleChange(event, "front", "text")}></textarea>
                 </div>
             </div>
-            {uploadPanel.visible &&
-                <UploadPanel
-                    type={uploadPanel.type}
-                    hide={hideUploadPanel}
-                    addAttachment={addAttachment} />
-            }
+            {uploadPanelVisible && <UploadPanel hide={hideUploadPanel} addAttachment={addAttachment}/>}
         </Fragment>
     );
 }

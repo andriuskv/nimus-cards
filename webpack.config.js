@@ -18,19 +18,21 @@ module.exports = function(env = {}) {
             filename: "main.css"
         }),
         new HtmlWebpackPlugin({
-            template: "./public/index.html"
+            template: "./public/index.html",
+            cache: false
         }),
-        new CopyPlugin([
-            { from: "./public" }
-        ]),
-        new workboxPlugin.GenerateSW({
+        new CopyPlugin({ patterns: [{ from: "./public" }]})
+    ];
+
+    if (env.prod) {
+        plugins.push(new workboxPlugin.GenerateSW({
             swDest:  "./sw.js",
             maximumFileSizeToCacheInBytes: 10000000,
             skipWaiting: true,
             clientsClaim: true,
             disableDevLogs: true
-        })
-    ];
+        }));
+    }
 
     return {
         mode,
