@@ -5,19 +5,19 @@ export default function StudyCardFront({ id, side }) {
     const [imageExpanded, expandImage] = useState(false);
 
     useEffect(() => {
-        let url = "";
-        let fileType = "";
+        let src = "";
+        let srcType = "";
 
         if (side.attachment) {
-            const { file, type } = side.attachment;
-            fileType = typeof file === "string" ? "string": "blob";
-            url = fileType === "string" ? file : URL.createObjectURL(file);
+            const { blob, url, type } = side.attachment;
+            srcType = blob ? "blob": "url";
+            src = blob ? URL.createObjectURL(blob) : url;
 
             setAttachment({
                 id,
-                url,
+                src,
                 mediaType: type,
-                type: fileType
+                type: srcType
             });
         }
         else {
@@ -25,8 +25,8 @@ export default function StudyCardFront({ id, side }) {
         }
 
         return () => {
-            if (fileType === "blob") {
-                URL.revokeObjectURL(url);
+            if (srcType === "blob") {
+                URL.revokeObjectURL(src);
             }
         };
     }, [id]);
@@ -35,13 +35,16 @@ export default function StudyCardFront({ id, side }) {
         if (!attachment || attachment.id !== id) {
             return null;
         }
-        const { mediaType, url } = attachment;
+        const { mediaType, src } = attachment;
 
         if (mediaType === "image") {
-            return <img src={url} alt="" className="study-image" onClick={showImage}/>;
+            return <img src={src} alt="" className="study-image" onClick={showImage}/>;
         }
         else if (mediaType === "audio") {
-            return <audio src={url} className="study-audio" controls></audio>;
+            return <audio src={src} className="study-audio" controls></audio>;
+        }
+        else if (mediaType === "video") {
+            return <video src={src} className="study-video" crossOrigin="anonymous" autoPlay controls></video>;
         }
         return null;
     }
@@ -62,7 +65,7 @@ export default function StudyCardFront({ id, side }) {
             )}
             {imageExpanded && (
                 <div className="mask study-expaned-image-mask" onClick={hideImage}>
-                    <img src={attachment.url} className="study-expaned-image" alt="" />
+                    <img src={attachment.src} className="study-expaned-image" alt=""/>
                 </div>
             )}
         </Fragment>
