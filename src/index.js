@@ -18,25 +18,25 @@ const CreateDeck = lazy(() => import("./components/CreateDeck"));
 const StudyDeck = lazy(() => import("./components/StudyDeck"));
 
 render(
-    <HashRouter>
-        <Header />
-        <main className="main">
-            <Suspense fallback={<div></div>}>
-                <Switch>
-                    <Route path="/" exact component={Home} />
-                    <Route path="/decks" exact component={Decks} />
-                    <Route path="/decks/create" component={CreateDeck} key="create" />
-                    <Route path="/decks/:id" exact component={StudyDeck} />
-                    <Route path="/decks/:id/edit" component={CreateDeck} key="edit" />
-                    <Route component={NoMatch} />
-                </Switch>
-            </Suspense>
-            <ServiceWorkerPopup />
-        </main>
-    </HashRouter>,
-    document.getElementById("app")
+  <HashRouter>
+    <Header/>
+    <main className="main">
+      <Suspense fallback={<div></div>}>
+        <Switch>
+          <Route path="/" exact component={Home}/>
+          <Route path="/decks" exact component={Decks}/>
+          <Route path="/decks/create" component={CreateDeck} key="create"/>
+          <Route path="/decks/:id" exact component={StudyDeck}/>
+          <Route path="/decks/:id/edit" component={CreateDeck} key="edit"/>
+          <Route component={NoMatch}/>
+        </Switch>
+      </Suspense>
+      <ServiceWorkerPopup/>
+    </main>
+  </HashRouter>,
+  document.getElementById("app")
 );
 
 if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
-    initServiceWorker();
+  initServiceWorker();
 }

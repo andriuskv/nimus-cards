@@ -1,105 +1,105 @@
 @import "../../scss/variables.scss";
 
 .decks-header {
-    position: relative;
-    padding: 8px;
-    margin-bottom: 16px;
-    background-color: $background-color;
-    box-shadow: $box-shadow;
-    border-radius: 4px;
-    color: $color-text;
+  position: relative;
+  padding: 8px;
+  margin-bottom: 16px;
+  background-color: $background-color;
+  box-shadow: $box-shadow;
+  border-radius: 4px;
+  color: $color-text;
 }
 
 .decks-title {
-    font-size: 1em;
-    font-weight: bold;
-    text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
 }
 
 .deck-create-link {
-    position: absolute;
-    right: 4px;
-    padding: 4px 12px;
-    top: 50%;
-    transform: translateY(-50%);
+  position: absolute;
+  right: 4px;
+  padding: 4px 12px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .decks-top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .decks-top-bar-item {
-    padding: 2px;
-    margin-left: 16px;
+  padding: 2px;
+  margin-left: 16px;
 }
 
 .deck-import-input-container:focus-within {
-    box-shadow: 0 0 0 1px $highlight-color;
+  box-shadow: 0 0 0 1px $highlight-color;
 }
 
 .deck {
-    padding: 8px;
-    margin-top: 16px;
-    border-radius: 4px;
-    background-color: $background-color;
-    box-shadow: $box-shadow;
-    color: $color-text-dark;
+  padding: 8px;
+  margin-top: 16px;
+  border-radius: 4px;
+  background-color: $background-color;
+  box-shadow: $box-shadow;
+  color: $color-text-dark;
 }
 
 .deck-info {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .deck-title {
-    font-size: 1em;
-    font-weight: bold;
+  font-size: 1em;
+  font-weight: bold;
 }
 
 .deck-description {
-    margin-top: 8px;
-    font-size: 0.875em;
+  margin-top: 8px;
+  font-size: 0.875em;
 }
 
 .deck-card-count {
-    margin-top: 8px;
-    font-size: 0.8125em;
-    font-weight: bold;
-    color: $color-text;
+  margin-top: 8px;
+  font-size: 0.8125em;
+  font-weight: bold;
+  color: $color-text;
 }
 
 .deck-btn-container {
-    display: flex;
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid $background-color-darker;
+  display: flex;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid $background-color-darker;
 }
 
 .deck-btn {
-    margin-right: 16px;
+  margin-right: 16px;
 }
 
 .deck-loading-indicator,
 .deck-list-message {
-    margin: auto;
+  margin: auto;
 }
 
 .deck-dialog-box {
-    max-width: 380px;
+  max-width: 380px;
 }
 
 .deck-dialog-box-title {
-    margin-bottom: 24px;
-    font-size: 1em;
+  margin-bottom: 24px;
+  font-size: 1em;
 }
 
 .deck-dialog-box-btns {
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
 
-    .btn-text {
-        margin-left: 8px;
-    }
+  .btn-text {
+    margin-left: 8px;
+  }
 }
