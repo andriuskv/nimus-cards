@@ -16,7 +16,6 @@ export default function Dropdown({ children }) {
       isMounted.current = false;
       window.removeEventListener("click", memoizedWindowClickHandler);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleMenuClick() {

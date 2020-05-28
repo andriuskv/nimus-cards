@@ -1,7 +1,7 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./decks.scss";
-import { getRandomString } from "../../helpers";
+import { getRandomString, setDocumentTitle, getCardsToLearn, getCardsToReview } from "../../helpers";
 import { fetchDecks, deleteDeck, saveDeck } from "../../services/db";
 import Icon from "../Icon";
 import DeckRemovalDialog from "./DeckRemovalDialog";
@@ -9,15 +9,20 @@ import Settings from "./Settings";
 import Deck from "./Deck";
 
 export default function Decks() {
-  const [decks, updateDecks] = useState([]);
+  const [decks, setDecks] = useState([]);
   const [dialog, toggleDialog] = useState({ visible: false });
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchDecks().then(decks => {
-      updateDecks(decks);
+      setDecks(decks.map(deck => {
+        deck.hasCardsToLearn = !!getCardsToLearn(deck.cards).length;
+        deck.hasCardsToReview = !!getCardsToReview(deck.cards).length;
+        return deck;
+      }));
       setLoading(false);
+      setDocumentTitle("Your decks");
     });
   }, []);
 
@@ -29,7 +34,7 @@ export default function Decks() {
     const index = findDeckIndex(decks, dialog.deck.id);
 
     decks.splice(index, 1);
-    updateDecks([...decks]);
+    setDecks([...decks]);
     deleteDeck(dialog.deck.id);
     hideDialog();
   }
@@ -52,8 +57,7 @@ export default function Decks() {
 
     folder.file("metadata.json", JSON.stringify({
       title:  deck.title,
-      description:  deck.description,
-      studyMode: deck.studyMode
+      description:  deck.description
     }, null, 2));
 
     deck.cards.forEach((card, index) => {
@@ -120,7 +124,7 @@ export default function Decks() {
         deck.cards.push(card);
       }
     }
-    updateDecks([...decks, deck]);
+    setDecks([...decks, deck]);
     saveDeck(deck);
     target.value = "";
   }
@@ -142,7 +146,7 @@ export default function Decks() {
   }
 
   return (
-    <Fragment>
+    <>
       <div className="decks-header">
         <h1 className="decks-title">Your Decks</h1>
         <Link to="/decks/create" className="btn deck-create-link">Create</Link>
@@ -169,6 +173,6 @@ export default function Decks() {
           cancelRemoval={hideDialog}/>
       )}
       {settingsModalVisible && <Settings hide={hideSettingsModal}/>}
-    </Fragment>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { getRandomString } from "../../../../helpers";
 import { useStore } from "../../../../context/CreateDeckContext";
 import Icon from "../../../Icon";
@@ -108,7 +108,7 @@ export default function CreateCardBack({ index }) {
 
   function renderMultiAnswerType() {
     return (
-      <Fragment>
+      <>
         <div className="create-multi-layout">
           <div className="create-multi-layout-title">Layout</div>
           <div onInput={changeOptionLayout} className="create-multi-layout-items">
@@ -151,7 +151,7 @@ export default function CreateCardBack({ index }) {
             </li>
           ))}
         </ul>
-      </Fragment>
+      </>
     );
   }
 

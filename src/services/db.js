@@ -16,8 +16,8 @@ function fetchDeck(id) {
   return db.decks.get(id);
 }
 
-function saveDeck(set) {
-  db.decks.put(set).catch(error => {
+function saveDeck(deck) {
+  db.decks.put(deck).catch(error => {
     console.log(error);
   });
 }

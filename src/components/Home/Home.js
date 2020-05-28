@@ -4,6 +4,10 @@ import "./home.scss";
 import Icon from "../Icon";
 
 export default function Home() {
+  React.useEffect(() => {
+    document.title = "NimusCards";
+  }, []);
+
   return (
     <>
       <div className="home-hero">
