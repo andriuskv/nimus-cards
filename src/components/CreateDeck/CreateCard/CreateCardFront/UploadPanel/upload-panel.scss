@@ -4,14 +4,6 @@
   width: 360px;
 }
 
-.upload-panel-title {
-  margin-bottom: 24px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1em;
-  color: $color-text-dark;
-}
-
 .upload-type-selection {
   display: flex;
   margin-bottom: 16px;
@@ -30,7 +22,6 @@
   &:hover, &.active {
     background-color: $background-color;
     box-shadow: $box-shadow;
-
   }
 
   span {

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function StudyCardFront({ id, side }) {
   const [attachment, setAttachment] = useState(null);
@@ -58,7 +58,7 @@ export default function StudyCardFront({ id, side }) {
   }
 
   return (
-    <Fragment>
+    <>
       {renderAttachment()}
       {side.text && (
         <div className="study-front-text" style={{ fontSize: `${side.textSize}px` }}>{side.text}</div>
@@ -68,6 +68,6 @@ export default function StudyCardFront({ id, side }) {
           <img src={attachment.src} className="study-expaned-image" alt=""/>
         </div>
       )}
-    </Fragment>
+    </>
   );
 }

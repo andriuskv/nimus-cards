@@ -1,5 +1,10 @@
 import React from "react";
+import { setDocumentTitle } from "../helpers";
 
-export default function NoMatch() {
-  return <p className="no-match-message">This page isn't available</p>;
+export default function NoMatch({ message }) {
+  React.useEffect(() => {
+    setDocumentTitle("Page not found");
+  }, [message]);
+
+  return <p className="no-match-message">{message || "This page is not available."}</p>;
 }

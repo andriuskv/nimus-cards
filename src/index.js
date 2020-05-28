@@ -26,7 +26,7 @@ render(
           <Route path="/" exact component={Home}/>
           <Route path="/decks" exact component={Decks}/>
           <Route path="/decks/create" component={CreateDeck} key="create"/>
-          <Route path="/decks/:id" exact component={StudyDeck}/>
+          <Route path="/decks/:id/(learn|review|practice)" exact component={StudyDeck}/>
           <Route path="/decks/:id/edit" component={CreateDeck} key="edit"/>
           <Route component={NoMatch}/>
         </Switch>

@@ -30,7 +30,13 @@ export default function Deck({ deck, showDialog, exportDeck }) {
         </Dropdown>
       </div>
       <div className="deck-btn-container">
-        <Link to={`/decks/${deck.id}`} className="btn btn-text deck-btn">Practice</Link>
+        {deck.hasCardsToLearn ? (
+          <Link to={`/decks/${deck.id}/learn`} className="btn btn-text deck-btn">Learn</Link>
+        ) : <span className="btn btn-text deck-btn disabled">Learn</span>}
+        {deck.hasCardsToReview ? (
+          <Link to={`/decks/${deck.id}/review`} className="btn btn-text deck-btn">Review</Link>
+        ) : <span className="btn btn-text deck-btn disabled">Review</span>}
+        <Link to={`/decks/${deck.id}/practice`} className="btn btn-text deck-btn">Practice</Link>
       </div>
     </li>
   );

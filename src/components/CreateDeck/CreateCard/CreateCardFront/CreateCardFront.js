@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { useStore } from "../../../../context/CreateDeckContext";
 import TextSizeSelect from "../TextSizeSelect";
 import UploadPanel from "./UploadPanel";
@@ -44,7 +44,7 @@ export default function CreateCardFront({ index, side, handleChange }) {
   }
 
   return (
-    <Fragment>
+    <>
       <div>
         <div className="deck-form-field-title">FRONT</div>
         <div className="create-side-toolbar">
@@ -65,6 +65,6 @@ export default function CreateCardFront({ index, side, handleChange }) {
         </div>
       </div>
       {uploadPanelVisible && <UploadPanel hide={hideUploadPanel} addAttachment={addAttachment}/>}
-    </Fragment>
+    </>
   );
 }

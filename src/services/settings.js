@@ -6,7 +6,7 @@ function getDefault() {
       value: true
     },
     cardCount: {
-      value: ""
+      value: 10
     },
     timeoutDuration: {
       value: ""

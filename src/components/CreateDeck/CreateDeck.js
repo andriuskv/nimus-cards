@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./create-deck.scss";
+import { getRandomString, setDocumentTitle } from "../../helpers";
 import { useStore, CreateDeckProvider } from "../../context/CreateDeckContext";
-import { getRandomString } from "../../helpers";
 import { fetchDeck, saveDeck } from "../../services/db";
 import Card from "./CreateCard";
 
@@ -18,20 +18,23 @@ function CreateDeck(props) {
 
     if (props.match.path === "/decks/create") {
       dispatch({ type: "RESET_DECK", deck: getInitialDeck() });
+      setDocumentTitle("Create a new deck");
     }
     else if (id) {
       fetchDeck(id).then(deck => {
         if (deck) {
           deck.cards = deck.cards.map(card => {
-            const newCard = getNewCard();
-            newCard.front = card.front;
-            newCard.back.type = card.back.type;
-            newCard.back[`${card.back.type}Options`] = card.back.typeOptions;
-            newCard.notes = card.notes;
-            delete newCard.back.typeOptions;
-            return newCard;
+            card.back = {
+              ...getNewCard().back,
+              ...card.back,
+              type: card.back.type,
+              [`${card.back.type}Options`]: card.back.typeOptions
+            };
+            delete card.back.typeOptions;
+            return card;
           });
           dispatch({ type: "RESET_DECK", deck });
+          setDocumentTitle(`Editing ${deck.title}`);
         }
       });
     }
@@ -66,7 +69,6 @@ function CreateDeck(props) {
       id: getRandomString(),
       title: "",
       description: "",
-      studyMode: "standard",
       cards: [getNewCard(), getNewCard()]
     };
   }
@@ -203,6 +205,12 @@ function CreateDeck(props) {
         typeOptions: card.back[`${card.back.type}Options`]
       };
 
+      if (card.modified) {
+        delete card.level;
+        delete card.nextReview;
+        delete card.modified;
+      }
+
       if (back.type === "multi") {
         back.typeOptions.options = card.back.multiOptions.options.filter(({ value }) => value);
       }
@@ -224,10 +232,8 @@ function CreateDeck(props) {
     const valid = validateCards(cards);
 
     if (valid) {
-      const modeElements = document.querySelectorAll(".create-radio-input");
-      state.studyMode = modeElements[0].checked ? "standard" : "leitner";
       state.cards = cleanupCards(cards);
-      state.createdAt = new Date();
+      state.createdAt = state.createdAt || new Date();
       props.history.push("/decks");
       saveDeck(state);
     }
@@ -254,30 +260,9 @@ function CreateDeck(props) {
             value={state.description}
             onChange={handleChange}></textarea>
         </label>
-        <div className="create-mode-setting">
-          <div className="deck-form-field-title">STUDY MODE</div>
-          <div className="create-radio-items">
-            <label className="radio-container create-radio-container">
-              <input type="radio" name="study-mode"
-                className="sr-only radio-input create-radio-input"
-                value="standard"
-                defaultChecked={state.studyMode === "standard"}/>
-              <div className="radio"></div>
-              <span className="radio-label">Standard</span>
-            </label>
-            <label className="radio-container create-radio-container">
-              <input type="radio" name="study-mode"
-                className="sr-only radio-input create-radio-input"
-                value="leitner"
-                defaultChecked={state.studyMode === "leitner"}/>
-              <div className="radio"></div>
-              <span className="radio-label">Leitner system</span>
-            </label>
-          </div>
-        </div>
       </div>
       <ul>{state.cards.map((card, index) => (
-        <Card key={card.id} index={index} card={card} removeCard={removeCard} />
+        <Card key={card.id} index={index} card={card} removeCard={removeCard}/>
       ))}</ul>
       {pendingCards.length > 0 && (
         <div className="deck-form-dialog">

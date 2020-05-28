@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./upload-panel.scss";
+import Modal from "../../../../Modal";
 import Icon from "../../../../Icon";
 
 export default function UploadPanel({ hide, addAttachment }) {
   const [message, setMessage] = useState("");
   const [visibleType, setVisibleType] = useState("");
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeydown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
-  }, []);
 
   function showMessage(message) {
     setMessage(message);
@@ -20,18 +13,6 @@ export default function UploadPanel({ hide, addAttachment }) {
     setTimeout(() => {
       setMessage("");
     }, 3200);
-  }
-
-  function handleContainerClick({ target, currentTarget }) {
-    if (target === currentTarget) {
-      hide();
-    }
-  }
-
-  function handleKeydown({ key }) {
-    if (key === "Escape") {
-      hide();
-    }
   }
 
   function handleFileUpload({ target }) {
@@ -95,8 +76,7 @@ export default function UploadPanel({ hide, addAttachment }) {
       const video = document.createElement("video");
       video.crossOrigin = "anonymous";
 
-      video.onloadedmetadata = (event) => {
-        console.log(event);
+      video.onloadedmetadata = () => {
         addAttachment({
           url,
           type: visibleType
@@ -127,34 +107,32 @@ export default function UploadPanel({ hide, addAttachment }) {
   }
 
   return (
-    <div className="mask" onClick={handleContainerClick} onKeyDown={handleKeydown}>
-      <div className="modal upload-panel">
-        <h3 className="upload-panel-title">Add Attachment</h3>
-        {renderTypeSelection()}
-        {visibleType && (
-          <>
-            <div className="upload-panel-device-target">
-              <div className="upload-panel-device-target-title">Select {visibleType} file from device</div>
-              <label className="btn upload-panel-import-input-container">
-                <span>Select File</span>
-                <input type="file" className="sr-only" onChange={handleFileUpload} />
-              </label>
-            </div>
-            <div className="upload-panel-item-separator">Or</div>
-            <div className="upload-panel-url-target">
-              <div className="upload-panel-url-target-title">Upload {visibleType} file from URL</div>
-              <form onSubmit={handleFileUploadFormURL} className="upload-panel-form">
-                <input type="text" name="url" className="input upload-panel-url-target-input" />
-                <button className="btn">Upload</button>
-              </form>
-            </div>
-            <div className="upload-panel-footer">
-              {message && <div className="upload-panel-message">{message}</div>}
-              <button type="button" className="btn btn-text" onClick={hide}>Cancel</button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+    <Modal className="upload-panel" hide={hide}>
+      <h3 className="modal-title">Add Attachment</h3>
+      {renderTypeSelection()}
+      {visibleType && (
+        <>
+          <div className="upload-panel-device-target">
+            <div className="upload-panel-device-target-title">Select {visibleType} file from device</div>
+            <label className="btn upload-panel-import-input-container">
+              <span>Select File</span>
+              <input type="file" className="sr-only" onChange={handleFileUpload} />
+            </label>
+          </div>
+          <div className="upload-panel-item-separator">Or</div>
+          <div className="upload-panel-url-target">
+            <div className="upload-panel-url-target-title">Upload {visibleType} file from URL</div>
+            <form onSubmit={handleFileUploadFormURL} className="upload-panel-form">
+              <input type="text" name="url" className="input upload-panel-url-target-input" />
+              <button className="btn">Upload</button>
+            </form>
+          </div>
+          <div className="upload-panel-footer">
+            {message && <div className="upload-panel-message">{message}</div>}
+            <button type="button" className="btn btn-text" onClick={hide}>Cancel</button>
+          </div>
+        </>
+      )}
+    </Modal>
   );
 }

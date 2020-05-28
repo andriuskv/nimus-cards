@@ -29,16 +29,20 @@ function reducer(state, action) {
       state.cards.splice(action.index, 1);
       return { ...state };
     case "UPDATE_CARD_VALUE":
+      state.cards[action.index].modified = action.name === "front";
       state.cards[action.index][action.name][action.key] = action.value;
       return { ...state };
     case "ADD_ATTACHMENT":
+      state.cards[action.index].modified = true;
       state.cards[action.index].front.attachment = action.attachment;
       return { ...state };
     case "REMOVE_ATTACHMENT":
+      state.cards[action.index].modified = true;
       delete state.cards[action.index].front.attachment;
       return { ...state };
     case "UPDATE_CARD_BACK":
       const card = state.cards[action.index];
+      card.modified = true;
       card.back = { ...card.back, ...action.payload };
       return { ...state };
     default:

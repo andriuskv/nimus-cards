@@ -1,29 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./timer.scss";
 
-export default function Timer({ id, revealed, initDuration, callback }) {
+export default function Timer({ revealed, initDuration, callback }) {
   const [duration, setDuration] = useState(initDuration);
   const timeoutId = useRef(0);
-  const durationRef = useRef(duration);
-  durationRef.current = duration;
 
   useEffect(() => {
+    updateTimer(duration);
+
     return () => {
       clearTimeout(timeoutId.current);
     };
   }, []);
-
-  useEffect(() => {
-    clearTimeout(timeoutId.current);
-
-    if (duration === initDuration) {
-      updateTimer(duration);
-    }
-    else {
-      setDuration(initDuration);
-      updateTimer(initDuration);
-    }
-  }, [id]);
 
   useEffect(() => {
     if (revealed) {
