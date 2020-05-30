@@ -149,7 +149,10 @@ function CreateDeck(props) {
   }
 
   function isFrontValid(side) {
-    return side.text || side.attachment;
+    if (side.attachment) {
+      return !!side.attachment.description;
+    }
+    return !!side.text;
   }
 
   function isBackValid(side, checkIfEmpty = false) {
@@ -206,10 +209,11 @@ function CreateDeck(props) {
       };
 
       if (card.modified) {
+        delete card.score;
         delete card.level;
         delete card.nextReview;
-        delete card.modified;
       }
+      delete card.modified;
 
       if (back.type === "multi") {
         back.typeOptions.options = card.back.multiOptions.options.filter(({ value }) => value);

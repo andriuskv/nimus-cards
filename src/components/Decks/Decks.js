@@ -166,12 +166,7 @@ export default function Decks() {
         <ul>{renderDecks(decks)}</ul> :
         <h2 className="deck-list-message">You have no decks</h2>
       }
-      {dialog.visible && (
-        <DeckRemovalDialog
-          deckTitle={dialog.deck.title}
-          removeDeck={removeDeck}
-          cancelRemoval={hideDialog}/>
-      )}
+      {dialog.visible && <DeckRemovalDialog removeDeck={removeDeck} cancelRemoval={hideDialog}/>}
       {settingsModalVisible && <Settings hide={hideSettingsModal}/>}
     </>
   );

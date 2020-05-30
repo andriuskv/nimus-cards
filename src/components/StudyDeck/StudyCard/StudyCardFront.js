@@ -64,7 +64,7 @@ export default function StudyCardFront({ id, side }) {
         <div className="study-front-text" style={{ fontSize: `${side.textSize}px` }}>{side.text}</div>
       )}
       {imageExpanded && (
-        <div className="mask study-expaned-image-mask" onClick={hideImage}>
+        <div className="study-expaned-image-mask" onClick={hideImage}>
           <img src={attachment.src} className="study-expaned-image" alt=""/>
         </div>
       )}

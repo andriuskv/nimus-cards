@@ -154,6 +154,7 @@ textarea {
   }
 
   &:disabled, &.disabled {
+    background-color: transparent;
     color: $color-text-light;
   }
 }

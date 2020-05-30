@@ -14,7 +14,7 @@ export default function StudyCardBack({ card, selectOption, handleSubmit }) {
     let inputClassName = "input study-exact-input";
 
     if (revealed) {
-      inputClassName += card.correct ? " right" : " wrong";
+      inputClassName += card.isCorrect ? " right" : " wrong";
     }
     return (
       <form onSubmit={handleSubmit} className="study-exact">
