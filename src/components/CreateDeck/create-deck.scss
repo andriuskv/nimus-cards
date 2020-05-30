@@ -140,6 +140,8 @@
 
 .create-side-content {
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   height: 308px;
   border-radius: 0 0 4px 4px;
   box-shadow: $box-shadow;
@@ -150,10 +152,6 @@
   position: relative;
   height: 60%;
   border-bottom: 1px solid $background-color-darkest;
-
-  & + .create-side-text-input {
-    height: 40%;
-  }
 }
 
 .create-side-image {
@@ -179,6 +177,14 @@
   max-height: 100%;
 }
 
+.create-side-attachment-input {
+  width: calc(100% - 2px);
+  margin: 1px;
+  border-radius: 0;
+  border-bottom: 1px solid $background-color-darkest;
+  box-shadow: none;
+}
+
 .create-side-panel-btn {
   position: absolute;
   top: 4px;
@@ -186,8 +192,11 @@
 }
 
 .create-side-text-input {
-  width: 100%;
+  width: calc(100% - 2px);
+  margin: 1px;
   height: 100%;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .create-multi-layout {

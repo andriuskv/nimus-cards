@@ -26,7 +26,7 @@ export default function StudyCard({ card, selectOption, revealAnswer, nextStep, 
       <div className="study-card study-card-text">
         <CardFront id={card.id} side={card.front}/>
         <button className="btn study-card-text-btn study-card-text-reveal-btn"
-          onClick={revealAnswer}>Reveal</button>
+          onClick={revealAnswer}>Check</button>
       </div>
     );
   }

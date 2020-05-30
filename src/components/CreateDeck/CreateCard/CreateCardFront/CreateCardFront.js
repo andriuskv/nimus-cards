@@ -23,6 +23,14 @@ export default function CreateCardFront({ index, side, handleChange }) {
     dispatch({ type: "REMOVE_ATTACHMENT", index });
   }
 
+  function updateAttachmentDescription({ target }) {
+    dispatch({
+      type: "UPDATE_ATTACHMENT_DESCRIPTION",
+      index,
+      description: target.value
+    });
+  }
+
   function showUploadPanel() {
     setUploadPanelVisibility(true);
   }
@@ -57,7 +65,16 @@ export default function CreateCardFront({ index, side, handleChange }) {
             handleChange={event => handleChange(event, "front", "textSize")}/>
         </div>
         <div className="create-side-content">
-          {attachment && renderAttachment()}
+          {attachment && (
+            <>
+              {renderAttachment()}
+              <input type="text"
+                className="input create-side-attachment-input"
+                placeholder="Describe attachment"
+                defaultValue={attachment.description}
+                onChange={updateAttachmentDescription}/>
+            </>
+          )}
           <textarea className="input create-side-text-input"
             value={text}
             style={{ fontSize: `${textSize}px` }}

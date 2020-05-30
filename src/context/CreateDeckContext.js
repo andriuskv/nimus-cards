@@ -40,6 +40,10 @@ function reducer(state, action) {
       state.cards[action.index].modified = true;
       delete state.cards[action.index].front.attachment;
       return { ...state };
+    case "UPDATE_ATTACHMENT_DESCRIPTION":
+      state.cards[action.index].modified = true;
+      state.cards[action.index].front.attachment.description = action.description;
+      return { ...state };
     case "UPDATE_CARD_BACK":
       const card = state.cards[action.index];
       card.modified = true;

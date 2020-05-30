@@ -91,13 +91,13 @@ export default function StudyDeck() {
     if (card.back.type === "multi") {
       card.back.typeOptions.options = shuffleArray(card.back.typeOptions.options);
     }
-    return card;
+    return { ...card };
   }
 
-  function updateScoreCounter(correct) {
+  function updateScoreCounter(isCorrect) {
     const { score } = state;
 
-    if (correct) {
+    if (isCorrect) {
       score.right += 1;
     }
     else {
@@ -123,16 +123,15 @@ export default function StudyDeck() {
     nextStep(id === state.card.back.typeOptions.correctId);
   }
 
-  function adjustCardLevel(id, isCorrect) {
-    const card = state.deck.cards.find(deck => deck.id === id);
+  function adjustCardLevel(card, isCorrect) {
     const currentLevel = card.level || 0;
     let nextLevel = currentLevel;
 
-    if (isCorrect && !card.levelFreezed) {
+    if (isCorrect) {
       nextLevel = currentLevel < 8 ? currentLevel + 1 : 8;
     }
     else {
-      card.levelFreezed = true;
+      card.frozen = true;
       nextLevel = 1;
     }
     const hours = 6 * Math.pow(2, nextLevel - 1) * nextLevel;
@@ -141,30 +140,61 @@ export default function StudyDeck() {
     card.nextReview = new Date(Date.now() + hours * 60 * 60 * 1000);
   }
 
+  function updateCardScore(card, isCorrect) {
+    card.score = card.score || {
+      streak: 0,
+      right: 0,
+      wrong: 0,
+      total: 0
+    };
+
+    if (isCorrect) {
+      card.score.streak += 1;
+      card.score.right += 1;
+    }
+    else {
+      card.frozen = true;
+      card.score.streak = 0;
+      card.score.wrong += 1;
+    }
+    card.score.total = card.score.right + card.score.wrong;
+  }
+
+  function updateCard(id, isCorrect) {
+    const card = state.deck.cards.find(deck => deck.id === id);
+
+    if (card.frozen) {
+      return;
+    }
+    adjustCardLevel(card, isCorrect);
+    updateCardScore(card, isCorrect);
+  }
+
   function nextStep(isCorrect, params = {}) {
     const updatedScore = updateScoreCounter(isCorrect);
     const currentCard = state.cards.shift();
     const revealedCard = {
       ...currentCard,
       ...params,
-      correct: isCorrect,
+      isCorrect,
       revealed: true,
       finished: true
     };
 
     if (state.mode === "learn" || state.mode === "review") {
-      adjustCardLevel(revealedCard.id, isCorrect);
+      updateCard(currentCard.id, isCorrect);
     }
 
-    if (!isCorrect) {
-      delete currentCard.revealed;
+    if (isCorrect) {
+      state.sessionCardIds = [...(state.sessionCardIds || []), currentCard.id];
+    }
+    else {
       state.cards.push(currentCard);
       state.cards = settings.randomize.value ? shuffleArray(state.cards) : state.cards;
     }
+    delete currentCard.revealed;
     setState({ ...state, card: revealedCard, score: updatedScore });
-    nextStepTimeout.current = setTimeout(() => {
-      setState(getNextCard());
-    }, 1600);
+    nextStepTimeout.current = setTimeout(getNextCard, 1600);
   }
 
   function getNextCard() {
@@ -173,22 +203,21 @@ export default function StudyDeck() {
 
     if (wasLastCard && (mode === "learn" || mode === "review")) {
       state.deck.cards = state.deck.cards.map(card => {
-        delete card.levelFreezed;
+        delete card.frozen;
         return card;
       });
       saveDeck(state.deck);
     }
-
-    return {
+    setState({
       ...state,
       wasLastCard,
       card: wasLastCard ? null : getCard(cards)
-    };
+    });
   }
 
   function skipNextStepTimeout() {
     clearTimeout(nextStepTimeout.current);
-    setState(getNextCard());
+    getNextCard();
   }
 
   function handleStudyExit() {
@@ -231,7 +260,7 @@ export default function StudyDeck() {
         )}
       </div>
       {state.wasLastCard ? (
-        <StudyDeckScore score={state.score} deck={state.deck}/>
+        <StudyDeckScore score={state.score} deck={state.deck} ids={state.sessionCardIds}/>
       ) : (
         <>
           <StudyDeckHeader score={state.score}/>
