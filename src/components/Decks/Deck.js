@@ -15,6 +15,10 @@ export default function Deck({ deck, showDialog, exportDeck }) {
           </div>
         </div>
         <Dropdown>
+          <Link to={`/decks/${deck.id}`} className="btn btn-icon dropdown-btn">
+            <Icon name="list"/>
+            <span>Status</span>
+          </Link>
           <Link to={`/decks/${deck.id}/edit`} className="btn btn-icon dropdown-btn">
             <Icon name="edit"/>
             <span>Edit</span>
