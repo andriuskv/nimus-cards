@@ -68,6 +68,7 @@ export default function Decks() {
         if (currentAttachment.blob) {
           newAttachement = {
             type: currentAttachment.type,
+            description: currentAttachment.description,
             mimeType: currentAttachment.blob.type,
             blobName: currentAttachment.blob.name
           };
