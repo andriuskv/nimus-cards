@@ -25,6 +25,9 @@ function reducer(state, action) {
       return { ...state, [action.name]: action.value };
     case "ADD_CARD":
       return { ...state, cards: [...state.cards, action.card] };
+    case "INSERT_CARD":
+      state.cards.splice(action.index, 0, action.card);
+      return { ...state, cards: [...state.cards] };
     case "REMOVE_CARD":
       state.cards.splice(action.index, 1);
       return { ...state };
