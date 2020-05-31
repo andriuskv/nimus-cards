@@ -68,7 +68,15 @@ export default function StudyDeck() {
       }
     }
     cards = settings.randomize.value ? shuffleArray(cards) : cards;
-    const sessionCards = cards.slice(0, settings.cardCount.value);
+    const sessionCards = cards.slice(0, settings.cardCount.value).map(card => {
+      card.score = card.score || {
+        streak: 0,
+        right: 0,
+        wrong: 0,
+        total: 0
+      };
+      return card;
+    });
 
     setState({
       mode,
@@ -141,13 +149,6 @@ export default function StudyDeck() {
   }
 
   function updateCardScore(card, isCorrect) {
-    card.score = card.score || {
-      streak: 0,
-      right: 0,
-      wrong: 0,
-      total: 0
-    };
-
     if (isCorrect) {
       card.score.streak += 1;
       card.score.right += 1;

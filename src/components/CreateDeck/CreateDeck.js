@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./create-deck.scss";
+import cloneDeep from "lodash.clonedeep";
 import { getRandomString, setDocumentTitle } from "../../helpers";
 import { useStore, CreateDeckProvider } from "../../context/CreateDeckContext";
 import { fetchDeck, saveDeck } from "../../services/db";
@@ -101,6 +102,12 @@ function CreateDeck(props) {
       },
       notes: {
         value: ""
+      },
+      score: {
+        streak: 0,
+        right: 0,
+        wrong: 0,
+        total: 0
       }
     };
   }
@@ -125,6 +132,13 @@ function CreateDeck(props) {
     requestAnimationFrame(() => {
       newCardBtnRef.current.scrollIntoView();
     });
+  }
+
+  function cloneCard(index) {
+    const cloneCard = cloneDeep(state.cards[index]);
+    cloneCard.id = getRandomString();
+
+    dispatch({ type: "INSERT_CARD", index: index + 1, card: cloneCard });
   }
 
   function removeCard(index) {
@@ -266,7 +280,9 @@ function CreateDeck(props) {
         </label>
       </div>
       <ul>{state.cards.map((card, index) => (
-        <Card key={card.id} index={index} card={card} removeCard={removeCard}/>
+        <Card key={card.id} index={index} card={card}
+          cloneCard={cloneCard}
+          removeCard={removeCard}/>
       ))}</ul>
       {pendingCards.length > 0 && (
         <div className="deck-form-dialog">

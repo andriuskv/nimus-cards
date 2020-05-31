@@ -5,7 +5,7 @@ import CardFront from "./CreateCardFront";
 import CardBack from "./CreateCardBack";
 import CardNotes from "./CardNotes";
 
-export default function CreateCard({ index, card, removeCard }) {
+export default function CreateCard({ index, card, cloneCard, removeCard }) {
   const { state, dispatch } = useStore();
   const [notesVisible, setNotesVisibility] = useState(card.notes && !!card.notes.value);
 
@@ -38,6 +38,10 @@ export default function CreateCard({ index, card, removeCard }) {
       <div className="create-card-btns">
         <button className="btn btn-icon" title="Toggle notes" onClick={toggleNotes}>
           <Icon name="notes" />
+        </button>
+
+        <button className="btn btn-icon" title="Clone card" onClick={() => cloneCard(index)}>
+          <Icon name="clone" />
         </button>
         {state.cards.length > 1 && (
           <button className="btn btn-icon" title="Remove card" onClick={() => removeCard(index)}>
