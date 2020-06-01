@@ -24,6 +24,7 @@
 }
 
 .deck-status-progress-bar-container {
+  position: relative;
   overflow: hidden;
   border-radius: 2px;
   background-color: $background-color-lightest;
@@ -34,6 +35,14 @@
   width: var(--width, 50%);
   height: 20px;
   background-color: $secondary-accent-color;
+}
+
+.deck-status-progress-half-bar {
+  position: absolute;
+  bottom: 0;
+  width: var(--width, 50%);
+  height: 10px;
+  background-color: $secondary-accent-color-darker;
 }
 
 .deck-status-items {

@@ -12,7 +12,9 @@ export default function DeckStatus() {
   useEffect(() => {
     fetchDeck(match.params.id).then(deck => {
       if (deck) {
-        deck.learnCardCount = deck.cards.filter(card => card.level === 8).length;
+        const learnedCards = deck.cards.filter(card => card.level > 1);
+        deck.learnedCardCount = learnedCards.length;
+        deck.memorizedCardCount = learnedCards.filter(card => card.level === 8).length;
         setState(deck);
       }
       else {
@@ -62,10 +64,12 @@ export default function DeckStatus() {
     <div className="deck-status">
       <div className="deck-status-header">
         <h2 className="deck-status-title">{state.title}</h2>
-        <div className="deck-status-progress">Memorized {state.learnCardCount} out of {state.cards.length} cards</div>
+        <div className="deck-status-progress">Learned {state.learnedCardCount} out of {state.cards.length} cards, {state.memorizedCardCount} memorized</div>
         <div className="deck-status-progress-bar-container">
           <div className="deck-status-progress-bar"
-            style={{ "--width": `${state.learnCardCount / state.cards.length * 100}%` }}></div>
+            style={{ "--width": `${state.learnedCardCount / state.cards.length * 100}%` }}></div>
+          <div className="deck-status-progress-half-bar"
+            style={{ "--width": `${state.memorizedCardCount / state.cards.length * 100}%` }}></div>
         </div>
       </div>
       <ul className="deck-status-items">
