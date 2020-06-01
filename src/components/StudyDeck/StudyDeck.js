@@ -81,6 +81,7 @@ export default function StudyDeck() {
     setState({
       mode,
       deck,
+      sessionStartedAt: new Date(),
       cardCount: sessionCards.length,
       cards: sessionCards,
       card: getCard(sessionCards),
@@ -261,7 +262,8 @@ export default function StudyDeck() {
         )}
       </div>
       {state.wasLastCard ? (
-        <StudyDeckScore score={state.score} deck={state.deck} ids={state.sessionCardIds}/>
+        <StudyDeckScore score={state.score} deck={state.deck}
+          startTime={state.sessionStartedAt} ids={state.sessionCardIds}/>
       ) : (
         <>
           <StudyDeckHeader score={state.score}/>

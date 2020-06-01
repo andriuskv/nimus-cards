@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { getCardsToLearn, getCardsToReview } from "../../helpers";
+import { getCardsToLearn, getCardsToReview, formatTime } from "../../helpers";
+import Icon from "../Icon";
 import StudyScoreBar from "./StudyDeckScoreBar";
 
-export default function StudyDeckScore({ score, deck, ids }) {
+export default function StudyDeckScore({ score, deck, startTime, ids }) {
   const hasCardsToLearn = !!getCardsToLearn(deck.cards).length;
   const hasCardsToReview = !!getCardsToReview(deck.cards).length;
   const cards = deck.cards.filter(card => ids.some(id => card.id === id));
@@ -17,13 +18,21 @@ export default function StudyDeckScore({ score, deck, ids }) {
     }
   }
 
+  function showSessionTime() {
+    return formatTime(Math.floor((new Date() - startTime) / 1000));
+  }
+
   return (
     <>
       <div className="deck-score-container">
         <h3 className="deck-score-title">Session Results</h3>
-        <div className="deck-score-accuracy">
+        <div className="deck-score-stats">
           <span className="deck-score-accuracy-name">Accuracy</span>
           <span className="deck-score-accuracy-value">{Math.round(score.right / score.total * 100)}%</span>
+          <div className="deck-score-time">
+            <Icon name="clock"/>
+            <span className="deck-score-time-value">{showSessionTime()}</span>
+          </div>
         </div>
         <div className="deck-score-bars">
           <StudyScoreBar score={score} name="wrong"/>
