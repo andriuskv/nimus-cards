@@ -26,18 +26,8 @@ export default function StudyDeckScore({ score, deck, ids }) {
           <span className="deck-score-accuracy-value">{Math.round(score.right / score.total * 100)}%</span>
         </div>
         <div className="deck-score-bars">
-          <div className="deck-score-bar-container">
-            <span className="deck-score-bar-name">Wrong</span>
-            <div className="deck-score-bar">
-              <StudyScoreBar score={score} name="wrong"/>
-            </div>
-          </div>
-          <div className="deck-score-bar-container">
-            <span className="deck-score-bar-name">Right</span>
-            <div className="deck-score-bar">
-              <StudyScoreBar score={score} name="right"/>
-            </div>
-          </div>
+          <StudyScoreBar score={score} name="wrong"/>
+          <StudyScoreBar score={score} name="right"/>
         </div>
         <div className="deck-score-btn-container">
           {hasCardsToLearn ? (
