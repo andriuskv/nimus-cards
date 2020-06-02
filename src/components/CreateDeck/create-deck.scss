@@ -59,7 +59,7 @@
   }
 }
 
-.create-card-index,
+.create-card-left,
 .create-card-btns {
   flex-shrink: 0;
   min-width: 20px;
@@ -67,7 +67,7 @@
 }
 
 .create-card-index {
-  margin-right: 4px;
+  margin: 0 auto;
   color: $color-text-dark;
   text-align: center;
 }

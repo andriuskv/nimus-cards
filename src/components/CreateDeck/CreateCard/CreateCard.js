@@ -5,7 +5,7 @@ import CardFront from "./CreateCardFront";
 import CardBack from "./CreateCardBack";
 import CardNotes from "./CardNotes";
 
-export default function CreateCard({ index, card, cloneCard, removeCard }) {
+export default function CreateCard({ index, card, length, cloneCard, swapCard, removeCard }) {
   const { state, dispatch } = useStore();
   const [notesVisible, setNotesVisibility] = useState(card.notes && !!card.notes.value);
 
@@ -29,7 +29,19 @@ export default function CreateCard({ index, card, cloneCard, removeCard }) {
 
   return (
     <li className="create-list-item">
-      <div className="create-card-index">{index + 1}.</div>
+      <div className="create-card-left">
+        {index > 0 && (
+          <button className="btn btn-icon" onClick={() => swapCard(index, -1)} title="Move card up">
+            <Icon name="chevron-up"/>
+          </button>
+        )}
+        <div className="create-card-index">{index + 1}</div>
+        {index < length - 1 && (
+          <button className="btn btn-icon" onClick={() => swapCard(index, 1)} title="Move card down">
+            <Icon name="chevron-down"/>
+          </button>
+        )}
+      </div>
       <div className="deck-form-field-group create-card">
         <CardFront index={index} side={card.front} handleChange={handleChange}/>
         <CardBack index={index}/>
@@ -37,15 +49,15 @@ export default function CreateCard({ index, card, cloneCard, removeCard }) {
       </div>
       <div className="create-card-btns">
         <button className="btn btn-icon" title="Toggle notes" onClick={toggleNotes}>
-          <Icon name="notes" />
+          <Icon name="notes"/>
         </button>
 
         <button className="btn btn-icon" title="Clone card" onClick={() => cloneCard(index)}>
-          <Icon name="clone" />
+          <Icon name="clone"/>
         </button>
         {state.cards.length > 1 && (
           <button className="btn btn-icon" title="Remove card" onClick={() => removeCard(index)}>
-            <Icon name="remove" />
+            <Icon name="remove"/>
           </button>
         )}
       </div>
