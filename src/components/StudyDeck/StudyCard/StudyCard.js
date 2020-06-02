@@ -24,7 +24,7 @@ export default function StudyCard({ card, selectOption, revealAnswer, nextStep, 
   if (card.back.type === "text" && !card.revealed) {
     return (
       <div className="study-card study-card-text">
-        <CardFront id={card.id} side={card.front}/>
+        <CardFront id={card.id} attachementId={card.attachementId} side={card.front}/>
         <button className="btn study-card-text-btn study-card-text-reveal-btn"
           onClick={revealAnswer}>Check</button>
       </div>
@@ -32,7 +32,7 @@ export default function StudyCard({ card, selectOption, revealAnswer, nextStep, 
   }
   return (
     <div className={`study-card study-card-${card.back.type}`}>
-      <CardFront id={card.id} side={card.front}/>
+      <CardFront id={card.id} attachementId={card.attachementId} side={card.front}/>
       <CardBack card={card} selectOption={selectOption} handleSubmit={handleExactTypeFormSubmit}/>
       {card.back.type === "text" && card.revealed && !card.timerReveal && (
         <div className="study-card-text-btns">

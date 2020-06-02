@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import "./study-deck.scss";
-import { shuffleArray, setDocumentTitle, getCardsToLearn, getCardsToReview } from "../../helpers";
+import { shuffleArray, setDocumentTitle, getCardsToLearn, getCardsToReview, getRandomString } from "../../helpers";
 import { fetchDeck, saveDeck } from "../../services/db";
 import { getSettings } from "../../services/settings";
 import Modal from "../Modal";
@@ -173,7 +173,6 @@ export default function StudyDeck() {
   }
 
   function nextStep(isCorrect, params = {}) {
-    const updatedScore = updateScoreCounter(isCorrect);
     const currentCard = state.cards.shift();
     const revealedCard = {
       ...currentCard,
@@ -191,11 +190,15 @@ export default function StudyDeck() {
       state.sessionCardIds = [...(state.sessionCardIds || []), currentCard.id];
     }
     else {
+      currentCard.attachementId = getRandomString();
       state.cards.push(currentCard);
       state.cards = settings.randomize.value ? shuffleArray(state.cards) : state.cards;
     }
-    delete currentCard.revealed;
-    setState({ ...state, card: revealedCard, score: updatedScore });
+    setState({
+      ...state,
+      card: revealedCard,
+      score: updateScoreCounter(isCorrect)
+    });
     nextStepTimeout.current = setTimeout(getNextCard, 1600);
   }
 
