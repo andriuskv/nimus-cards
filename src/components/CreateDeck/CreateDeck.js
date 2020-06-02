@@ -141,6 +141,10 @@ function CreateDeck(props) {
     dispatch({ type: "INSERT_CARD", index: index + 1, card: cloneCard });
   }
 
+  function swapCard(index, direction) {
+    dispatch({ type: "SWAP_CARD", index, direction });
+  }
+
   function removeCard(index) {
     const card = state.cards[index];
 
@@ -281,7 +285,9 @@ function CreateDeck(props) {
       </div>
       <ul>{state.cards.map((card, index) => (
         <Card key={card.id} index={index} card={card}
+          length={state.cards.length}
           cloneCard={cloneCard}
+          swapCard={swapCard}
           removeCard={removeCard}/>
       ))}</ul>
       {pendingCards.length > 0 && (
