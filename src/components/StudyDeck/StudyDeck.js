@@ -17,7 +17,6 @@ export default function StudyDeck() {
   const match = useRouteMatch();
   const [state, setState] = useState(null);
   const nextStepTimeout = useRef(0);
-  const settings = getSettings();
   const { location } = history;
 
   useEffect(() => {
@@ -49,6 +48,7 @@ export default function StudyDeck() {
 
   function initDeck(deck) {
     const mode = match.url.split("/")[3];
+    const settings = deck.settings || getSettings();
     let { cards } = deck;
 
     if (mode === "learn") {
@@ -81,6 +81,7 @@ export default function StudyDeck() {
     setState({
       mode,
       deck,
+      settings,
       sessionStartedAt: new Date(),
       cardCount: sessionCards.length,
       cards: sessionCards,
@@ -192,7 +193,7 @@ export default function StudyDeck() {
     else {
       currentCard.attachementId = getRandomString();
       state.cards.push(currentCard);
-      state.cards = settings.randomize.value ? shuffleArray(state.cards) : state.cards;
+      state.cards = state.settings.randomize.value ? shuffleArray(state.cards) : state.cards;
     }
     setState({
       ...state,
@@ -258,9 +259,9 @@ export default function StudyDeck() {
           transform: `scaleX(${state.card ? (state.cardCount - state.cards.length) / state.cardCount : 1})`
         }}></div>
         <h1 className="study-header-title">{state.deck.title}</h1>
-        {!state.wasLastCard && !state.card.finished && settings.timeoutDuration.value > 0 && (
+        {!state.wasLastCard && !state.card.finished && state.settings.timeoutDuration.value > 0 && (
           <Timer revealed={state.card.revealed}
-            initDuration={settings.timeoutDuration.value}
+            initDuration={state.settings.timeoutDuration.value}
             callback={timerRevealAnswer}/>
         )}
       </div>
