@@ -1,0 +1,43 @@
+@import "../../../scss/variables.scss";
+
+.deck-settings-item {
+  display: block;
+  padding-left: 8px;
+  padding-bottom: 4px;
+  font-size: 0.875em;
+
+  &:not(:last-of-type) {
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid $background-color-darkest;
+  }
+
+  &.disabled {
+    opacity: 0.6;
+  }
+}
+
+.deck-settings-checkbox {
+  background-color: $background-color-darkest;
+}
+
+.deck-settings-input {
+  width: 60px;
+  padding: 4px 8px;
+  margin-right: 8px;
+  margin-left: 8px;
+  text-align: center;
+  background-color: $background-color-darkest;
+
+  &:invalid ~ .deck-settings-message {
+    display: block;
+  }
+}
+
+.deck-settings-message {
+  display: none;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  color: $danger-color;
+}

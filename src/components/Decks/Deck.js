@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Icon from "../Icon";
 import Dropdown from "../Dropdown";
 
-export default function Deck({ deck, showDialog, exportDeck }) {
+export default function Deck({ deck, showDialog, showDeckSettings, exportDeck }) {
   return (
     <li className="deck">
       <div className="deck-info">
@@ -15,6 +15,10 @@ export default function Deck({ deck, showDialog, exportDeck }) {
           </div>
         </div>
         <Dropdown>
+          <button className="btn btn-icon dropdown-btn" onClick={() => showDeckSettings(deck)}>
+            <Icon name="settings"/>
+            <span>Settings</span>
+          </button>
           <Link to={`/decks/${deck.id}`} className="btn btn-icon dropdown-btn">
             <Icon name="list"/>
             <span>Status</span>
@@ -27,7 +31,7 @@ export default function Deck({ deck, showDialog, exportDeck }) {
             <Icon name="export"/>
             <span>Export</span>
           </button>
-          <button className="btn btn-icon dropdown-btn" onClick={() => showDialog(deck)}>
+          <button className="btn btn-icon dropdown-btn" onClick={() => showDialog(deck.id)}>
             <Icon name="remove"/>
             <span>Remove</span>
           </button>

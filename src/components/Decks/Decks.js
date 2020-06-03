@@ -4,14 +4,14 @@ import "./decks.scss";
 import { getRandomString, setDocumentTitle, getCardsToLearn, getCardsToReview } from "../../helpers";
 import { fetchDecks, deleteDeck, saveDeck } from "../../services/db";
 import Icon from "../Icon";
-import DeckRemovalDialog from "./DeckRemovalDialog";
+import DeckRemovalModal from "./DeckRemovalModal";
 import Settings from "./Settings";
+import DeckSettings from "./DeckSettings";
 import Deck from "./Deck";
 
 export default function Decks() {
   const [decks, setDecks] = useState([]);
-  const [dialog, toggleDialog] = useState({ visible: false });
-  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+  const [modal, setModal] = useState({ visible: false });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,20 +31,28 @@ export default function Decks() {
   }
 
   function removeDeck() {
-    const index = findDeckIndex(decks, dialog.deck.id);
+    const index = findDeckIndex(decks, modal.id);
 
     decks.splice(index, 1);
     setDecks([...decks]);
-    deleteDeck(dialog.deck.id);
-    hideDialog();
+    deleteDeck(modal.id);
+    hideModal();
   }
 
-  function showDialog(deck) {
-    toggleDialog({ visible: true, deck });
+  function showDialog(id) {
+    setModal({ deckRemovalModalVisible: true, id });
   }
 
-  function hideDialog() {
-    toggleDialog({ visible: false, deck: null });
+  function showSettingsModal() {
+    setModal({ settingsVisible: true });
+  }
+
+  function showDeckSettings(deck) {
+    setModal({ deckSettingsVisible: true, deck });
+  }
+
+  function hideModal() {
+    setModal({});
   }
 
   async function exportDeck(deck) {
@@ -130,18 +138,11 @@ export default function Decks() {
     target.value = "";
   }
 
-  function showSettingsModal() {
-    setSettingsModalVisible(true);
-  }
-
-  function hideSettingsModal() {
-    setSettingsModalVisible(false);
-  }
-
   function renderDecks(decks) {
     return decks.map(deck => (
       <Deck key={deck.id} deck={deck}
         showDialog={showDialog}
+        showDeckSettings={showDeckSettings}
         exportDeck={exportDeck}/>
     ));
   }
@@ -167,8 +168,9 @@ export default function Decks() {
         <ul>{renderDecks(decks)}</ul> :
         <h2 className="deck-list-message">You have no decks</h2>
       }
-      {dialog.visible && <DeckRemovalDialog removeDeck={removeDeck} cancelRemoval={hideDialog}/>}
-      {settingsModalVisible && <Settings hide={hideSettingsModal}/>}
+      {modal.deckRemovalModalVisible && <DeckRemovalModal removeDeck={removeDeck} cancelRemoval={hideModal}/>}
+      {modal.settingsVisible && <Settings hide={hideModal}/>}
+      {modal.deckSettingsVisible && <DeckSettings hide={hideModal} deck={modal.deck}/>}
     </>
   );
 }

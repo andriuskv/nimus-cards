@@ -1,9 +1,9 @@
 import React from "react";
 import Modal from "../Modal";
 
-export default function DeckRemovalDialog({ removeDeck, cancelRemoval }) {
+export default function DeckRemovalModal({ removeDeck, cancelRemoval }) {
   return (
-    <Modal>
+    <Modal hide={cancelRemoval}>
       <h3 className="modal-title">Are you sure you want to remove this deck?</h3>
       <div className="deck-dialog-box-btns">
         <button className="btn btn-danger" onClick={removeDeck}>Remove</button>
