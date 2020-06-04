@@ -1,6 +1,7 @@
 import React from "react";
-import { classNames } from "../../../helpers";
-import Icon from "../../Icon";
+import "./study-card-back.scss";
+import { classNames } from "../../../../helpers";
+import Icon from "../../../Icon";
 
 export default function StudyCardBack({ card, selectOption, handleSubmit }) {
   const { back, revealed } = card;
