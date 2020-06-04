@@ -1,0 +1,12 @@
+@import "../../../../scss/variables.scss";
+
+.create-card-preview-modal {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 1024px;
+  width: 100%;
+  max-height: 100%;
+  min-height: auto;
+  padding: 16px;
+}

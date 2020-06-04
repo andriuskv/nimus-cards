@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./create-deck.scss";
 import cloneDeep from "lodash.clonedeep";
-import { getRandomString, setDocumentTitle } from "../../helpers";
+import { getRandomString, setDocumentTitle, shuffleArray } from "../../helpers";
 import { useStore, CreateDeckProvider } from "../../context/CreateDeckContext";
 import { fetchDeck, saveDeck } from "../../services/db";
 import Card from "./CreateCard";
@@ -132,6 +132,26 @@ function CreateDeck(props) {
     requestAnimationFrame(() => {
       newCardBtnRef.current.scrollIntoView();
     });
+  }
+
+  function previewCard(card) {
+    if (isFrontValid(card.front) && isBackValid(card.back)) {
+      card.visible = true;
+      card.back.typeOptions = card.back[`${card.back.type}Options`];
+
+      if (card.back.type === "multi") {
+        card.back.typeOptions.options = shuffleArray(card.back.multiOptions.options.filter(({ value }) => value));
+      }
+    }
+    else {
+      card.message = "Can't preview invalid card";
+
+      setTimeout(() => {
+        delete card.message;
+        dispatch({ type: "PREVIEW_CARD", card });
+      }, 2400);
+    }
+    dispatch({ type: "PREVIEW_CARD", card });
   }
 
   function cloneCard(index) {
@@ -286,6 +306,7 @@ function CreateDeck(props) {
       <ul>{state.cards.map((card, index) => (
         <Card key={card.id} index={index} card={card}
           length={state.cards.length}
+          previewCard={previewCard}
           cloneCard={cloneCard}
           swapCard={swapCard}
           removeCard={removeCard}/>

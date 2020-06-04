@@ -25,6 +25,12 @@ function reducer(state, action) {
       return { ...state, [action.name]: action.value };
     case "ADD_CARD":
       return { ...state, cards: [...state.cards, action.card] };
+    case "PREVIEW_CARD":
+      return { ...state, cards: [...state.cards] };
+    case "HIDE_PREVIEW_CARD":
+      delete action.card.visible;
+      delete action.card.back.typeOptions;
+      return { ...state, cards: [...state.cards] };
     case "INSERT_CARD":
       state.cards.splice(action.index, 0, action.card);
       return { ...state, cards: [...state.cards] };

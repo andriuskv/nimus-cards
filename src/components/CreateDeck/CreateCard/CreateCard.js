@@ -4,8 +4,9 @@ import Icon from "../../Icon";
 import CardFront from "./CreateCardFront";
 import CardBack from "./CreateCardBack";
 import CardNotes from "./CardNotes";
+import CreateCardPreview from "./CreateCardPreview";
 
-export default function CreateCard({ index, card, length, cloneCard, swapCard, removeCard }) {
+export default function CreateCard({ index, card, length, previewCard, cloneCard, swapCard, removeCard }) {
   const { state, dispatch } = useStore();
   const [notesVisible, setNotesVisibility] = useState(card.notes && !!card.notes.value);
 
@@ -25,6 +26,10 @@ export default function CreateCard({ index, card, length, cloneCard, swapCard, r
         value
       });
     }
+  }
+
+  function hidePreview() {
+    dispatch({ type: "HIDE_PREVIEW_CARD", card });
   }
 
   return (
@@ -51,7 +56,12 @@ export default function CreateCard({ index, card, length, cloneCard, swapCard, r
         <button className="btn btn-icon" title="Toggle notes" onClick={toggleNotes}>
           <Icon name="notes"/>
         </button>
-
+        <div className="create-card-preview-btn-container">
+          <button className="btn btn-icon" title="Preview card" onClick={() => previewCard(card)}>
+            <Icon name="preview"/>
+          </button>
+          {card.message && <p className="create-card-preview-message">{card.message}</p>}
+        </div>
         <button className="btn btn-icon" title="Clone card" onClick={() => cloneCard(index)}>
           <Icon name="clone"/>
         </button>
@@ -61,6 +71,7 @@ export default function CreateCard({ index, card, length, cloneCard, swapCard, r
           </button>
         )}
       </div>
+      {card.visible && <CreateCardPreview card={card} hide={hidePreview}/>}
     </li>
   );
 }
