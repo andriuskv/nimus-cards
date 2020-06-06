@@ -7,7 +7,7 @@ import Icon from "../../../Icon";
 
 export default function CreateCardFront({ index, side, handleChange }) {
   const { dispatch } = useStore();
-  const [uploadPanelVisible, setUploadPanelVisibility] = useState(false);
+  const [type, setType] = useState("text");
   const { text, textSize, attachment } = side;
 
   function addAttachment(attachment) {
@@ -16,7 +16,6 @@ export default function CreateCardFront({ index, side, handleChange }) {
       index,
       attachment
     });
-    hideUploadPanel();
   }
 
   function removeAttachment() {
@@ -31,12 +30,8 @@ export default function CreateCardFront({ index, side, handleChange }) {
     });
   }
 
-  function showUploadPanel() {
-    setUploadPanelVisibility(true);
-  }
-
-  function hideUploadPanel() {
-    setUploadPanelVisibility(false);
+  function handleTypeChange({ target }) {
+    setType(target.value);
   }
 
   function renderAttachment() {
@@ -52,20 +47,42 @@ export default function CreateCardFront({ index, side, handleChange }) {
   }
 
   return (
-    <>
-      <div>
-        <div className="deck-form-field-title">FRONT</div>
-        <div className="create-side-toolbar">
-          <button className="btn btn-icon toolbar-btn"
-            title="Add attachment" onClick={showUploadPanel}>
-            <Icon name="add-file"/>
-          </button>
-          <TextSizeSelect
-            textSize={textSize}
-            handleChange={event => handleChange(event, "front", "textSize")}/>
+    <div className="create-card-side">
+      <div className="create-side-toolbar">
+        <ul className="create-side-types">
+          <li className="create-side-type">
+            <label>
+              <input type="radio" className="sr-only create-type-radio"
+                value="text"
+                checked={type === "text"}
+                onChange={handleTypeChange}/>
+              <Icon name="text" title="Text" className="create-option-type-icon"/>
+            </label>
+          </li>
+          <li className="create-side-type">
+            <label>
+              <input type="radio" className="sr-only create-type-radio"
+                value="attachment"
+                checked={type === "attachment"}
+                onChange={handleTypeChange}/>
+              <Icon name="attachment" title="Attachment" className="create-option-type-icon"/>
+            </label>
+          </li>
+        </ul>
+        {type === "text" && <TextSizeSelect
+          textSize={textSize}
+          handleChange={event => handleChange(event, "front", "textSize")}/>}
+      </div>
+      {type === "text" ? (
+        <div className="create-side-content ab">
+          <textarea className="input create-side-text-input"
+            value={text}
+            style={{ fontSize: `${textSize}px` }}
+            onChange={event => handleChange(event, "front", "text")}></textarea>
         </div>
-        <div className="create-side-content">
-          {attachment && (
+      ) : (
+        <div className="create-side-content ab">
+          {attachment ? (
             <>
               {renderAttachment()}
               <input type="text"
@@ -74,14 +91,11 @@ export default function CreateCardFront({ index, side, handleChange }) {
                 defaultValue={attachment.description}
                 onChange={updateAttachmentDescription}/>
             </>
+          ) : (
+            <UploadPanel addAttachment={addAttachment}/>
           )}
-          <textarea className="input create-side-text-input"
-            value={text}
-            style={{ fontSize: `${textSize}px` }}
-            onChange={event => handleChange(event, "front", "text")}></textarea>
         </div>
-      </div>
-      {uploadPanelVisible && <UploadPanel hide={hideUploadPanel} addAttachment={addAttachment}/>}
-    </>
+      )}
+    </div>
   );
 }

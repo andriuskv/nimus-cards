@@ -169,8 +169,7 @@ export default function CreateCardBack({ index }) {
   }
 
   return (
-    <div>
-      <div className="deck-form-field-title">BACK</div>
+    <div className="create-card-side">
       <div className="create-side-toolbar">
         <ul className="create-side-types" onChange={handleTypeChange}>
           <li className="create-side-type">
