@@ -31,12 +31,16 @@ function reducer(state, action) {
       delete action.card.visible;
       delete action.card.back.typeOptions;
       return { ...state, cards: [...state.cards] };
+    case "SELECT_CARD":
+      state.selectedCardIndex = action.index;
+      return { ...state };
     case "INSERT_CARD":
+      state.selectedCardIndex = action.index;
       state.cards.splice(action.index, 0, action.card);
       return { ...state, cards: [...state.cards] };
     case "SWAP_CARD":
-      [state.cards[action.index], state.cards[action.index + action.direction]] =
-      [state.cards[action.index + action.direction], state.cards[action.index]];
+      [state.cards[action.index], state.cards[action.targetIndex]] =
+      [state.cards[action.targetIndex], state.cards[action.index]];
       return { ...state, cards: [...state.cards] };
     case "REMOVE_CARD":
       state.cards.splice(action.index, 1);

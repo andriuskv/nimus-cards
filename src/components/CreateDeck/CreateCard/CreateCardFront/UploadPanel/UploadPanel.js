@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import "./upload-panel.scss";
-import Modal from "../../../../Modal";
 import Icon from "../../../../Icon";
 
-export default function UploadPanel({ hide, addAttachment }) {
+export default function UploadPanel({ addAttachment }) {
   const [message, setMessage] = useState("");
-  const [visibleType, setVisibleType] = useState("");
+  const [visibleType, setVisibleType] = useState("image");
 
   function showMessage(message) {
     setMessage(message);
@@ -107,8 +106,7 @@ export default function UploadPanel({ hide, addAttachment }) {
   }
 
   return (
-    <Modal className="upload-panel" hide={hide}>
-      <h3 className="modal-title">Add Attachment</h3>
+    <div className="upload-panel">
       {renderTypeSelection()}
       {visibleType && (
         <>
@@ -129,10 +127,9 @@ export default function UploadPanel({ hide, addAttachment }) {
           </div>
           <div className="upload-panel-footer">
             {message && <div className="upload-panel-message">{message}</div>}
-            <button type="button" className="btn btn-text" onClick={hide}>Cancel</button>
           </div>
         </>
       )}
-    </Modal>
+    </div>
   );
 }

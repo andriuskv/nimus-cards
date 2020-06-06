@@ -1,16 +1,16 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./create-deck.scss";
 import cloneDeep from "lodash.clonedeep";
 import { getRandomString, setDocumentTitle, shuffleArray } from "../../helpers";
 import { useStore, CreateDeckProvider } from "../../context/CreateDeckContext";
 import { fetchDeck, saveDeck } from "../../services/db";
+import Icon from "../Icon";
 import Card from "./CreateCard";
 
 function CreateDeck(props) {
   const { state, dispatch } = useStore();
   const [formMessage, setFormMessage] = useState("");
   const [pendingCards, setPendingCards] = useState([]);
-  const newCardBtnRef = useRef();
   let messageTimeout = 0;
   let undoTimeout = 0;
 
@@ -24,6 +24,7 @@ function CreateDeck(props) {
     else if (id) {
       fetchDeck(id).then(deck => {
         if (deck) {
+          deck.selectedCardIndex = 0;
           deck.cards = deck.cards.map(card => {
             card.back = {
               ...getNewCard().back,
@@ -70,6 +71,7 @@ function CreateDeck(props) {
       id: getRandomString(),
       title: "",
       description: "",
+      selectedCardIndex: 0,
       cards: [getNewCard(), getNewCard()]
     };
   }
@@ -129,9 +131,6 @@ function CreateDeck(props) {
       card.back.exactOptions.caseSensitive = lastCard.back.exactOptions.caseSensitive;
     }
     dispatch({ type: "ADD_CARD", card });
-    requestAnimationFrame(() => {
-      newCardBtnRef.current.scrollIntoView();
-    });
   }
 
   function previewCard(card) {
@@ -162,7 +161,9 @@ function CreateDeck(props) {
   }
 
   function swapCard(index, direction) {
-    dispatch({ type: "SWAP_CARD", index, direction });
+    const targetIndex = index + direction;
+
+    dispatch({ type: "SWAP_CARD", index, targetIndex });
   }
 
   function removeCard(index) {
@@ -239,6 +240,12 @@ function CreateDeck(props) {
     dispatch({ type: "UPDATE_DECK", name, value });
   }
 
+  function selectCard(index) {
+    if (index !== state.selectedCardIndex) {
+      dispatch({ type: "SELECT_CARD", index });
+    }
+  }
+
   function cleanupCards(cards) {
     return cards.map(card => {
       const back = {
@@ -284,33 +291,40 @@ function CreateDeck(props) {
   if (!state) {
     return null;
   }
-
   return (
     <>
-      <div className="deck-form-field-group create-input-group">
-        <label className="deck-form-title-input-container">
-          <div className="deck-form-field-title">TITLE</div>
-          <input className="input create-title-input"
-            name="title"
-            value={state.title}
-            onChange={handleChange}/>
-        </label>
-        <label className="deck-form-desc-input-container">
-          <div className="deck-form-field-title">DESCRIPTION (OPTIONAL)</div>
-          <textarea className="input create-description-input"
-            name="description"
-            value={state.description}
-            onChange={handleChange}></textarea>
-        </label>
-      </div>
-      <ul>{state.cards.map((card, index) => (
-        <Card key={card.id} index={index} card={card}
-          length={state.cards.length}
-          previewCard={previewCard}
-          cloneCard={cloneCard}
-          swapCard={swapCard}
-          removeCard={removeCard}/>
-      ))}</ul>
+      <label className="deck-form-field">
+        <div className="deck-form-field-title">TITLE</div>
+        <input className="input deck-form-field-input"
+          name="title"
+          value={state.title}
+          onChange={handleChange}/>
+      </label>
+      <label className="deck-form-field">
+        <div className="deck-form-field-title">DESCRIPTION</div>
+        <input className="input deck-form-field-input"
+          name="description"
+          value={state.description}
+          onChange={handleChange}/>
+      </label>
+      <ul className="create-card-select">
+        {state.cards.map((_, index) => (
+          <li className="create-card-select-item" key={index}>
+            <button className={`btn btn-text create-card-select-btn${index === state.selectedCardIndex ? " active": ""}`} onClick={() => selectCard(index)}>{index + 1}</button>
+          </li>
+        ))}
+        <li className="create-card-select-item">
+          <button onClick={addCard} className="btn btn-icon create-card-select-btn create-card-add-btn" title="Add Card">
+            <Icon name="plus"/>
+          </button>
+        </li>
+      </ul>
+      <Card index={state.selectedCardIndex} card={state.cards[state.selectedCardIndex]}
+        length={state.cards.length}
+        previewCard={previewCard}
+        cloneCard={cloneCard}
+        swapCard={swapCard}
+        removeCard={removeCard}/>
       {pendingCards.length > 0 && (
         <div className="deck-form-dialog">
           <span>Removed {pendingCards.length} card{pendingCards.length > 1 ? "s" : ""}</span>
@@ -318,7 +332,6 @@ function CreateDeck(props) {
         </div>
       )}
       <div className="create-footer">
-        <button className="btn" onClick={addCard} ref={newCardBtnRef}>New Card</button>
         {formMessage && <span className="create-message">{formMessage}</span>}
         <button className="btn" onClick={handleSubmit}>Create</button>
       </div>

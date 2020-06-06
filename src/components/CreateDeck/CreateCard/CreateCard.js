@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import "./create-card.scss";
 import { useStore } from "../../../context/CreateDeckContext";
 import Icon from "../../Icon";
 import CardFront from "./CreateCardFront";
@@ -8,11 +9,6 @@ import CreateCardPreview from "./CreateCardPreview";
 
 export default function CreateCard({ index, card, length, previewCard, cloneCard, swapCard, removeCard }) {
   const { state, dispatch } = useStore();
-  const [notesVisible, setNotesVisibility] = useState(card.notes && !!card.notes.value);
-
-  function toggleNotes() {
-    setNotesVisibility(!notesVisible);
-  }
 
   function handleChange({ target }, name, key) {
     const { value } = target;
@@ -33,29 +29,19 @@ export default function CreateCard({ index, card, length, previewCard, cloneCard
   }
 
   return (
-    <li className="create-list-item">
-      <div className="create-card-left">
-        {index > 0 && (
-          <button className="btn btn-icon" onClick={() => swapCard(index, -1)} title="Move card up">
-            <Icon name="chevron-up"/>
+    <div className="create-card">
+      <div className="create-card-header">
+        <div className="create-card-header-a">
+          <button className="btn btn-icon" onClick={() => swapCard(index, -1)}
+            title="Swap with the left card" disabled={index === 0}>
+            <Icon name="chevron-left"/>
           </button>
-        )}
-        <div className="create-card-index">{index + 1}</div>
-        {index < length - 1 && (
-          <button className="btn btn-icon" onClick={() => swapCard(index, 1)} title="Move card down">
-            <Icon name="chevron-down"/>
+          <div className="create-card-index">{index + 1}</div>
+          <button className="btn btn-icon" onClick={() => swapCard(index, 1)}
+            title="Swap with the right card" disabled={index === length - 1}>
+            <Icon name="chevron-right"/>
           </button>
-        )}
-      </div>
-      <div className="deck-form-field-group create-card">
-        <CardFront index={index} side={card.front} handleChange={handleChange}/>
-        <CardBack index={index}/>
-        {notesVisible && <CardNotes value={card.notes.value} handleChange={handleChange}/>}
-      </div>
-      <div className="create-card-btns">
-        <button className="btn btn-icon" title="Toggle notes" onClick={toggleNotes}>
-          <Icon name="notes"/>
-        </button>
+        </div>
         <div className="create-card-preview-btn-container">
           <button className="btn btn-icon" title="Preview card" onClick={() => previewCard(card)}>
             <Icon name="preview"/>
@@ -71,7 +57,12 @@ export default function CreateCard({ index, card, length, previewCard, cloneCard
           </button>
         )}
       </div>
+      <div className="create-card-main">
+        <CardFront index={index} side={card.front} handleChange={handleChange}/>
+        <CardBack index={index}/>
+      </div>
+      <CardNotes value={card.notes.value} handleChange={handleChange}/>
       {card.visible && <CreateCardPreview card={card} hide={hidePreview}/>}
-    </li>
+    </div>
   );
 }
