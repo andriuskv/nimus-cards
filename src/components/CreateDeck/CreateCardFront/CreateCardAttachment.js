@@ -1,6 +1,7 @@
 import React from "react";
 
-export default function Attachment({ blob, url, type }) {
+export default React.memo(({ attachment }) => {
+  const { blob, url, type } = attachment;
   const src = blob ? URL.createObjectURL(blob) : url;
 
   if (type === "image") {
@@ -13,4 +14,4 @@ export default function Attachment({ blob, url, type }) {
     return <video src={src} className="create-side-video" crossOrigin="anonymous" controls></video>;
   }
   return null;
-}
+});

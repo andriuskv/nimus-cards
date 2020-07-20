@@ -1,67 +1,70 @@
-@import "../../../../scss/mixins.scss";
-@import "../../../../scss/variables.scss";
+@import "../../../../styles/mixins.scss";
+
+.study-front-content {
+  .study-image-btn, .study-audio-btn, .study-video-btn {
+    margin-bottom: var(--space-xl);
+  }
+}
+
+.study-image-btn, .study-video-btn {
+  overflow: hidden;
+  padding: 0;
+  border-radius: 8px;
+  transition: none;
+}
 
 .study-image-btn {
-  overflow: hidden;
-  margin: 0 auto 16px auto;
-  border-radius: 4px;
-  box-shadow: $box-shadow;
-  transition: none;
   cursor: zoom-in;
 }
 
-.study-image {
-  max-width: 408px;
-  max-height: 320px;
+.study-image, .study-video {
+  max-width: 100%;
+  max-height: 280px;
+
+  @include breakpoint-smallest {
+    // Capitalize function name to call native css function instead of scss.
+    max-height: Min(280px, 25vh);
+  }
 }
 
 .study-audio-btn {
-  margin: 0 auto 16px auto;
-  padding: 16px;
+  padding: var(--space-xxl);
   border-radius: 50%;
 }
 
-.study-video-btn {
-  overflow: hidden;
-  margin: 0 auto 16px auto;
-  border-radius: 4px;
-  box-shadow: $box-shadow;
-  transition: none;
+.study-audio-btn-icon {
+    width: 32px;
+    height: 32px;
 }
 
 .study-video {
   pointer-events: none;
-  max-height: 320px;
 }
 
 .study-front-text {
-  display: flex;
-  justify-content: center;
-  max-width: 620px;
-  min-height: 100px;
-  margin: 0 auto 16px auto;
+  max-width: var(--max-content-width);
   text-align: center;
-  line-height: 1.25;
+  font-weight: bold;
 }
 
-.study-expaned-image-mask {
+.study-expanded-image-mask {
   z-index: 2;
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--color-grey-90-60);
 }
 
-.study-expaned-image {
+.study-expanded-image {
   position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: calc(100% - 64px);
   max-height: calc(100% - 64px);
-  border-radius: 4px;
+  border-radius: 8px;
 
   @include breakpoint-smallest {
     max-width: calc(100% - 16px);

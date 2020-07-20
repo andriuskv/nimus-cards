@@ -2,6 +2,7 @@ const path = require("path");
 const { DefinePlugin } = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const workboxPlugin = require("workbox-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
@@ -15,7 +16,8 @@ module.exports = function(env = {}) {
       }
     }),
     new MiniCssExtractPlugin({
-      filename: "main.css"
+      filename: "main.css",
+      ignoreOrder: true
     }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
@@ -61,14 +63,19 @@ module.exports = function(env = {}) {
             comments: false
           }
         }
-      })]
+      }), new OptimizeCSSAssetsPlugin({})]
     },
     module: {
       rules: [
         {
           test: /\.s?css$/,
           use: [
-            MiniCssExtractPlugin.loader,
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                esModule: true
+              }
+            },
             {
               loader: "css-loader",
               options: {
@@ -81,15 +88,10 @@ module.exports = function(env = {}) {
               options: {
                 sourceMap: !env.prod,
                 plugins() {
-                  const plugins = [
+                  return [
                     require("autoprefixer")(),
                     require("css-mqpacker")()
                   ];
-
-                  if (env.prod) {
-                    plugins.push(require("cssnano")());
-                  }
-                  return plugins;
                 }
               }
             },

@@ -2,28 +2,29 @@ import React, { useEffect, useState } from "react";
 import "./create-deck.scss";
 import cloneDeep from "lodash.clonedeep";
 import { getRandomString, setDocumentTitle, shuffleArray } from "../../helpers";
-import { useStore, CreateDeckProvider } from "../../context/CreateDeckContext";
 import { fetchDeck, saveDeck } from "../../services/db";
 import Icon from "../Icon";
-import Card from "./CreateCard";
+import CardFront from "./CreateCardFront";
+import CardBack from "./CreateCardBack";
+import CardNotes from "./CardNotes";
+import CreateCardPreview from "./CreateCardPreview";
 
-function CreateDeck(props) {
-  const { state, dispatch } = useStore();
-  const [formMessage, setFormMessage] = useState("");
+export default function CreateDeck(props) {
+  const [state, setState] = useState(null);
   const [pendingCards, setPendingCards] = useState([]);
-  let messageTimeout = 0;
   let undoTimeout = 0;
 
   useEffect(() => {
     const { id } = props.match.params;
 
     if (props.match.path === "/decks/create") {
-      dispatch({ type: "RESET_DECK", deck: getInitialDeck() });
+      setState(getInitialDeck());
       setDocumentTitle("Create a new deck");
     }
     else if (id) {
       fetchDeck(id).then(deck => {
         if (deck) {
+          deck.makingEdit = true;
           deck.selectedCardIndex = 0;
           deck.cards = deck.cards.map(card => {
             card.back = {
@@ -35,23 +36,12 @@ function CreateDeck(props) {
             delete card.back.typeOptions;
             return card;
           });
-          dispatch({ type: "RESET_DECK", deck });
+          setState(deck);
           setDocumentTitle(`Editing ${deck.title}`);
         }
       });
     }
   }, []);
-
-  useEffect(() => {
-    clearTimeout(messageTimeout);
-    messageTimeout = setTimeout(() => {
-      setFormMessage("");
-    }, 3200);
-
-    return () => {
-      clearTimeout(messageTimeout);
-    };
-  }, [formMessage]);
 
   useEffect(() => {
     clearTimeout(undoTimeout);
@@ -114,6 +104,12 @@ function CreateDeck(props) {
     };
   }
 
+  function selectCard(index) {
+    if (index !== state.selectedCardIndex) {
+      setState({ ...state, selectedCardIndex: index });
+    }
+  }
+
   function addCard() {
     const lastCard = state.cards[state.cards.length - 1];
     const card = getNewCard();
@@ -130,7 +126,15 @@ function CreateDeck(props) {
     else if (card.back.type === "exact") {
       card.back.exactOptions.caseSensitive = lastCard.back.exactOptions.caseSensitive;
     }
-    dispatch({ type: "ADD_CARD", card });
+    setState({ ...state, cards: [...state.cards, card] });
+  }
+
+  function swapCard(index, direction) {
+    const targetIndex = index + direction;
+    const cards = state.cards;
+    [cards[index], cards[targetIndex]] = [cards[targetIndex], cards[index]];
+
+    setState({ ...state });
   }
 
   function previewCard(card) {
@@ -147,23 +151,25 @@ function CreateDeck(props) {
 
       setTimeout(() => {
         delete card.message;
-        dispatch({ type: "PREVIEW_CARD", card });
+        setState({ ...state });
       }, 2400);
     }
-    dispatch({ type: "PREVIEW_CARD", card });
+    setState({ ...state });
+  }
+
+  function hidePreview(card) {
+    delete card.visible;
+    delete card.back.typeOptions;
+    setState({ ...state });
   }
 
   function cloneCard(index) {
     const cloneCard = cloneDeep(state.cards[index]);
     cloneCard.id = getRandomString();
+    state.selectedCardIndex = index;
 
-    dispatch({ type: "INSERT_CARD", index: index + 1, card: cloneCard });
-  }
-
-  function swapCard(index, direction) {
-    const targetIndex = index + direction;
-
-    dispatch({ type: "SWAP_CARD", index, targetIndex });
+    state.cards.splice(index, 0, cloneCard);
+    setState({ ...state });
   }
 
   function removeCard(index) {
@@ -172,19 +178,83 @@ function CreateDeck(props) {
     if (isFrontValid(card.front) || isBackValid(card.back) || card.notes.value) {
       setPendingCards([...pendingCards, card]);
     }
-    dispatch({ type: "REMOVE_CARD", index });
+    state.selectedCardIndex = index > 0 ? index - 1 : 0;
+    state.cards.splice(index, 1);
+    setState({ ...state });
   }
 
   function undoCardRemoval() {
-    clearTimeout(undoTimeout);
     setPendingCards([]);
-    dispatch({
-      type: "RESET_DECK",
-      deck: {
-        ...state,
-        cards: state.cards.concat(pendingCards)
-      }
+    setState({
+      ...state,
+      cards: state.cards.concat(pendingCards)
     });
+  }
+
+  function handleChange({ target }) {
+    const { name, value } = target;
+    state[name] = value;
+
+    if (name === "title" && state.missingTitle) {
+      delete state.missingTitle;
+    }
+    setState({ ...state });
+  }
+
+  function handleCardFieldChange({ target }, name, key) {
+    const { value } = target;
+    const card = state.cards[state.selectedCardIndex];
+
+    if (value !== card[name][key]) {
+      card[name][key] = value;
+
+      if (name === "front") {
+        card.modified = true;
+
+        if (card.front.error?.textMessage) {
+          delete card.front.error.textMessage;
+        }
+      }
+      setState({ ...state });
+    }
+  }
+
+  function addAttachment(attachment) {
+    const card = state.cards[state.selectedCardIndex];
+    card.modified = true;
+    card.front.attachment = attachment;
+
+    delete card.front.error;
+    setState({ ...state });
+  }
+
+  function removeAttachment() {
+    const card = state.cards[state.selectedCardIndex];
+    card.modified = true;
+
+    delete card.front.attachment;
+    delete card.front.error;
+    setState({ ...state });
+  }
+
+  function updateAttachmentDescription({ target }) {
+    const card = state.cards[state.selectedCardIndex];
+    card.modified = true;
+    card.front.attachment.description = target.value;
+
+    if (card.front.error?.attachmentMessage) {
+      delete card.front.error;
+    }
+    setState({ ...state });
+  }
+
+  function updateCardBack(payload) {
+    const card = state.cards[state.selectedCardIndex];
+    card.modified = true;
+    card.back = { ...card.back, ...payload };
+
+    delete card.back.error;
+    setState({ ...state });
   }
 
   function isFrontValid(side) {
@@ -194,56 +264,30 @@ function CreateDeck(props) {
     return !!side.text;
   }
 
-  function isBackValid(side, checkIfEmpty = false) {
-    if (side.type === "text") {
-      return side.textOptions.value.length > 0;
-    }
-    else if (side.type === "exact") {
-      return side.exactOptions.value.length > 0;
-    }
-    const validOptionCount = side.multiOptions.options.reduce((acc, { value }) => {
+  function validateMultiType(options) {
+    const validOptionCount = options.options.reduce((acc, { value }) => {
       if (value) {
         acc += 1;
       }
       return acc;
     }, 0);
 
-    if (checkIfEmpty) {
-      return validOptionCount > 0;
-    }
-    return validOptionCount > 1 && side.multiOptions.correctId;
+    return {
+      validOptionCount,
+      correctId: options.correctId
+    };
   }
 
-  function validateCards(cards) {
-    let validCardCount = 0;
-
-    for (const { front, back } of cards) {
-      if (isFrontValid(front) && isBackValid(back)) {
-        validCardCount += 1;
-      }
+  function isBackValid(side) {
+    if (side.type === "text") {
+      return side.textOptions.value.length > 0;
     }
-
-    if (validCardCount !== cards.length) {
-      setFormMessage("Please fill in both card sides");
+    else if (side.type === "exact") {
+      return side.exactOptions.value.length > 0;
     }
-    else if (validCardCount < 2) {
-      setFormMessage("Please fill in at least two cards");
-    }
-    else {
-      return true;
-    }
-  }
+    const { validOptionCount, correctId } = validateMultiType(side.multiOptions);
 
-  function handleChange({ target }) {
-    const { name, value } = target;
-
-    dispatch({ type: "UPDATE_DECK", name, value });
-  }
-
-  function selectCard(index) {
-    if (index !== state.selectedCardIndex) {
-      dispatch({ type: "SELECT_CARD", index });
-    }
+    return validOptionCount > 1 && correctId;
   }
 
   function cleanupCards(cards) {
@@ -259,6 +303,8 @@ function CreateDeck(props) {
         delete card.nextReview;
       }
       delete card.modified;
+      delete card.invalid;
+      delete card.valid;
 
       if (back.type === "multi") {
         back.typeOptions.options = card.back.multiOptions.options.filter(({ value }) => value);
@@ -268,81 +314,175 @@ function CreateDeck(props) {
     });
   }
 
-  function filterCards(cards) {
-    return cards.filter(card => isFrontValid(card.front) || isBackValid(card.back, true));
+  function validateCards(cards) {
+    let validCardCount = 0;
+
+    for (const card of cards) {
+      let validSideCount = 0;
+      card.valid = false;
+      card.invalid = false;
+
+      if (!isFrontValid(card.front)) {
+        card.front.error = card.front.error || {};
+        const { text, attachment, error } = card.front;
+
+        if (attachment && !attachment.description) {
+          error.attachmentMessage = "Please provide attachment description.";
+        }
+        else if (!text) {
+          error.textMessage = "Please fill in the text field or provide an attachment.";
+        }
+      }
+      else {
+        validSideCount += 1;
+        delete card.front.error;
+      }
+
+      if (!isBackValid(card.back)) {
+        card.back.error = card.back.error || {};
+        const { type, textOptions, exactOptions, multiOptions, error } = card.back;
+
+        if (type === "text" && !textOptions.value) {
+          error.message = "Please fill in the text field.";
+        }
+        else if (type === "exact" && !exactOptions.value) {
+          error.message = "Please provide an answer.";
+        }
+        else if (type === "multi") {
+          const { validOptionCount, correctId } = validateMultiType(multiOptions);
+
+          if (validOptionCount < 2) {
+            error.message = "Please fill in at least 2 options.";
+          }
+          else if (!correctId) {
+            error.message = "Please select correct option.";
+          }
+        }
+      }
+      else {
+        validSideCount += 1;
+        delete card.back.error;
+      }
+
+      if (validSideCount === 2) {
+        validCardCount += 1;
+        card.valid = true;
+      }
+      else {
+        card.invalid = true;
+      }
+
+    }
+    if (validCardCount < 2) {
+      state.globalMessage = "Please fill in at least 2 cards.";
+    }
+    else {
+      state.globalMessage = "";
+    }
+    return validCardCount === cards.length;
   }
 
   function handleSubmit() {
     if (!state.title) {
-      setFormMessage("Title is required");
-      return;
+      state.missingTitle = true;
     }
-    const cards = filterCards(state.cards);
-    const valid = validateCards(cards);
+    const cardsValid = validateCards(state.cards);
 
-    if (valid) {
-      state.cards = cleanupCards(cards);
-      state.createdAt = state.createdAt || new Date();
+    if (state.title && cardsValid) {
+      state.cards = cleanupCards(state.cards);
+      state.createdAt = state.createdAt || Date.now();
       props.history.push("/decks");
       saveDeck(state);
+    }
+    else {
+      setState({ ...state });
     }
   }
 
   if (!state) {
     return null;
   }
+  const index = state.selectedCardIndex;
+  const length = state.cards.length;
+  const card = state.cards[index];
+
   return (
     <>
-      <label className="deck-form-field">
-        <div className="deck-form-field-title">TITLE</div>
-        <input className="input deck-form-field-input"
-          name="title"
-          value={state.title}
+      <label className="create-field">
+        <div className="create-field-title">Title</div>
+        <input className="input create-field-input"
+          name="title" value={state.title}
           onChange={handleChange}/>
+        {state.missingTitle && <div className="create-field-input-message">Please provide title for your deck.</div>}
       </label>
-      <label className="deck-form-field">
-        <div className="deck-form-field-title">DESCRIPTION</div>
-        <input className="input deck-form-field-input"
-          name="description"
-          value={state.description}
+      <label className="create-field">
+        <div className="create-field-title">Description</div>
+        <input className="input create-field-input"
+          name="description" value={state.description}
           onChange={handleChange}/>
       </label>
       <ul className="create-card-select">
-        {state.cards.map((_, index) => (
+        {state.cards.map((card, index) => (
           <li className="create-card-select-item" key={index}>
-            <button className={`btn btn-text create-card-select-btn${index === state.selectedCardIndex ? " active": ""}`} onClick={() => selectCard(index)}>{index + 1}</button>
+            <button className={`btn btn-text create-card-select-btn${index === state.selectedCardIndex ? " active": ""}${card.invalid ? " invalid": ""}${card.valid ? " valid": ""}`} onClick={() => selectCard(index)}>{index + 1}</button>
           </li>
         ))}
         <li className="create-card-select-item">
-          <button onClick={addCard} className="btn btn-icon create-card-select-btn create-card-add-btn" title="Add Card">
+          <button onClick={addCard} className="btn btn-icon create-card-select-btn" title="Add Card">
             <Icon name="plus"/>
           </button>
         </li>
       </ul>
-      <Card index={state.selectedCardIndex} card={state.cards[state.selectedCardIndex]}
-        length={state.cards.length}
-        previewCard={previewCard}
-        cloneCard={cloneCard}
-        swapCard={swapCard}
-        removeCard={removeCard}/>
+      <div className="create-card">
+        <div className="create-card-header">
+          <div className="create-card-index-container">
+            <button className="btn btn-icon create-card-header-item" onClick={() => swapCard(index, -1)}
+              title="Swap with the left card" disabled={index === 0}>
+              <Icon name="chevron-left"/>
+            </button>
+            <div className="create-card-index">{index + 1}</div>
+            <button className="btn btn-icon create-card-header-item" onClick={() => swapCard(index, 1)}
+              title="Swap with the right card" disabled={index === length - 1}>
+              <Icon name="chevron-right"/>
+            </button>
+          </div>
+          <div className="create-card-preview-btn-container create-card-header-item">
+            <button className="btn btn-icon" title="Preview card" onClick={() => previewCard(card)}>
+              <Icon name="preview"/>
+            </button>
+            {card.message && <p className="create-card-preview-message">{card.message}</p>}
+          </div>
+          <button className="btn btn-icon" title="Clone card" onClick={() => cloneCard(index)}>
+            <Icon name="clone"/>
+          </button>
+          {length > 1 && (
+            <button className="btn btn-icon create-card-remove-card-btn" title="Remove card" onClick={() => removeCard(index)}>
+              <Icon name="remove"/>
+            </button>
+          )}
+        </div>
+        <div className="create-card-main" key={card.id}>
+          <CardFront side={card.front}
+            addAttachment={addAttachment}
+            removeAttachment={removeAttachment}
+            updateAttachmentDescription={updateAttachmentDescription}
+            handleChange={handleCardFieldChange}/>
+          <CardBack side={card.back} updateCardBack={updateCardBack}/>
+        </div>
+        <CardNotes value={card.notes.value} handleChange={handleCardFieldChange}/>
+        {card.visible && <CreateCardPreview card={card} hide={() => hidePreview(card)}/>}
+      </div>
       {pendingCards.length > 0 && (
-        <div className="deck-form-dialog">
+        <div className="create-undo-dialog">
           <span>Removed {pendingCards.length} card{pendingCards.length > 1 ? "s" : ""}</span>
-          <button className="btn btn-text" onClick={undoCardRemoval}>UNDO</button>
+          <button className="btn btn-text create-dialog-undo-btn" onClick={undoCardRemoval}>UNDO</button>
         </div>
       )}
       <div className="create-footer">
-        {formMessage && <span className="create-message">{formMessage}</span>}
-        <button className="btn" onClick={handleSubmit}>Create</button>
+        {state.globalMessage && <span className="create-message">{state.globalMessage}</span>}
+        <button className="btn create-submit-btn" onClick={handleSubmit}>{state.makingEdit ? "Update" : "Create" }</button>
       </div>
     </>
   );
 }
 
-export default function CreateDeckContainer(props) {
-  return (
-    <CreateDeckProvider>
-      <CreateDeck {...props}/>
-    </CreateDeckProvider>
-  );
-}

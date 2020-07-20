@@ -1,26 +1,15 @@
 import React from "react";
-import { getRandomString } from "../../../../helpers";
-import { useStore } from "../../../../context/CreateDeckContext";
-import Icon from "../../../Icon";
+import { getRandomString } from "../../../helpers";
+import Icon from "../../Icon";
 import TextSizeSelect from "../TextSizeSelect";
 
-export default function CreateCardBack({ index }) {
-  const { state, dispatch } = useStore();
-  const { back, id: cardId } = state.cards[index];
-  const { type, textOptions, multiOptions, exactOptions } = back;
-
-  function updateCardBack(payload) {
-    dispatch({
-      type: "UPDATE_CARD_BACK",
-      index,
-      payload
-    });
-  }
+export default function CreateCardBack({ side, updateCardBack }) {
+  const { type, textOptions, multiOptions, exactOptions } = side;
 
   function handleChange({ target }, key) {
     const { value } = target;
 
-    if (value !== back[key]) {
+    if (value !== side[key]) {
       textOptions[key] = value;
       updateCardBack({ textOptions });
     }
@@ -87,17 +76,17 @@ export default function CreateCardBack({ index }) {
   function renderExactAnswerType() {
     return (
       <div onChange={handleInputChange}>
-        <label className="creact-exact-input-container">
-          <div className="creact-exact-input-title">Provide answer:</div>
-          <input type="text" className="input creact-exact-input" name="input"
+        <label className="create-exact-input-container">
+          <div className="create-exact-input-title">Provide an answer:</div>
+          <input type="text" className="input create-exact-input" name="input"
             autoComplete="off"
             defaultValue={exactOptions.value}/>
         </label>
-        <label className="checkbox-container creact-exact-checkbox-container">
+        <label className="checkbox-container create-exact-checkbox-container">
           <input type="checkbox" className="sr-only checkbox-input"
             name="caseSensitive"
             defaultChecked={exactOptions.caseSensitive}/>
-          <div className="checkbox create-checkbox">
+          <div className="checkbox">
             <div className="checkbox-tick"></div>
           </div>
           <span className="checkbox-label">Case sensitive</span>
@@ -114,19 +103,19 @@ export default function CreateCardBack({ index }) {
           <div onInput={changeOptionLayout} className="create-multi-layout-items">
             <label className="create-multi-layout-item">
               <input type="radio" className="sr-only create-type-radio"
-                name={`multi-${cardId}`} value="short"
+                name="multi-select" value="short"
                 defaultChecked={multiOptions.layout === "short"}/>
               <Icon name="grid" className="create-option-type-icon"/>
             </label>
             <label className="create-multi-layout-item">
               <input type="radio" className="sr-only create-type-radio"
-                name={`multi-${cardId}`} value="medium"
+                name="multi-select" value="medium"
                 defaultChecked={multiOptions.layout === "medium"}/>
               <Icon name="list-2-col" className="create-option-type-icon"/>
             </label>
             <label className="create-multi-layout-item">
               <input type="radio" className="sr-only create-type-radio"
-                name={`multi-${cardId}`} value="long"
+                name="multi-select" value="long"
                 defaultChecked={multiOptions.layout === "long"}/>
               <Icon name="menu" className="create-option-type-icon"/>
             </label>
@@ -136,17 +125,16 @@ export default function CreateCardBack({ index }) {
           {multiOptions.options.map(({ id, value }, index) => (
             <li className="create-option" key={id}>
               <label>
-                <input type="radio" className="sr-only radio-input" name={cardId}
+                <input type="radio" className="sr-only radio-input" name="multi-option"
                   checked={multiOptions.correctId === id}
                   onChange={() => markAnswerAsCorrect(id)}/>
-                <div className="radio create-option-radio"
-                  title="Mark answer as correct"></div>
+                <div className="radio" title="Mark answer as correct"></div>
               </label>
               <input type="text" className="input create-option-input" name={index}
                 defaultValue={value} autoComplete="off" onChange={handleOptionTextChange}/>
               <button className="btn btn-icon" title="Remove answer"
                 onClick={() => removeOption(index)}>
-                <Icon name="remove" />
+                <Icon name="remove"/>
               </button>
             </li>
           ))}
@@ -175,7 +163,7 @@ export default function CreateCardBack({ index }) {
           <li className="create-side-type">
             <label>
               <input type="radio" className="sr-only create-type-radio"
-                name={`type-${cardId}`} value="text"
+                name="type-select" value="text"
                 defaultChecked={type === "text"}/>
               <Icon name="text" title="Text" className="create-option-type-icon"/>
             </label>
@@ -183,7 +171,7 @@ export default function CreateCardBack({ index }) {
           <li className="create-side-type">
             <label>
               <input type="radio" className="sr-only create-type-radio"
-                name={`type-${cardId}`} value="multi"
+                name="type-select" value="multi"
                 defaultChecked={type === "multi"}/>
               <Icon name="list-checkbox" title="Multiple choice" className="create-option-type-icon"/>
             </label>
@@ -191,7 +179,7 @@ export default function CreateCardBack({ index }) {
           <li className="create-side-type">
             <label>
               <input type="radio" className="sr-only create-type-radio"
-                name={`type-${cardId}`} value="exact"
+                name="type-select" value="exact"
                 defaultChecked={type === "exact"}/>
               <Icon name="text-short" title="Exact answer" className="create-option-type-icon"/>
             </label>
@@ -210,6 +198,7 @@ export default function CreateCardBack({ index }) {
       </div>
       <div className="create-side-content">
         {renderAnswerType(type)}
+        {side.errors?.message && <div className="create-side-message">{side.errors.message}</div>}
       </div>
     </div>
   );

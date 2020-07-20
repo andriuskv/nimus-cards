@@ -45,7 +45,7 @@ export default function StudyCardBack({ card, selectOption, handleSubmit }) {
           `${revealed ? "revealed" : ""}`
         )}>
         {typeOptions.options.map(({ id, value }, index) => (
-          <li key={index}>
+          <li key={id + index}>
             <button onClick={() => selectOption(id)}
               className={classNames(
                 "btn study-multi-item",

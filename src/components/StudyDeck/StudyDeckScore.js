@@ -24,38 +24,38 @@ export default function StudyDeckScore({ score, deck, startTime, ids }) {
 
   return (
     <>
-      <div className="deck-score-container">
-        <h3 className="deck-score-title">Session Results</h3>
-        <div className="deck-score-stats">
-          <span className="deck-score-accuracy-name">Accuracy</span>
-          <span className="deck-score-accuracy-value">{Math.round(score.right / score.total * 100)}%</span>
-          <div className="deck-score-time">
+      <div className="study-score-container">
+        <h3 className="study-score-title">Session Results</h3>
+        <div className="study-score-stats">
+          <span className="study-score-accuracy-name">Accuracy</span>
+          <span className="study-score-accuracy-value">{Math.round(score.right / score.total * 100)}%</span>
+          <div className="study-score-time">
             <Icon name="clock"/>
-            <span className="deck-score-time-value">{showSessionTime()}</span>
+            <span className="study-score-time-value">{showSessionTime()}</span>
           </div>
         </div>
-        <div className="deck-score-bars">
+        <div className="study-score-bars">
           <StudyScoreBar score={score} name="wrong"/>
           <StudyScoreBar score={score} name="right"/>
         </div>
-        <div className="deck-score-btn-container">
+        <div className="study-score-btn-container">
           {hasCardsToLearn ? (
             <Link to={{
-              pathname: `/decks/${deck.id}/pearn`,
+              pathname: `/decks/${deck.id}/learn`,
               search: "?reload=1"
-            }} className="btn btn-text deck-score-btn">Learn</Link>
-          ) : <span className="btn btn-text deck-score-btn disabled">Learn</span>}
+            }} className="btn btn-text study-score-btn">Learn</Link>
+          ) : <span className="btn btn-text study-score-btn disabled">Learn</span>}
           {hasCardsToReview ? (
             <Link to={{
               pathname: `/decks/${deck.id}/review`,
               search: "?reload=1"
-            }} className="btn btn-text deck-score-btn">Review</Link>
-          ) : <span className="btn btn-text deck-score-btn disabled">Review</span>}
+            }} className="btn btn-text study-score-btn">Review</Link>
+          ) : <span className="btn btn-text study-score-btn disabled">Review</span>}
           <Link to={{
             pathname: `/decks/${deck.id}/practice`,
             search: "?reload=1"
-          }} className="btn btn-text deck-score-btn">Practice</Link>
-          <Link to="/decks" className="btn btn-text deck-score-btn">Close</Link>
+          }} className="btn btn-text study-score-btn">Practice</Link>
+          <Link to="/decks" className="btn btn-text study-score-btn">Close</Link>
         </div>
       </div>
       <ul className="study-session-stats">

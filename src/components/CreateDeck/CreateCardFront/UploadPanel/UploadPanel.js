@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./upload-panel.scss";
-import Icon from "../../../../Icon";
+import Icon from "../../../Icon";
 
 export default function UploadPanel({ addAttachment }) {
   const [message, setMessage] = useState("");
@@ -26,7 +26,7 @@ export default function UploadPanel({ addAttachment }) {
       });
       return;
     }
-    showMessage(`File is not an ${visibleType}`);
+    showMessage(`Selected file is not ${visibleType[0] === "v" ? "a" : "an"} ${visibleType} file.`);
   }
 
   function handleFileUploadFormURL(event) {
@@ -35,7 +35,7 @@ export default function UploadPanel({ addAttachment }) {
     event.preventDefault();
 
     if (!url) {
-      showMessage(`Please specify valid url`);
+      showMessage(`Please specify valid url.`);
       return;
     }
 
@@ -50,7 +50,7 @@ export default function UploadPanel({ addAttachment }) {
       };
 
       image.onerror = event => {
-        showMessage(`URL doesn't contain ${visibleType} file`);
+        showInvalidFileMessage();
         console.log(event);
       };
 
@@ -67,7 +67,7 @@ export default function UploadPanel({ addAttachment }) {
       };
 
       audio.onerror = event => {
-        showMessage(`URL doesn't contain ${visibleType} file`);
+        showInvalidFileMessage();
         console.log(event);
       };
     }
@@ -83,7 +83,7 @@ export default function UploadPanel({ addAttachment }) {
       };
 
       video.onerror = event => {
-        showMessage(`URL doesn't contain ${visibleType} file`);
+        showInvalidFileMessage();
         console.log(event);
       };
 
@@ -91,11 +91,15 @@ export default function UploadPanel({ addAttachment }) {
     }
   }
 
+  function showInvalidFileMessage() {
+    showMessage(`URL does not contain valid ${visibleType} file.`);
+  }
+
   function renderTypeSelection() {
     return (
       <div className="upload-type-selection">
         {["image", "audio", "video"].map((type, index) => (
-          <button className={`btn btn-icon upload-type-selection-btn${visibleType === type ? " active" : ""}`}
+          <button className={`btn btn-icon-text upload-type-selection-btn${visibleType === type ? " active" : ""}`}
             onClick={() => setVisibleType(type)} key={index}>
             <Icon name={`${type}-file`}/>
             <span>{type}</span>
@@ -108,28 +112,18 @@ export default function UploadPanel({ addAttachment }) {
   return (
     <div className="upload-panel">
       {renderTypeSelection()}
-      {visibleType && (
-        <>
-          <div className="upload-panel-device-target">
-            <div className="upload-panel-device-target-title">Select {visibleType} file from device</div>
-            <label className="btn upload-panel-import-input-container">
-              <span>Select File</span>
-              <input type="file" className="sr-only" onChange={handleFileUpload} />
-            </label>
-          </div>
-          <div className="upload-panel-item-separator">Or</div>
-          <div className="upload-panel-url-target">
-            <div className="upload-panel-url-target-title">Upload {visibleType} file from URL</div>
-            <form onSubmit={handleFileUploadFormURL} className="upload-panel-form">
-              <input type="text" name="url" className="input upload-panel-url-target-input" />
-              <button className="btn">Upload</button>
-            </form>
-          </div>
-          <div className="upload-panel-footer">
-            {message && <div className="upload-panel-message">{message}</div>}
-          </div>
-        </>
-      )}
+      <div className="upload-panel-content">
+        <label className="btn upload-panel-import-input-container">
+          <span>Select File</span>
+          <input type="file" className="sr-only" onChange={handleFileUpload}/>
+        </label>
+        <div className="upload-panel-item-separator">OR</div>
+        {message && <div className="upload-panel-message">{message}</div>}
+        <form onSubmit={handleFileUploadFormURL} className="upload-panel-form">
+          <input type="text" name="url" className="input upload-panel-form-input" placeholder="Enter URL..."/>
+          <button className="btn upload-panel-form-btn">Upload</button>
+        </form>
+      </div>
     </div>
   );
 }

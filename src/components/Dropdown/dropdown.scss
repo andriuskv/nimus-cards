@@ -1,5 +1,3 @@
-@import "../../scss/variables.scss";
-
 .dropdown-container {
   position: relative;
 }
@@ -8,15 +6,22 @@
   z-index: 1;
   position: absolute;
   right: 0;
-  min-width: 120px;
-  padding: 8px 8px 0 8px;
-  border-radius: 2px;
-  background-color: $background-color-dark;
-  box-shadow: $box-shadow;
+  min-width: 140px;
+  padding: var(--space-md) 0;
+  border-radius: 8px;
+  background-color: var(--color-grey-60);
+  box-shadow: 0 1px 4px 0 var(--color-black-10);
+  transform: translateY(4px);
 }
 
 .dropdown-btn {
+  --color: var(--color-white);
+
   justify-content: flex-start;
   width: 100%;
-  margin-bottom: 8px;
+  border-radius: 0;
+
+  &:hover, &.focus-visible {
+    --background-color: var(--color-grey-40);
+  }
 }

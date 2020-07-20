@@ -6,6 +6,7 @@ import CardBack from "./StudyCardBack";
 export default function StudyCard({ card, selectOption, revealAnswer, nextStep, skipNextStepTimeout }) {
   function handleExactTypeFormSubmit(event) {
     event.preventDefault();
+    event.persist();
 
     if (card.revealed) {
       return;
@@ -20,37 +21,41 @@ export default function StudyCard({ card, selectOption, revealAnswer, nextStep, 
       isCorrect = answer.toLowerCase() === card.back.typeOptions.value.toLowerCase();
     }
     nextStep(isCorrect);
+
+    setTimeout(() => {
+      event.target.reset();
+    }, 1600);
   }
 
   if (card.back.type === "text" && !card.revealed) {
     return (
-      <div className="study-card study-card-text">
-        <CardFront id={card.id} attachementId={card.attachementId} side={card.front}/>
-        <button className="btn study-card-text-btn study-card-text-reveal-btn"
+      <div className="study-card">
+        <CardFront id={card.id} attachmentId={card.attachmentId} side={card.front}/>
+        <button className="btn btn-invert study-card-text-btn"
           onClick={revealAnswer}>Check</button>
       </div>
     );
   }
   return (
-    <div className={`study-card study-card-${card.back.type}`}>
-      <CardFront id={card.id} attachementId={card.attachementId} side={card.front}/>
+    <div className="study-card">
+      <CardFront id={card.id} attachmentId={card.attachmentId} side={card.front}/>
       <CardBack card={card} selectOption={selectOption} handleSubmit={handleExactTypeFormSubmit}/>
-      {card.back.type === "text" && card.revealed && !card.timerReveal && (
-        <div className="study-card-text-btns">
-          {card.finished ? (
-            <button className="btn study-card-text-btn"
+      {card.back.type === "text" && card.revealed && (
+        <>
+          {card.finished || card.timerReveal ? (
+            <button className="btn btn-invert study-card-text-btn"
               onClick={skipNextStepTimeout}>Next</button>
           ) : (
-            <>
-              <button className="btn btn-danger study-card-text-btn"
+            <div>
+              <button className="btn btn-negative study-card-text-btn"
                 disabled={card.finished}
                 onClick={() => nextStep(false)}>I Was Wrong</button>
-              <button className="btn btn-success study-card-text-btn"
+              <button className="btn btn-positive study-card-text-btn"
                 disabled={card.finished}
                 onClick={() => nextStep(true)}>I Got It Right</button>
-            </>
+            </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );

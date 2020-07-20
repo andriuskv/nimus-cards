@@ -1,7 +1,7 @@
 import "focus-visible";
 
 import "normalize.css";
-import "./scss/base.scss";
+import "./styles/base.scss";
 
 import React, { lazy, Suspense } from "react";
 import { render } from "react-dom";
@@ -21,7 +21,7 @@ const DeckStatus = lazy(() => import("./components/DeckStatus"));
 render(
   <HashRouter>
     <Header/>
-    <main className="main">
+    <main className="container">
       <Suspense fallback={<div></div>}>
         <Switch>
           <Route path="/" exact component={Home}/>

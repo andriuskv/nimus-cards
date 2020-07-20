@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import "./study-card-front.scss";
 import Icon from "../../../Icon";
 
-export default function StudyCardFront({ id, attachementId, side }) {
+export default function StudyCardFront({ id, attachmentId, side }) {
   const [attachment, setAttachment] = useState(null);
   const [imageExpanded, expandImage] = useState(false);
   const audioElementRef = useRef(null);
@@ -19,7 +19,7 @@ export default function StudyCardFront({ id, attachementId, side }) {
 
       setAttachment({
         src,
-        attachementId,
+        attachmentId,
         mediaType: type
       });
     }
@@ -32,7 +32,7 @@ export default function StudyCardFront({ id, attachementId, side }) {
         URL.revokeObjectURL(src);
       }
     };
-  }, [id, attachementId]);
+  }, [id, attachmentId]);
 
   function handleAudio() {
     audioElementRef.current.currentTime = 0;
@@ -45,7 +45,7 @@ export default function StudyCardFront({ id, attachementId, side }) {
   }
 
   function renderAttachment() {
-    const { mediaType, src, attachementId } = attachment;
+    const { mediaType, src, attachmentId } = attachment;
 
     if (mediaType === "image") {
       return (
@@ -57,15 +57,15 @@ export default function StudyCardFront({ id, attachementId, side }) {
     else if (mediaType === "audio") {
       return (
         <button className="btn study-audio-btn" onClick={handleAudio}>
-          <Icon name="volume"/>
-          <audio src={src} ref={audioElementRef} key={attachementId} autoPlay></audio>
+          <Icon name="volume" className="study-audio-btn-icon"/>
+          <audio src={src} ref={audioElementRef} key={attachmentId} autoPlay></audio>
         </button>
       );
     }
     else if (mediaType === "video") {
       return (
         <button className="btn btn-icon study-video-btn" onClick={handleVideo}>
-          <video src={src} className="study-video" crossOrigin="anonymous" ref={videoElementRef} key={attachementId} autoPlay></video>
+          <video src={src} className="study-video" crossOrigin="anonymous" ref={videoElementRef} key={attachmentId} autoPlay></video>
         </button>
       );
     }
@@ -80,15 +80,34 @@ export default function StudyCardFront({ id, attachementId, side }) {
     expandImage(false);
   }
 
+  function renderText() {
+    return <div className="study-front-text" style={{ fontSize: `${side.textSize}px` }}>{side.text}</div>;
+  }
+
+  function renderContent() {
+    if (side.text && attachment) {
+      return (
+        <div className="study-front-content">
+          {renderAttachment()}
+          {renderText()}
+        </div>
+      );
+    }
+    else if (side.text) {
+      return renderText();
+    }
+    else if (attachment) {
+      return renderAttachment();
+    }
+    return null;
+  }
+
   return (
     <>
-      {attachment && renderAttachment()}
-      {side.text && (
-        <div className="study-front-text" style={{ fontSize: `${side.textSize}px` }}>{side.text}</div>
-      )}
+      {renderContent()}
       {imageExpanded && (
-        <div className="study-expaned-image-mask" onClick={hideImage}>
-          <img src={attachment.src} className="study-expaned-image" alt=""/>
+        <div className="study-expanded-image-mask" onClick={hideImage}>
+          <img src={attachment.src} className="study-expanded-image" alt=""/>
         </div>
       )}
     </>

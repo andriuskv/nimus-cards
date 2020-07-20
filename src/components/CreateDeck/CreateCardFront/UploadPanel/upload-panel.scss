@@ -1,0 +1,89 @@
+@import "../../../../styles/mixins.scss";
+
+.upload-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--space-xl) var(--space-md);
+}
+
+.upload-type-selection {
+  display: flex;
+}
+
+.upload-type-selection-btn {
+  flex: 1;
+  text-transform: capitalize;
+
+  &:not(:last-of-type) {
+    margin-right: var(--space-md);
+  }
+
+  &.active {
+    --background-color: var(--color-grey-40);
+    --color: var(--color-white);
+  }
+
+  @include breakpoint-smallest {
+    padding: var(--space-sm) var(--space-lg);
+  }
+}
+
+
+.upload-panel-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+.upload-panel-import-input-container:focus-within {
+  --background-color: var(--color-grey-40);
+
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+.upload-panel-item-separator {
+  margin-top: var(--space-xxl);
+  margin-bottom: var(--space-xxl);
+  font-weight: bold;
+  text-align: center;
+}
+
+.upload-panel-form {
+  overflow: hidden;
+  display: flex;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.upload-panel-form-input, .upload-panel-form-btn {
+  border: 1px solid transparent;
+
+  &.focus-visible {
+    box-shadow: none;
+    border: 1px solid var(--color-accent);
+  }
+}
+
+.upload-panel-form-input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 1px solid var(--color-grey-70);
+}
+
+.upload-panel-form-btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+.upload-panel-message {
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  border-radius: 8px;
+  background-color: var(--color-negative-50);
+  font-size: var(--text-sm);
+  font-weight: bold;
+}

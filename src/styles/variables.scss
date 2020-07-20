@@ -1,0 +1,60 @@
+@import "mixins";
+
+:root {
+  --header-height: 56px;
+
+  --space-unit: 8px;
+  --space-xs: calc(0.25 * var(--space-unit));
+  --space-sm: calc(0.5 * var(--space-unit));
+  --space-md: calc(1 * var(--space-unit));
+  --space-lg: calc(1.5 * var(--space-unit));
+  --space-xl: calc(2 * var(--space-unit));
+  --space-xxl: calc(3 * var(--space-unit));
+  --space-xxxl: calc(4 * var(--space-unit));
+  --space-xxxxl: calc(8 * var(--space-unit));
+
+  --text-base-size: 1rem;
+  --text-xxs: calc(0.75 * var(--text-base-size));
+  --text-xs: calc(0.8125 * var(--text-base-size));
+  --text-sm: calc(0.875 * var(--text-base-size));
+  --text-md: calc(1 * var(--text-base-size));
+  --text-lg: calc(1.125 * var(--text-base-size));
+  --text-xl: calc(1.375 * var(--text-base-size));
+  --text-xxl: calc(1.75 * var(--text-base-size));
+  --text-xxxl: calc(2.5 * var(--text-base-size));
+
+  --color-primary-50: hsl(34, 80%, 52%);
+  --color-primary-40: hsl(34, 72%, 64%);
+
+  --color-accent: hsl(205, 69%, 49%);
+
+  --color-white: hsl(228, 5%, 92%);
+
+  --color-grey-10: hsl(228, 8%, 72%);
+  --color-grey-20: hsl(222, 7%, 65%);
+  --color-grey-30: hsl(224, 6%, 46%);
+  --color-grey-40: hsl(218, 12%, 35%);
+  --color-grey-50: hsl(218, 12%, 31%);
+  --color-grey-60: hsl(218, 13%, 27%);
+  --color-grey-70: hsl(218, 13%, 23%);
+  --color-grey-80: hsl(215, 13%, 20%);
+  --color-grey-90: hsl(218, 14%, 18%);
+
+  --color-grey-90-60: hsla(218, 14%, 18%, 0.6);
+
+  --color-black-10: hsla(0, 0%, 0%, 0.1);
+
+  --color-negative-30: hsl(4, 78%, 68%);
+  --color-negative-40: hsl(4, 80%, 64%);
+  --color-negative-50: hsl(4, 55%, 54%);
+  --color-negative-60: hsl(4, 60%, 32%);
+
+  --color-positive-40: hsl(122, 36%, 56%);
+  --color-positive-50: hsl(122, 39%, 49%);
+
+  @include breakpoint-smallest {
+    --header-height: 40px;
+    --text-base-size: 0.875rem;
+  }
+}
+
