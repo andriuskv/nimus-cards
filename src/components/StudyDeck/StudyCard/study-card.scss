@@ -1,47 +1,20 @@
-@import "../../../scss/mixins.scss";
-@import "../../../scss/variables.scss";
-
 .study-card {
-  width: 100%;
-  margin: 0 auto;
-}
+  --max-content-width: 620px;
 
-.study-card-text {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-}
-
-.study-card-text-btns {
-  margin: auto;
-
-  .btn:first-of-type {
-    margin-right: 8px;
-  }
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: var(--space-xl);
 }
 
 .study-card-text-btn {
-  padding: 12px 24px;
-}
+  min-width: 120px;
+  padding: var(--space-lg) var(--space-xxxl);
 
-.study-card-text-reveal-btn {
-  margin: 0 auto auto auto;
-  color: $color-text-dark;
-  background-color: $background-color;
-
-  &:hover {
-    background-color: $background-color-dark;
+  &:not(:last-of-type) {
+    margin-right: var(--space-xl);
   }
-}
-
-.study-card-multi {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.study-card-exact {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
 }

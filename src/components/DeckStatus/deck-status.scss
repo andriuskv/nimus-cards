@@ -1,40 +1,35 @@
-@import "../../scss/mixins.scss";
-@import "../../scss/variables.scss";
+@import "../../styles/mixins.scss";
 
 .deck-status-header {
-  padding: 16px;
-  margin: 0 auto;
-  border-radius: 4px;
-  background-color: $background-color;
-  box-shadow: $box-shadow;
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  border-radius: 8px;
+  background-color: var(--color-grey-70);
 }
 
 .deck-status-title {
-  margin-bottom: 16px;
-  font-size: 1.25em;
+  margin-bottom: var(--space-xl);
+  font-size: var(--text-xl);
   font-weight: bold;
-  color: $color-text-dark;
 }
 
 .deck-status-progress {
-  margin-bottom: 8px;
-  font-size: 1em;
+  margin-bottom: var(--space-xl);
+  font-size: var(--text-md);
   font-weight: bold;
-  color: $color-text-dark;
 }
 
 .deck-status-progress-bar-container {
   position: relative;
   overflow: hidden;
-  border-radius: 2px;
-  background-color: $background-color-lightest;
-  box-shadow: inset $box-shadow;
+  border-radius: 4px;
+  background-color: var(--color-grey-90);
 }
 
 .deck-status-progress-bar {
   width: var(--width, 50%);
   height: 20px;
-  background-color: $secondary-accent-color;
+  background-color: var(--color-primary-50);
 }
 
 .deck-status-progress-half-bar {
@@ -42,37 +37,30 @@
   bottom: 0;
   width: var(--width, 50%);
   height: 10px;
-  background-color: $secondary-accent-color-darker;
+  background-color: var(--color-primary-40);
+  box-shadow: 0 0 4px 0 var(--color-black-10);
 }
 
 .deck-status-items {
-  margin-top: 16px;
-  border-radius: 4px;
-  background-color: $background-color;
-  box-shadow: $box-shadow;
+  border-radius: 8px;;
+  background-color: var(--color-grey-70);
 }
 
 .deck-status-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0;
+  padding: var(--space-xl) 0;
   text-align: center;
 
   &:not(:last-of-type) {
-    border-bottom: 1px solid $background-color-darkest;
+    border-bottom: 1px solid var(--color-grey-60);
   }
 }
 
-.deck-status-items-header-item {
-  font-weight: bold;
-  font-size: 0.815em;
-  color: $color-text-dark;
-}
-
 .deck-status-item-column {
-  padding: 0 8px;
-  font-size: 0.875em;
+  padding: 0 var(--space-md);
+  font-size: var(--text-sm);
   white-space: pre-line;
 
   &-1 {
@@ -92,6 +80,10 @@
   }
 
   @include breakpoint-smallest {
-    padding: 0 4px;
+    padding: 0 var(--space-sm);
   }
+}
+
+.deck-status-items-header-item {
+  font-weight: bold;
 }

@@ -1,49 +1,27 @@
 import React, { useState } from "react";
-import { useStore } from "../../../../context/CreateDeckContext";
 import TextSizeSelect from "../TextSizeSelect";
 import UploadPanel from "./UploadPanel";
 import Attachment from "./CreateCardAttachment";
-import Icon from "../../../Icon";
+import Icon from "../../Icon";
 
-export default function CreateCardFront({ index, side, handleChange }) {
-  const { dispatch } = useStore();
+export default function CreateCardFront({ side, addAttachment, removeAttachment, updateAttachmentDescription, handleChange }) {
   const [type, setType] = useState("text");
   const { text, textSize, attachment } = side;
-
-  function addAttachment(attachment) {
-    dispatch({
-      type: "ADD_ATTACHMENT",
-      index,
-      attachment
-    });
-  }
-
-  function removeAttachment() {
-    dispatch({ type: "REMOVE_ATTACHMENT", index });
-  }
-
-  function updateAttachmentDescription({ target }) {
-    dispatch({
-      type: "UPDATE_ATTACHMENT_DESCRIPTION",
-      index,
-      description: target.value
-    });
-  }
 
   function handleTypeChange({ target }) {
     setType(target.value);
   }
 
-  function renderAttachment() {
-    return (
-      <div className="create-side-panel">
-        <button type="button" className="btn btn-icon create-side-panel-btn"
-          onClick={removeAttachment} title="Remove attachment">
-          <Icon name="remove"/>
-        </button>
-        <Attachment {...attachment}/>
-      </div>
-    );
+  function showErrorMessage() {
+    const errors = side.errors;
+
+    if (errors?.attachmentMessage) {
+      return <div className="create-side-message">{errors.attachmentMessage}</div>;
+    }
+    else if (errors?.textMessage) {
+      return <div className="create-side-message">{errors.textMessage}</div>;
+    }
+    return null;
   }
 
   return (
@@ -74,17 +52,27 @@ export default function CreateCardFront({ index, side, handleChange }) {
           handleChange={event => handleChange(event, "front", "textSize")}/>}
       </div>
       {type === "text" ? (
-        <div className="create-side-content ab">
+        <div className="create-side-content create-front-side-content">
           <textarea className="input create-side-text-input"
             value={text}
             style={{ fontSize: `${textSize}px` }}
             onChange={event => handleChange(event, "front", "text")}></textarea>
+          {showErrorMessage()}
         </div>
       ) : (
-        <div className="create-side-content ab">
+        <div className="create-side-content create-front-side-content">
           {attachment ? (
             <>
-              {renderAttachment()}
+              <div className="create-side-panel">
+                <button type="button" className="btn btn-icon create-side-panel-btn"
+                  onClick={removeAttachment} title="Remove attachment">
+                  <Icon name="remove"/>
+                </button>
+                <Attachment attachment={attachment}/>
+                {side.errors?.attachmentMessage && (
+                  <div className="create-side-attachment-message">{side.errors.attachmentMessage}</div>
+                )}
+              </div>
               <input type="text"
                 className="input create-side-attachment-input"
                 placeholder="Describe attachment"

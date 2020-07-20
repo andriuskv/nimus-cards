@@ -1,5 +1,3 @@
-@import "../../scss/variables.scss";
-
 .modal-mask {
   z-index: 2;
   position: fixed;
@@ -10,29 +8,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px;
-  background-color: rgba(0, 0, 0, 0.4);
-  animation-fill-mode: both;
+  padding: var(--space-sm);
+  background-color: var(--color-grey-90-60);
+  animation-fill-mode: forwards;
   animation-duration: 0.2s;
   animation-name: opacity-up;
 }
 
 .modal {
-  padding: 16px 16px 8px 16px;
-  border-radius: 2px;
-  background-color: $background-color-darker;
-  box-shadow: $box-shadow;
+  padding: var(--space-xl);
+  border-radius: 8px;
+  background-color: var(--color-grey-60);
   animation-fill-mode: both;
   animation-duration: 0.2s;
   animation-name: translate-modal;
 }
 
 .modal-title {
-  margin-bottom: 24px;
-  font-size: 1em;
+  margin-bottom: var(--space-xxl);
+  font-size: var(--text-md);
   font-weight: bold;
   text-align: center;
-  color: $color-text-dark;
 }
 
 @keyframes opacity-up {

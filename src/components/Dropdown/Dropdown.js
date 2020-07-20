@@ -29,10 +29,10 @@ export default function Dropdown({ children }) {
   }
 
   function handleWindowClick({ target }) {
-    const closestContanier = target.closest(".dropdown-container");
+    const closestContainer = target.closest(".dropdown-container");
     let hideDropdown = true;
 
-    if (closestContanier && closestContanier.id === id) {
+    if (closestContainer && closestContainer.id === id) {
       hideDropdown = target.closest(".dropdown-btn");
     }
 

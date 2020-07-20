@@ -4,8 +4,8 @@ import "./decks.scss";
 import { getRandomString, setDocumentTitle, getCardsToLearn, getCardsToReview } from "../../helpers";
 import { fetchDecks, deleteDeck, saveDeck } from "../../services/db";
 import Icon from "../Icon";
-import DeckRemovalModal from "./DeckRemovalModal";
-import Settings from "./Settings";
+import DeckRemoveModal from "./DeckRemoveModal";
+import GlobalSettings from "./GlobalSettings";
 import DeckSettings from "./DeckSettings";
 import Deck from "./Deck";
 
@@ -40,7 +40,7 @@ export default function Decks() {
   }
 
   function showDialog(id) {
-    setModal({ deckRemovalModalVisible: true, id });
+    setModal({ deckRemoveModalVisible: true, id });
   }
 
   function showSettingsModal() {
@@ -70,11 +70,11 @@ export default function Decks() {
 
     deck.cards.forEach((card, index) => {
       const currentAttachment = card.front.attachment;
-      let newAttachement = undefined;
+      let newAttachment = undefined;
 
       if (currentAttachment) {
         if (currentAttachment.blob) {
-          newAttachement = {
+          newAttachment = {
             type: currentAttachment.type,
             description: currentAttachment.description,
             mimeType: currentAttachment.blob.type,
@@ -85,12 +85,12 @@ export default function Decks() {
           }));
         }
         else {
-          newAttachement = currentAttachment;
+          newAttachment = currentAttachment;
         }
       }
       folder.file(`${index}.json`, JSON.stringify({
         ...card,
-        front: { ...card.front, attachment: newAttachement }
+        front: { ...card.front, attachment: newAttachment }
       }, null, 2));
     });
     const archive = await zip.generateAsync({ type:"blob" });
@@ -105,7 +105,7 @@ export default function Decks() {
       id: getRandomString(),
       title: "",
       description: "",
-      createdAt: new Date(),
+      createdAt: Date.now(),
       cards: []
     };
 
@@ -154,22 +154,22 @@ export default function Decks() {
         <Link to="/decks/create" className="btn deck-create-link">Create</Link>
       </div>
       <div className="decks-top-bar">
-        <label className="btn btn-icon decks-top-bar-item deck-import-input-container">
+        <label className="btn btn-icon-text decks-top-bar-item deck-import-input-container">
           <Icon name="import"/>
           <span>Import</span>
           <input type="file" className="sr-only" onChange={importDeck}/>
         </label>
-        <button className="btn btn-icon decks-top-bar-item" onClick={showSettingsModal}>
+        <button className="btn btn-icon-text decks-top-bar-item" onClick={showSettingsModal}>
           <Icon name="settings"/>
           <span>Settings</span>
         </button>
       </div>
       {loading ? "" : decks.length ?
-        <ul>{renderDecks(decks)}</ul> :
-        <h2 className="deck-list-message">You have no decks</h2>
+        <ul className="decks">{renderDecks(decks)}</ul> :
+        <h2 className="decks-message">You have no decks</h2>
       }
-      {modal.deckRemovalModalVisible && <DeckRemovalModal removeDeck={removeDeck} cancelRemoval={hideModal}/>}
-      {modal.settingsVisible && <Settings hide={hideModal}/>}
+      {modal.deckRemoveModalVisible && <DeckRemoveModal removeDeck={removeDeck} cancelRemoval={hideModal}/>}
+      {modal.settingsVisible && <GlobalSettings hide={hideModal}/>}
       {modal.deckSettingsVisible && <DeckSettings hide={hideModal} deck={modal.deck}/>}
     </>
   );

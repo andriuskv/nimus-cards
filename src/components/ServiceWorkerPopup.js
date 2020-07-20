@@ -1,44 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-export default class ServiceWorkerPopup extends React.Component {
-  constructor(props) {
-    super(props);
+export default function ServiceWorkerPopup() {
+  const [visible, setVisible] = useState(false);
+  const [popup, setPopup] = useState(null);
 
-    this.state = {
-      visible: false,
-      message: ""
-    };
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     window.addEventListener("sw-state-change", ({ detail }) => {
       if (detail === "init") {
-        this.showPopup("Content is cached for offline use.");
+        showPopup({
+          message: "Content is cached for offline use.",
+          name: detail
+        });
       }
       else if (detail === "update") {
-        this.showPopup("Update is available, please refresh.");
+        showPopup({
+          message: "Update is available, please refresh.",
+          name: detail
+        });
       }
     });
-  }
+  }, []);
 
-  showPopup(message) {
-    this.setState({
-      visible: true,
-      message
-    });
+  function showPopup(popup) {
+    setVisible(true);
+    setPopup(popup);
 
     setTimeout(() => {
-      this.setState({
-        visible: false
-      });
-    }, 6000);
+      setVisible(false);
+    }, 8000);
   }
 
-  render() {
-    return (
-      <div className={`service-worker-popup${this.state.visible ? " visible" : ""}`}>
-        <p>{this.state.message}</p>
-      </div>
-    );
+  function hidePopup() {
+    setVisible(false);
   }
+
+  function reloadPage() {
+    window.location.reload();
+  }
+
+  return (
+    <div className={`service-worker-popup${visible ? " visible" : ""}`}>
+      {popup && (
+        <>
+          <p>{popup.message}</p>
+          {popup.name === "init" ? (
+            <button className="btn btn-text service-worker-popup-action-btn" onClick={hidePopup}>Dismiss</button>
+          ) : (
+            <button className="btn btn-text service-worker-popup-action-btn" onClick={reloadPage}>Reload</button>
+          )}
+        </>
+      )}
+    </div>
+  );
 }

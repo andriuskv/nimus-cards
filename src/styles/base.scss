@@ -1,0 +1,317 @@
+@import "variables";
+@import "mixins";
+
+*, *:after, *:before {
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background-color: var(--color-grey-90);
+  color: var(--color-white);
+  font-family: "Open sans", sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+
+  &.focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+}
+
+ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: normal;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+svg {
+  box-sizing: content-box;
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+textarea {
+  display: block;
+  resize: none;
+}
+
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: 0;
+}
+
+.js-focus-visible .focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100% - var(--header-height));
+  padding: var(--space-xl);
+
+  @include breakpoint-smallest {
+    padding: var(--space-xl) var(--space-md);
+  }
+}
+
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.input {
+  padding: var(--space-md);
+  border: none;
+  border-radius: 8px;
+  background-color: var(--color-grey-50);
+  color: var(--color-white);
+  font-size: var(--text-sm);
+
+  &::placeholder {
+    color: var(--color-grey-20);
+  }
+}
+
+.btn {
+  --background-color: var(--color-grey-50);
+  --color: var(--color-white);
+
+  padding: var(--space-md) var(--space-xl);
+  border-radius: 999px;
+  border: none;
+  background-color: var(--background-color);
+  color: var(--color);
+  font-weight: bold;
+  font-size: var(--text-sm);
+  transition: 0.1s background-color, 0.1s color;
+  cursor: pointer;
+
+  &:hover, &.focus-visible {
+    --background-color: var(--color-grey-40);
+  }
+
+  &:disabled, &.disabled {
+    --background-color: var(--color-grey-50);
+    --color: var(--color-grey-80);
+
+    cursor: default;
+  }
+}
+
+.btn-invert {
+  --background-color: var(--color-white);
+  --color: var(--color-grey-50);
+
+  &:hover, &.focus-visible {
+    --background-color: var(--color-grey-10);
+    --color: var(--color-grey-90);
+  }
+}
+
+.btn-icon-text, .btn-icon, .btn-text {
+  --background-color: transparent;
+  --color: var(--color-grey-20);
+
+  &:hover, &.focus-visible {
+    --background-color: var(--color-grey-50);
+    --color: var(--color-white);
+  }
+
+  &:disabled, &.disabled {
+    --background-color: transparent;
+    --color: var(--color-grey-30);
+  }
+}
+
+.btn-icon-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    margin-right: var(--space-md);
+  }
+}
+
+.btn-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-sm);
+}
+
+.btn-positive {
+  --background-color: var(--color-positive-50);
+
+  &:hover, &.focus-visible {
+    --background-color: var(--color-positive-40);
+  }
+
+  &:disabled {
+    --background-color: var(--color-positive-50);
+
+  }
+}
+
+.btn-negative {
+  --background-color: var(--color-negative-50);
+
+  &:hover, &.focus-visible {
+    --background-color: var(--color-negative-40);
+  }
+
+  &:disabled {
+    --background-color: var(--color-negative-50);
+  }
+}
+
+.btn-negative-text {
+  --background-color: transparent;
+  --color: var(--color-negative-40);
+
+  &:hover, &.focus-visible {
+    --background-color: var(--color-negative-50);
+  }
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-input {
+  &:checked + .checkbox .checkbox-tick {
+    display: block;
+  }
+
+  &.focus-visible + .checkbox {
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+}
+
+.checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background-color: var(--color-grey-50);
+}
+
+.checkbox-tick {
+  display: none;
+  width: 34%;
+  height: 68%;
+  border-right: 2px solid var(--color-accent);
+  border-bottom: 2px solid var(--color-accent);
+  transform: translate(4%, -10%) rotateZ(45deg);
+}
+
+.checkbox-label {
+  margin-left: var(--space-md);
+}
+
+.radio-container {
+  display: flex;
+  align-items: center;
+}
+
+.radio-input {
+  &:checked + .radio {
+    background-color: var(--color-accent);
+  }
+
+  &.focus-visible + .radio {
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+}
+
+.radio {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 5px solid var(--color-grey-50);
+  background-color: var(--color-grey-50);
+}
+
+.radio-label {
+  margin-left: var(--space-md);
+}
+
+.sr-only {
+  position: absolute;
+  overflow: hidden;
+  height: 1px;
+  width: 1px;
+  padding: 0;
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+.no-match-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--text-xl);
+}
+
+.service-worker-popup {
+  z-index: 2;
+  position: fixed;
+  bottom: var(--space-xl);
+  right: var(--space-xl);
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  padding: var(--space-md) var(--space-xl) var(--space-md) var(--space-xl);
+  border-radius: 8px;
+  background-color: var(--color-grey-70);
+  box-shadow: 0 1px 4px 0 var(--color-black-10);
+  font-size: var(--text-sm);
+  font-weight: bold;
+  transition: 0.4s opacity,
+              0.4s visibility,
+              0.4s transform;
+  transform: translateX(calc(100% + var(--space-xl)));
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+}
+
+.service-worker-popup-action-btn {
+  margin-left: var(--space-md);
+}

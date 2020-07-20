@@ -30,13 +30,10 @@ function deleteDeck(id) {
 
 function sortDecks(decks) {
   return decks.sort((a, b) => {
-    const aDate = new Date(a.createdAt || 0);
-    const bDate = new Date(b.createdAt || 0);
-
-    if (aDate < bDate) {
+    if (a.createdAt < b.createdAt) {
       return 1;
     }
-    else if (aDate > bDate) {
+    else if (a.createdAt > b.createdAt) {
       return -1;
     }
     return 0;

@@ -3,12 +3,13 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import "./study-deck.scss";
 import { shuffleArray, setDocumentTitle, getCardsToLearn, getCardsToReview, getRandomString } from "../../helpers";
 import { fetchDeck, saveDeck } from "../../services/db";
-import { getSettings } from "../../services/settings";
+import { getGlobalSettings } from "../../services/settings";
+import Icon from "../Icon";
 import Modal from "../Modal";
 import NoMatch from "../NoMatch";
 import StudyDeckHeader from "./StudyDeckHeader";
 import StudyDeckScore from "./StudyDeckScore";
-import StudyDeckFooter from "./StudyDeckFooter";
+import StudyNotes from "./StudyNotes";
 import Card from "./StudyCard";
 import Timer from "./Timer";
 
@@ -46,9 +47,16 @@ export default function StudyDeck() {
     });
   }
 
+  function getSettings(deck) {
+    if (!deck.settings || deck.settings.useGlobalSettings.value) {
+      return getGlobalSettings();
+    }
+    return deck.settings;
+  }
+
   function initDeck(deck) {
     const mode = match.url.split("/")[3];
-    const settings = deck.settings || getSettings();
+    const settings = getSettings(deck);
     let { cards } = deck;
 
     if (mode === "learn") {
@@ -68,7 +76,7 @@ export default function StudyDeck() {
       }
     }
     cards = settings.randomize.value ? shuffleArray(cards) : cards;
-    const sessionCards = cards.slice(0, settings.cardCount.value).map(card => {
+    const sessionCards = cards.slice(0, settings.cardCount.value || cards.length).map(card => {
       card.score = card.score || {
         streak: 0,
         right: 0,
@@ -191,7 +199,7 @@ export default function StudyDeck() {
       state.sessionCardIds = [...(state.sessionCardIds || []), currentCard.id];
     }
     else {
-      currentCard.attachementId = getRandomString();
+      currentCard.attachmentId = getRandomString();
       state.cards.push(currentCard);
       state.cards = state.settings.randomize.value ? shuffleArray(state.cards) : state.cards;
     }
@@ -246,6 +254,32 @@ export default function StudyDeck() {
     setState({ ...state, exitModalVisible: false });
   }
 
+  function renderStudyHeader() {
+    if (state.wasLastCard) {
+      return (
+        <div className="study-header">
+          <h1 className="study-header-title">{state.deck.title}</h1>
+        </div>
+      );
+    }
+    return (
+      <div className={`study-header${state.settings.timeoutDuration.value > 0 ? " has-timer" : ""}`}>
+        <button className="btn btn-icon study-exit-btn" onClick={handleStudyExit} title="Exit">
+          <Icon name="close"/>
+        </button>
+        <h1 className="study-header-title">{state.deck.title}</h1>
+        <div className="study-progress" style={{
+          transform: `scaleX(${state.card ? (state.cardCount - state.cards.length) / state.cardCount : 1})`
+        }}></div>
+        {!state.card.finished && state.settings.timeoutDuration.value > 0 && (
+          <Timer revealed={state.card.revealed}
+            initDuration={state.settings.timeoutDuration.value}
+            callback={timerRevealAnswer}/>
+        )}
+      </div>
+    );
+  }
+
   if (!state) {
     return null;
   }
@@ -254,17 +288,7 @@ export default function StudyDeck() {
   }
   return (
     <>
-      <div className="study-header">
-        <div className="study-progress" style={{
-          transform: `scaleX(${state.card ? (state.cardCount - state.cards.length) / state.cardCount : 1})`
-        }}></div>
-        <h1 className="study-header-title">{state.deck.title}</h1>
-        {!state.wasLastCard && !state.card.finished && state.settings.timeoutDuration.value > 0 && (
-          <Timer revealed={state.card.revealed}
-            initDuration={state.settings.timeoutDuration.value}
-            callback={timerRevealAnswer}/>
-        )}
-      </div>
+      {renderStudyHeader()}
       {state.wasLastCard ? (
         <StudyDeckScore score={state.score} deck={state.deck}
           startTime={state.sessionStartedAt} ids={state.sessionCardIds}/>
@@ -276,16 +300,16 @@ export default function StudyDeck() {
             revealAnswer={revealAnswer}
             skipNextStepTimeout={skipNextStepTimeout}
             nextStep={nextStep}/>
-          <StudyDeckFooter notes={state.card.notes} handleStudyExit={handleStudyExit}/>
+          {state.card.notes?.value && <StudyNotes notes={state.card.notes}/>}
         </>
       )}
       {state.exitModalVisible && (
         <Modal hide={hideExitModal}>
           <h3 className="modal-title">Do you want to save your progress?</h3>
           <div className="study-exit-modal-btns">
-            <button className="btn btn-text study-exit-modal-btns"
+            <button className="btn btn-text study-exit-modal-btn"
               onClick={() => exitStudy(true)}>Save and Exit</button>
-            <button className="btn btn-text study-exit-modal-btns"
+            <button className="btn btn-text study-exit-modal-btn"
               onClick={() => exitStudy(false)}>Exit Without Saving</button>
           </div>
         </Modal>

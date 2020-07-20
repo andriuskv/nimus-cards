@@ -16,7 +16,7 @@ function getDefault() {
   };
 }
 
-function getSettings() {
+function getGlobalSettings() {
   return cloneDeep(settings);
 }
 
@@ -26,6 +26,6 @@ function saveSettings(newSettings) {
 }
 
 export {
-  getSettings,
+  getGlobalSettings,
   saveSettings
 };
