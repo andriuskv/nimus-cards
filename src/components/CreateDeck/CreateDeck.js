@@ -1,44 +1,50 @@
 import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import "./create-deck.scss";
 import cloneDeep from "lodash.clonedeep";
-import { getRandomString, setDocumentTitle, shuffleArray } from "../../helpers";
+import { getRandomString, setDocumentTitle } from "../../helpers";
 import { fetchDeck, saveDeck } from "../../services/db";
 import Icon from "../Icon";
+import NoMatch from "../NoMatch";
 import CardFront from "./CreateCardFront";
 import CardBack from "./CreateCardBack";
 import CardNotes from "./CardNotes";
-import CreateCardPreview from "./CreateCardPreview";
 
-export default function CreateDeck(props) {
+export default function CreateDeck() {
+  const history = useHistory();
+  const params = useParams();
   const [state, setState] = useState(null);
   const [pendingCards, setPendingCards] = useState([]);
+  const { location } = history;
   let undoTimeout = 0;
 
   useEffect(() => {
-    const { id } = props.match.params;
+    const { id } = params;
 
-    if (props.match.path === "/decks/create") {
+    if (location.state) {
+      const deck = location.state;
+      deck.cards = parseCards(deck.cards);
+
+      setState(deck);
+      setDocumentTitle(deck.type === "edit" ? `Editing ${deck.title}` : "Create a new deck");
+    }
+    else if (location.pathname === "/decks/create") {
       setState(getInitialDeck());
       setDocumentTitle("Create a new deck");
     }
     else if (id) {
       fetchDeck(id).then(deck => {
-        if (deck) {
-          deck.makingEdit = true;
-          deck.selectedCardIndex = 0;
-          deck.cards = deck.cards.map(card => {
-            card.back = {
-              ...getNewCard().back,
-              ...card.back,
-              type: card.back.type,
-              [`${card.back.type}Options`]: card.back.typeOptions
-            };
-            delete card.back.typeOptions;
-            return card;
-          });
-          setState(deck);
-          setDocumentTitle(`Editing ${deck.title}`);
+        if (!deck) {
+          setState({ error: true });
+          return;
         }
+        deck.type = "edit";
+        deck.makingEdit = true;
+        deck.selectedCardIndex = 0;
+        deck.cards = parseCards(deck.cards);
+
+        setState(deck);
+        setDocumentTitle(`Editing ${deck.title}`);
       });
     }
   }, []);
@@ -59,6 +65,7 @@ export default function CreateDeck(props) {
   function getInitialDeck() {
     return {
       id: getRandomString(),
+      type: "create",
       title: "",
       description: "",
       selectedCardIndex: 0,
@@ -104,6 +111,20 @@ export default function CreateDeck(props) {
     };
   }
 
+  function parseCards(cards) {
+    return cards.map(card => {
+      const { back } = getNewCard();
+      card.back = {
+        ...back,
+        ...card.back,
+        [`${card.back.type}Options`]: card.back.typeOptions
+      };
+
+      delete card.back.typeOptions;
+      return card;
+    });
+  }
+
   function selectCard(index) {
     if (index !== state.selectedCardIndex) {
       setState({ ...state, selectedCardIndex: index });
@@ -134,32 +155,6 @@ export default function CreateDeck(props) {
     const cards = state.cards;
     [cards[index], cards[targetIndex]] = [cards[targetIndex], cards[index]];
 
-    setState({ ...state });
-  }
-
-  function previewCard(card) {
-    if (isFrontValid(card.front) && isBackValid(card.back)) {
-      card.visible = true;
-      card.back.typeOptions = card.back[`${card.back.type}Options`];
-
-      if (card.back.type === "multi") {
-        card.back.typeOptions.options = shuffleArray(card.back.multiOptions.options.filter(({ value }) => value));
-      }
-    }
-    else {
-      card.message = "Can't preview invalid card";
-
-      setTimeout(() => {
-        delete card.message;
-        setState({ ...state });
-      }, 2400);
-    }
-    setState({ ...state });
-  }
-
-  function hidePreview(card) {
-    delete card.visible;
-    delete card.back.typeOptions;
     setState({ ...state });
   }
 
@@ -371,7 +366,6 @@ export default function CreateDeck(props) {
       else {
         card.invalid = true;
       }
-
     }
     if (validCardCount < 2) {
       state.globalMessage = "Please fill in at least 2 cards.";
@@ -382,7 +376,7 @@ export default function CreateDeck(props) {
     return validCardCount === cards.length;
   }
 
-  function handleSubmit() {
+  function handleSubmit(type) {
     if (!state.title) {
       state.missingTitle = true;
     }
@@ -390,17 +384,35 @@ export default function CreateDeck(props) {
 
     if (state.title && cardsValid) {
       state.cards = cleanupCards(state.cards);
-      state.createdAt = state.createdAt || Date.now();
-      props.history.push("/decks");
-      saveDeck(state);
+
+      if (type === "preview") {
+        history.push({
+          pathname: `/decks/${state.id}/preview`,
+          state
+        });
+      }
+      else {
+        delete state.type;
+        delete state.selectedCardIndex;
+        state.createdAt = state.createdAt || Date.now();
+        history.push("/decks");
+        saveDeck(state);
+      }
     }
     else {
       setState({ ...state });
     }
   }
 
+  function previewDeck() {
+    handleSubmit("preview");
+  }
+
   if (!state) {
     return null;
+  }
+  else if (state.error) {
+    return <NoMatch/>;
   }
   const index = state.selectedCardIndex;
   const length = state.cards.length;
@@ -446,12 +458,6 @@ export default function CreateDeck(props) {
               <Icon name="chevron-right"/>
             </button>
           </div>
-          <div className="create-card-preview-btn-container create-card-header-item">
-            <button className="btn btn-icon" title="Preview card" onClick={() => previewCard(card)}>
-              <Icon name="preview"/>
-            </button>
-            {card.message && <p className="create-card-preview-message">{card.message}</p>}
-          </div>
           <button className="btn btn-icon" title="Clone card" onClick={() => cloneCard(index)}>
             <Icon name="clone"/>
           </button>
@@ -470,7 +476,6 @@ export default function CreateDeck(props) {
           <CardBack side={card.back} updateCardBack={updateCardBack}/>
         </div>
         <CardNotes value={card.notes.value} handleChange={handleCardFieldChange}/>
-        {card.visible && <CreateCardPreview card={card} hide={() => hidePreview(card)}/>}
       </div>
       {pendingCards.length > 0 && (
         <div className="create-undo-dialog">
@@ -480,7 +485,8 @@ export default function CreateDeck(props) {
       )}
       <div className="create-footer">
         {state.globalMessage && <span className="create-message">{state.globalMessage}</span>}
-        <button className="btn create-submit-btn" onClick={handleSubmit}>{state.makingEdit ? "Update" : "Create" }</button>
+        <button className="btn create-footer-btn" onClick={previewDeck}>Preview</button>
+        <button className="btn create-footer-btn" onClick={handleSubmit}>{state.makingEdit ? "Update" : "Create" }</button>
       </div>
     </>
   );

@@ -19,7 +19,7 @@ export default function StudyDeckScore({ score, deck, startTime, ids }) {
   }
 
   function showSessionTime() {
-    return formatTime(Math.floor((new Date() - startTime) / 1000));
+    return formatTime(Math.floor((Date.now() - startTime) / 1000));
   }
 
   return (

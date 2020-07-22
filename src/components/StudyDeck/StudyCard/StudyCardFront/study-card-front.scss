@@ -1,9 +1,11 @@
 @import "../../../../styles/mixins.scss";
 
 .study-front-content {
-  .study-image-btn, .study-audio-btn, .study-video-btn {
-    margin-bottom: var(--space-xl);
-  }
+  margin-bottom: var(--space-xl);
+}
+
+.study-attachment-btn {
+  margin-bottom: var(--space-xl);
 }
 
 .study-image-btn, .study-video-btn {

@@ -28,7 +28,7 @@ function getCardsToLearn(cards) {
 }
 
 function getCardsToReview(cards) {
-  return cards.filter(card => new Date() > new Date(card.nextReview));
+  return cards.filter(card => Date.now() > card.nextReview);
 }
 
 function getSeconds(time) {

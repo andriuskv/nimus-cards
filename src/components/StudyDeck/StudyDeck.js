@@ -37,6 +37,17 @@ export default function StudyDeck() {
   }, [location.pathname + location.search]);
 
   function init() {
+    const mode = match.url.split("/")[3];
+
+    if (mode === "preview") {
+      if (location.state?.title) {
+        initDeck(location.state, "preview");
+      }
+      else {
+        setState({ error: true });
+      }
+      return;
+    }
     fetchDeck(match.params.id).then(deck => {
       if (deck) {
         initDeck(deck);
@@ -47,16 +58,21 @@ export default function StudyDeck() {
     });
   }
 
-  function getSettings(deck) {
-    if (!deck.settings || deck.settings.useGlobalSettings.value) {
+  function getSettings(deck, mode) {
+    if (mode === "preview") {
+      return {
+        ...getGlobalSettings(),
+        randomize: { value: false },
+        cardCount: { value: 0 }
+      };
+    }
+    else if (!deck.settings || deck.settings.useGlobalSettings.value) {
       return getGlobalSettings();
     }
     return deck.settings;
   }
 
-  function initDeck(deck) {
-    const mode = match.url.split("/")[3];
-    const settings = getSettings(deck);
+  function initDeck(deck, mode = match.url.split("/")[3]) {
     let { cards } = deck;
 
     if (mode === "learn") {
@@ -75,6 +91,7 @@ export default function StudyDeck() {
         return;
       }
     }
+    const settings = getSettings(deck, mode);
     cards = settings.randomize.value ? shuffleArray(cards) : cards;
     const sessionCards = cards.slice(0, settings.cardCount.value || cards.length).map(card => {
       card.score = card.score || {
@@ -85,15 +102,16 @@ export default function StudyDeck() {
       };
       return card;
     });
+    const card = mode === "preview" ? cards[deck.selectedCardIndex] : getCard(sessionCards);
 
     setState({
       mode,
       deck,
       settings,
-      sessionStartedAt: new Date(),
+      sessionStartedAt: Date.now(),
       cardCount: sessionCards.length,
       cards: sessionCards,
-      card: getCard(sessionCards),
+      card,
       score: {
         right: 0,
         wrong: 0,
@@ -130,8 +148,9 @@ export default function StudyDeck() {
   }
 
   function revealAnswer() {
-    state.card.revealed = true;
-    setState({ ...state, card: state.card });
+    const card = { ...state.card };
+    card.revealed = true;
+    setState({ ...state, card });
   }
 
   function selectOption(id) {
@@ -155,7 +174,7 @@ export default function StudyDeck() {
     const hours = 6 * Math.pow(2, nextLevel - 1) * nextLevel;
 
     card.level = nextLevel;
-    card.nextReview = new Date(Date.now() + hours * 60 * 60 * 1000);
+    card.nextReview = Date.now() + hours * 60 * 60 * 1000;
   }
 
   function updateCardScore(card, isCorrect) {
@@ -182,7 +201,7 @@ export default function StudyDeck() {
   }
 
   function nextStep(isCorrect, params = {}) {
-    const currentCard = state.cards.shift();
+    const currentCard = state.mode === "preview" ? state.cards[state.deck.selectedCardIndex] : state.cards.shift();
     const revealedCard = {
       ...currentCard,
       ...params,
@@ -198,7 +217,8 @@ export default function StudyDeck() {
     if (isCorrect) {
       state.sessionCardIds = [...(state.sessionCardIds || []), currentCard.id];
     }
-    else {
+    else if (state.mode !== "preview") {
+      // Change attachment id to make it rerender.
       currentCard.attachmentId = getRandomString();
       state.cards.push(currentCard);
       state.cards = state.settings.randomize.value ? shuffleArray(state.cards) : state.cards;
@@ -208,7 +228,14 @@ export default function StudyDeck() {
       card: revealedCard,
       score: updateScoreCounter(isCorrect)
     });
-    nextStepTimeout.current = setTimeout(getNextCard, 1600);
+    nextStepTimeout.current = setTimeout(state.mode === "preview" ? getNextPreviewCard: getNextCard, 1600);
+  }
+
+  function getNextPreviewCard() {
+    const index = (state.deck.selectedCardIndex + 1) % state.cards.length;
+    state.deck.selectedCardIndex = index;
+
+    setState({ ...state, card: state.cards[index] });
   }
 
   function getNextCard() {
@@ -231,12 +258,24 @@ export default function StudyDeck() {
 
   function skipNextStepTimeout() {
     clearTimeout(nextStepTimeout.current);
-    getNextCard();
+
+    if (state.mode === "preview") {
+      getNextPreviewCard();
+    }
+    else {
+      getNextCard();
+    }
   }
 
   function handleStudyExit() {
     if (state.mode === "learn" || state.mode === "review") {
       setState({ ...state, exitModalVisible: true });
+    }
+    else if (state.mode === "preview") {
+      history.push({
+        pathname: `/decks/${state.deck.id}/${state.deck.type}`,
+        state: state.deck
+      });
     }
     else {
       history.push("/decks");
@@ -254,6 +293,13 @@ export default function StudyDeck() {
     setState({ ...state, exitModalVisible: false });
   }
 
+  function selectCard(index) {
+    const card = state.cards[index];
+    state.deck.selectedCardIndex = index;
+
+    setState({ ...state, card });
+  }
+
   function renderStudyHeader() {
     if (state.wasLastCard) {
       return (
@@ -264,13 +310,14 @@ export default function StudyDeck() {
     }
     return (
       <div className={`study-header${state.settings.timeoutDuration.value > 0 ? " has-timer" : ""}`}>
+        <div className="study-progress" style={{
+          transform: `scaleX(${(state.cardCount - state.cards.length) / state.cardCount})`
+        }}></div>
         <button className="btn btn-icon study-exit-btn" onClick={handleStudyExit} title="Exit">
           <Icon name="close"/>
         </button>
         <h1 className="study-header-title">{state.deck.title}</h1>
-        <div className="study-progress" style={{
-          transform: `scaleX(${state.card ? (state.cardCount - state.cards.length) / state.cardCount : 1})`
-        }}></div>
+        {state.mode === "preview" && <Icon name="preview" className="study-preview-icon" title="In preview mode"/>}
         {!state.card.finished && state.settings.timeoutDuration.value > 0 && (
           <Timer revealed={state.card.revealed}
             initDuration={state.settings.timeoutDuration.value}
@@ -290,11 +337,22 @@ export default function StudyDeck() {
     <>
       {renderStudyHeader()}
       {state.wasLastCard ? (
-        <StudyDeckScore score={state.score} deck={state.deck}
-          startTime={state.sessionStartedAt} ids={state.sessionCardIds}/>
+        <StudyDeckScore score={state.score}
+          deck={state.deck}
+          startTime={state.sessionStartedAt}
+          ids={state.sessionCardIds}/>
       ) : (
         <>
           <StudyDeckHeader score={state.score}/>
+          {state.mode === "preview" && (
+            <ul className="study-card-select">
+              {state.cards.map((_, index) => (
+                <li className="study-card-select-item" key={index}>
+                  <button className={`btn btn-text study-card-select-btn${index === state.deck.selectedCardIndex ? " active": ""}`} onClick={() => selectCard(index)}>{index + 1}</button>
+                </li>
+              ))}
+            </ul>
+          )}
           <Card card={state.card}
             selectOption={selectOption}
             revealAnswer={revealAnswer}

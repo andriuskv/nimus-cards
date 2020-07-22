@@ -117,25 +117,6 @@
   font-weight: bold;
 }
 
-.create-card-preview-btn-container {
-  position: relative;
-  margin-right: var(--space-md);
-}
-
-.create-card-preview-message {
-  z-index: 1;
-  position: absolute;
-  top: -2px;
-  left: -8px;
-  padding: var(--space-md);
-  border-radius: 8px;
-  background-color: var(--color-negative-50);
-  transform: translateX(-100%);
-  font-size: var(--text-sm);
-  font-weight: bold;
-  white-space: nowrap;
-}
-
 .create-side-message {
   padding: var(--space-sm);
   margin-top: auto;
@@ -383,15 +364,22 @@
 
 .create-message {
   padding: var(--space-md);
-  margin-right: var(--space-md);
   border-radius: 8px;
   background-color: var(--color-negative-50);
   font-size: var(--text-sm);
   font-weight: bold;
+
+  @include breakpoint-smallest {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+  }
 }
 
-.create-submit-btn {
+.create-footer-btn {
   --background-color: var(--color-grey-70);
+
+  margin-left: var(--space-md);
 
   &:hover {
     --background-color: var(--color-grey-50);

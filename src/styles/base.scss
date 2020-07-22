@@ -283,6 +283,7 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: var(--text-xl);
+  white-space: nowrap;
 }
 
 .service-worker-popup {
