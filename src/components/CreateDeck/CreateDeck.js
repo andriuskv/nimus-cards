@@ -392,9 +392,17 @@ export default function CreateDeck() {
         });
       }
       else {
+        const currentDate = Date.now();
+
         delete state.type;
         delete state.selectedCardIndex;
-        state.createdAt = state.createdAt || Date.now();
+
+        if (state.createdAt) {
+          state.modifiedAt = currentDate;
+        }
+        else {
+          state.createdAt = currentDate;
+        }
         history.push("/decks");
         saveDeck(state);
       }
