@@ -50,7 +50,7 @@
   margin-top: var(--space-xl);
 
   @include breakpoint-smallest {
-    --max-item-width: 302px;
+    --max-item-width: 304px;
   }
 }
 
@@ -62,7 +62,7 @@
   background-color: var(--color-grey-70);
 }
 
-.deck-info {
+.deck-body {
   display: flex;
   justify-content: space-between;
   padding: var(--space-xl);
@@ -78,11 +78,24 @@
   font-size: var(--text-sm);
 }
 
-.deck-card-count {
+.deck-info {
+  display: flex;
   margin-top: var(--space-md);
   font-size: var(--text-xs);
   color: var(--color-grey-20);
   font-weight: bold;
+}
+
+.deck-info-item {
+  &:not(:last-of-type) {
+    margin-right: var(--space-sm);
+
+    &::after {
+      content: "\2022";
+      display: inline;
+      margin-left: var(--space-sm);
+    }
+  }
 }
 
 .deck-btn-container {

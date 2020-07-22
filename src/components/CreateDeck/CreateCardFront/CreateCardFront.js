@@ -6,7 +6,7 @@ import Icon from "../../Icon";
 
 export default function CreateCardFront({ side, addAttachment, removeAttachment, updateAttachmentDescription, handleChange }) {
   const { text, textSize, attachment } = side;
-  const [type, setType] = useState(text ? "text" : "attachment");
+  const [type, setType] = useState(!text && attachment ? "attachment": "text");
 
   function handleTypeChange({ target }) {
     setType(target.value);
