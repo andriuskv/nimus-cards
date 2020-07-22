@@ -1,3 +1,5 @@
+@import "../../../styles/mixins.scss";
+
 .study-card {
   --max-content-width: 620px;
 
@@ -8,6 +10,10 @@
   align-items: center;
   width: 100%;
   margin-bottom: var(--space-xl);
+
+  @include breakpoint-smallest {
+    margin-bottom: 0;
+  }
 }
 
 .study-card-text-btn {

@@ -45,6 +45,22 @@
   white-space: nowrap;
 }
 
+.study-preview-icon {
+  position: absolute;
+  right: var(--space-xl);
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  color: var(--color-grey-20);
+  transform: translateY(-50%);
+
+  @include breakpoint-smallest {
+    right: var(--space-md);
+    width: 20px;
+    height: 20px;
+  }
+}
+
 .study-progress {
   position: absolute;
   bottom: 0;
@@ -121,9 +137,51 @@
   background-color: var(--color-positive-50);
 }
 
+.study-card-select {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-md);
+}
+
+.study-card-select-item {
+  --space: var(--space-md);
+
+  margin-bottom: var(--space);
+
+  &:not(:last-of-type) {
+    margin-right: var(--space);
+  }
+}
+
+.study-card-select-btn {
+  --background-color: var(--color-grey-70);
+
+  min-width: 32px;
+  height: 32px;
+  padding: var(--space-sm);
+
+  &:hover {
+    --background-color: var(--color-grey-50);
+
+    &.active {
+      --background-color: var(--color-primary-50);
+    }
+  }
+
+  &.active {
+    --background-color: var(--color-primary-50);
+    --color: var(--color-grey-70);
+  }
+}
+
 .study-notes-toggle-btn-container {
   display: flex;
   justify-content: center;
+
+  @include breakpoint-smallest {
+    margin-top: var(--space-md);
+  }
 }
 
 .study-notes {

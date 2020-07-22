@@ -34,7 +34,7 @@ export default function DeckStatus() {
 
   function getCardStatus(card) {
     if (card.level) {
-      const diff = card.nextReview - new Date();
+      const diff = card.nextReview - Date.now();
 
       if (diff < 0) {
         return "Ready to review";

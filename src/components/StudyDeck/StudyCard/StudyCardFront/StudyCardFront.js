@@ -49,14 +49,14 @@ export default function StudyCardFront({ id, attachmentId, side }) {
 
     if (mediaType === "image") {
       return (
-        <button className="btn btn-icon study-image-btn" onClick={showImage}>
+        <button className="btn btn-icon study-attachment-btn study-image-btn" onClick={showImage}>
           <img src={src} alt="" className="study-image"/>
         </button>
       );
     }
     else if (mediaType === "audio") {
       return (
-        <button className="btn study-audio-btn" onClick={handleAudio}>
+        <button className="btn study-attachment-btn study-audio-btn" onClick={handleAudio}>
           <Icon name="volume" className="study-audio-btn-icon"/>
           <audio src={src} ref={audioElementRef} key={attachmentId} autoPlay></audio>
         </button>
@@ -64,7 +64,7 @@ export default function StudyCardFront({ id, attachmentId, side }) {
     }
     else if (mediaType === "video") {
       return (
-        <button className="btn btn-icon study-video-btn" onClick={handleVideo}>
+        <button className="btn btn-icon study-attachment-btn study-video-btn" onClick={handleVideo}>
           <video src={src} className="study-video" crossOrigin="anonymous" ref={videoElementRef} key={attachmentId} autoPlay></video>
         </button>
       );
@@ -87,10 +87,10 @@ export default function StudyCardFront({ id, attachmentId, side }) {
   function renderContent() {
     if (side.text && attachment) {
       return (
-        <div className="study-front-content">
+        <>
           {renderAttachment()}
           {renderText()}
-        </div>
+        </>
       );
     }
     else if (side.text) {
@@ -104,7 +104,7 @@ export default function StudyCardFront({ id, attachmentId, side }) {
 
   return (
     <>
-      {renderContent()}
+      <div className="study-front-content">{renderContent()}</div>
       {imageExpanded && (
         <div className="study-expanded-image-mask" onClick={hideImage}>
           <img src={attachment.src} className="study-expanded-image" alt=""/>
