@@ -8,7 +8,7 @@ export default function StudyCardBack({ card, selectOption, handleSubmit }) {
   const { type, typeOptions } = back;
 
   function renderTextTypeContent() {
-    return <div className="study-card-text-content" style={{ fontSize: `${typeOptions.textSize}px` }}>{typeOptions.value}</div>;
+    return <div className="study-card-text-content">{typeOptions.value}</div>;
   }
 
   function renderExactTypeContent() {

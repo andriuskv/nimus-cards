@@ -9,6 +9,18 @@
   }
 }
 
+.decks-settings-item-spaced {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.decks-settings-select {
+  border: none;
+  border-right: var(--space-md) solid transparent;
+  background-color: var(--color-grey-40);
+}
+
 .decks-settings-checkbox {
   background-color: var(--color-grey-40);
 }

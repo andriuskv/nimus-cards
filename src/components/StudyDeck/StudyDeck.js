@@ -59,17 +59,22 @@ export default function StudyDeck() {
   }
 
   function getSettings(deck, mode) {
+    const settings = getGlobalSettings();
+
     if (mode === "preview") {
       return {
-        ...getGlobalSettings(),
+        ...settings,
         randomize: { value: false },
         cardCount: { value: 0 }
       };
     }
     else if (!deck.settings || deck.settings.useGlobalSettings.value) {
-      return getGlobalSettings();
+      return settings;
     }
-    return deck.settings;
+    return {
+      ...deck.settings,
+      textSize: settings.textSize
+    };
   }
 
   function initDeck(deck, mode = match.url.split("/")[3]) {
@@ -273,7 +278,7 @@ export default function StudyDeck() {
     }
     else if (state.mode === "preview") {
       history.push({
-        pathname: `/decks/${state.deck.id}/${state.deck.type}`,
+        pathname: state.deck.type === "edit" ? `/decks/${state.deck.id}/${state.deck.type}` : "/decks/create",
         state: state.deck
       });
     }
@@ -354,6 +359,7 @@ export default function StudyDeck() {
             </ul>
           )}
           <Card card={state.card}
+            settings={state.settings}
             selectOption={selectOption}
             revealAnswer={revealAnswer}
             skipNextStepTimeout={skipNextStepTimeout}

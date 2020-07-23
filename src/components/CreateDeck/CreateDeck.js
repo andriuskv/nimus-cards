@@ -77,14 +77,12 @@ export default function CreateDeck() {
     return {
       id: getRandomString(),
       front: {
-        text: "",
-        textSize: 16
+        text: ""
       },
       back: {
         type: "text",
         textOptions: {
-          value: "",
-          textSize: 16
+          value: ""
         },
         multiOptions: {
           correctId: "",
@@ -135,13 +133,9 @@ export default function CreateDeck() {
     const lastCard = state.cards[state.cards.length - 1];
     const card = getNewCard();
 
-    card.front.textSize = lastCard.front.textSize;
     card.back.type = lastCard.back.type;
 
-    if (card.back.type === "text") {
-      card.back.textOptions.textSize = lastCard.back.textOptions.textSize;
-    }
-    else if (card.back.type === "multi") {
+    if (card.back.type === "multi") {
       card.back.multiOptions.layout = lastCard.back.multiOptions.layout;
     }
     else if (card.back.type === "exact") {
@@ -196,20 +190,27 @@ export default function CreateDeck() {
     setState({ ...state });
   }
 
-  function handleCardFieldChange({ target }, name, key) {
+  function handleCardFrontTextChange({ target }) {
     const { value } = target;
     const card = state.cards[state.selectedCardIndex];
 
-    if (value !== card[name][key]) {
-      card[name][key] = value;
+    if (value !== card.front.text) {
+      card.front.text = value;
+      card.modified = true;
 
-      if (name === "front") {
-        card.modified = true;
-
-        if (card.front.error?.textMessage) {
-          delete card.front.error.textMessage;
-        }
+      if (card.front.error?.textMessage) {
+        delete card.front.error.textMessage;
       }
+      setState({ ...state });
+    }
+  }
+
+  function handleCardNotesChange({ target }) {
+    const { value } = target;
+    const card = state.cards[state.selectedCardIndex];
+
+    if (value !== card.notes.value) {
+      card.notes.value = value;
       setState({ ...state });
     }
   }
@@ -367,6 +368,7 @@ export default function CreateDeck() {
         card.invalid = true;
       }
     }
+
     if (validCardCount < 2) {
       state.globalMessage = "Please fill in at least 2 cards.";
     }
@@ -480,10 +482,10 @@ export default function CreateDeck() {
             addAttachment={addAttachment}
             removeAttachment={removeAttachment}
             updateAttachmentDescription={updateAttachmentDescription}
-            handleChange={handleCardFieldChange}/>
+            handleChange={handleCardFrontTextChange}/>
           <CardBack side={card.back} updateCardBack={updateCardBack}/>
         </div>
-        <CardNotes value={card.notes.value} handleChange={handleCardFieldChange}/>
+        <CardNotes value={card.notes.value} handleChange={handleCardNotesChange}/>
       </div>
       {pendingCards.length > 0 && (
         <div className="create-undo-dialog">

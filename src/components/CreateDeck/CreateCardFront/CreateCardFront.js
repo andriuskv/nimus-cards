@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import TextSizeSelect from "../TextSizeSelect";
 import UploadPanel from "./UploadPanel";
 import Attachment from "./CreateCardAttachment";
 import Icon from "../../Icon";
 
 export default function CreateCardFront({ side, addAttachment, removeAttachment, updateAttachmentDescription, handleChange }) {
-  const { text, textSize, attachment } = side;
+  const { text, attachment } = side;
   const [type, setType] = useState(!text && attachment ? "attachment": "text");
 
   function handleTypeChange({ target }) {
@@ -13,13 +12,13 @@ export default function CreateCardFront({ side, addAttachment, removeAttachment,
   }
 
   function showErrorMessage() {
-    const errors = side.errors;
+    const { error } = side;
 
-    if (errors?.attachmentMessage) {
-      return <div className="create-side-message">{errors.attachmentMessage}</div>;
+    if (error?.attachmentMessage) {
+      return <div className="create-side-message">{error.attachmentMessage}</div>;
     }
-    else if (errors?.textMessage) {
-      return <div className="create-side-message">{errors.textMessage}</div>;
+    else if (error?.textMessage) {
+      return <div className="create-side-message">{error.textMessage}</div>;
     }
     return null;
   }
@@ -47,16 +46,11 @@ export default function CreateCardFront({ side, addAttachment, removeAttachment,
             </label>
           </li>
         </ul>
-        {type === "text" && <TextSizeSelect
-          textSize={textSize}
-          handleChange={event => handleChange(event, "front", "textSize")}/>}
       </div>
       {type === "text" ? (
         <div className="create-side-content create-front-side-content">
           <textarea className="input create-side-text-input"
-            value={text}
-            style={{ fontSize: `${textSize}px` }}
-            onChange={event => handleChange(event, "front", "text")}></textarea>
+            value={text} onChange={handleChange}></textarea>
           {showErrorMessage()}
         </div>
       ) : (
@@ -69,8 +63,8 @@ export default function CreateCardFront({ side, addAttachment, removeAttachment,
                   <Icon name="remove"/>
                 </button>
                 <Attachment attachment={attachment}/>
-                {side.errors?.attachmentMessage && (
-                  <div className="create-side-attachment-message">{side.errors.attachmentMessage}</div>
+                {side.error?.attachmentMessage && (
+                  <div className="create-side-attachment-message">{side.error.attachmentMessage}</div>
                 )}
               </div>
               <input type="text"
@@ -80,7 +74,7 @@ export default function CreateCardFront({ side, addAttachment, removeAttachment,
                 onChange={updateAttachmentDescription}/>
             </>
           ) : (
-            <UploadPanel addAttachment={addAttachment}/>
+            <UploadPanel addAttachment={addAttachment} errorMessage={side.error?.textMessage}/>
           )}
         </div>
       )}

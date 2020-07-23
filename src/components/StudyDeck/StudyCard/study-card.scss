@@ -2,6 +2,8 @@
 
 .study-card {
   --max-content-width: 620px;
+  --text-size: calc(1 * var(--text-base-size));
+  --multi-text-size: calc(0.875 * var(--text-base-size));
 
   display: flex;
   flex-direction: column;

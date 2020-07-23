@@ -7,7 +7,7 @@ export default function GlobalSettings({ hide }) {
 
   function hideSettings() {
     const initialSettings = getGlobalSettings();
-    const { cardCount, timeoutDuration } = settings;
+    const { cardCount, timeoutDuration, textSize } = settings;
 
     if (cardCount.valid) {
       initialSettings.cardCount.value = parseInt(cardCount.value, 10) || 0;
@@ -16,6 +16,7 @@ export default function GlobalSettings({ hide }) {
     if (timeoutDuration.valid) {
       initialSettings.timeoutDuration.value = parseInt(timeoutDuration.value, 10) || 0;
     }
+    initialSettings.textSize.value = parseFloat(textSize.value);
     initialSettings.randomize = settings.randomize;
 
     saveSettings(initialSettings);
@@ -38,47 +39,58 @@ export default function GlobalSettings({ hide }) {
     setState({ ...settings, [settingName]: setting });
   }
 
+  function handleTextSizeChange({ target }) {
+    setState({ ...settings, textSize: {
+      value: target.value
+    }});
+  }
+
   return (
     <Settings hide={hideSettings}>
       <h3 className="modal-title">Global Deck Settings</h3>
-      <div className="decks-settings-item">
-        <label className="checkbox-container">
-          <input type="checkbox" className="sr-only checkbox-input"
-            data-name="randomize"
-            onChange={handleChange}
-            checked={settings.randomize.value}/>
-          <div className="checkbox decks-settings-checkbox">
-            <div className="checkbox-tick"></div>
-          </div>
-          <span className="checkbox-label">Randomize cards</span>
-        </label>
-      </div>
-      <div className="decks-settings-item">
-        <label>
-          <span>Use</span>
-          <input type="text" className="input decks-settings-input"
-            inputMode="numeric"
-            data-name="cardCount"
-            onChange={handleChange}
-            pattern="[0-9]*$"
-            value={settings.cardCount.value}/>
-          <span>cards per study session</span>
-          <div className="decks-settings-message">Please provide a valid whole number.</div>
-        </label>
-      </div>
-      <div className="decks-settings-item">
-        <label>
-          <span>Reveal answer after</span>
-          <input type="text" className="input decks-settings-input"
-            inputMode="numeric"
-            data-name="timeoutDuration"
-            onChange={handleChange}
-            pattern="^0*|0*([5-9][0-9]*|[1-9]+[0-9]+)$"
-            value={settings.timeoutDuration.value}/>
-          <span>seconds</span>
-          <div className="decks-settings-message">Please provide a valid whole number.<br/> Minimal accepted value is 5 seconds.</div>
-        </label>
-      </div>
+      <label className="decks-settings-item decks-settings-item-spaced">
+        <span>Text size</span>
+        <select className="input decks-settings-select"
+          value={settings.textSize.value}
+          onChange={handleTextSizeChange}>
+          <option value="0.875">Small</option>
+          <option value="1">Medium</option>
+          <option value="1.125">Big</option>
+          <option value="1.25">Huge</option>
+        </select>
+      </label>
+      <label className="checkbox-container decks-settings-item decks-settings-item-spaced">
+        <span>Randomize cards</span>
+        <input type="checkbox" className="sr-only checkbox-input"
+          data-name="randomize"
+          onChange={handleChange}
+          checked={settings.randomize.value}/>
+        <div className="checkbox decks-settings-checkbox">
+          <div className="checkbox-tick"></div>
+        </div>
+      </label>
+      <label className="decks-settings-item">
+        <span>Use</span>
+        <input type="text" className="input decks-settings-input"
+          inputMode="numeric"
+          data-name="cardCount"
+          onChange={handleChange}
+          pattern="[0-9]*$"
+          value={settings.cardCount.value}/>
+        <span>cards per study session</span>
+        <div className="decks-settings-message">Please provide a valid whole number.</div>
+      </label>
+      <label className="decks-settings-item">
+        <span>Reveal answer after</span>
+        <input type="text" className="input decks-settings-input"
+          inputMode="numeric"
+          data-name="timeoutDuration"
+          onChange={handleChange}
+          pattern="^0*|0*([5-9][0-9]*|[1-9]+[0-9]+)$"
+          value={settings.timeoutDuration.value}/>
+        <span>seconds</span>
+        <div className="decks-settings-message">Please provide a valid whole number.<br/> Minimal accepted value is 5 seconds.</div>
+      </label>
     </Settings>
   );
 }

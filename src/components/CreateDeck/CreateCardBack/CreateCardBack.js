@@ -1,16 +1,15 @@
 import React from "react";
 import { getRandomString } from "../../../helpers";
 import Icon from "../../Icon";
-import TextSizeSelect from "../TextSizeSelect";
 
 export default function CreateCardBack({ side, updateCardBack }) {
   const { type, textOptions, multiOptions, exactOptions } = side;
 
-  function handleChange({ target }, key) {
+  function handleChange({ target }) {
     const { value } = target;
 
-    if (value !== side[key]) {
-      textOptions[key] = value;
+    if (value !== side.value) {
+      textOptions.value = value;
       updateCardBack({ textOptions });
     }
   }
@@ -67,7 +66,6 @@ export default function CreateCardBack({ side, updateCardBack }) {
     return (
       <textarea className="input create-side-text-input"
         value={textOptions.value}
-        style={{ fontSize: `${textOptions.textSize}px` }}
         onChange={event => handleChange(event, "value")}>
       </textarea>
     );
@@ -185,10 +183,6 @@ export default function CreateCardBack({ side, updateCardBack }) {
             </label>
           </li>
         </ul>
-        {type === "text" && <TextSizeSelect
-          textSize={textOptions.textSize}
-          handleChange={event => handleChange(event, "textSize")}/>
-        }
         {type === "multi" && (
           <button className="btn btn-icon" onClick={addOption} title="Add option"
             disabled={multiOptions.options.length >= 8}>
@@ -198,7 +192,7 @@ export default function CreateCardBack({ side, updateCardBack }) {
       </div>
       <div className="create-side-content">
         {renderAnswerType(type)}
-        {side.errors?.message && <div className="create-side-message">{side.errors.message}</div>}
+        {side.error?.message && <div className="create-side-message">{side.error.message}</div>}
       </div>
     </div>
   );
