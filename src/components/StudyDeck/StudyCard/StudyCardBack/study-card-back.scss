@@ -2,6 +2,7 @@
   text-align: center;
   word-break: break-word;
   white-space: pre-line;
+  font-size: var(--text-size);
 }
 
 .study-exact {
@@ -70,6 +71,7 @@
 
 .study-multi-item {
   font-weight: normal;
+  font-size: var(--multi-text-size);
 
   &:hover, &.focus-visible {
     --background-color: var(--color-grey-40);

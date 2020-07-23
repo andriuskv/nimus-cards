@@ -50,59 +50,51 @@ export default function DeckSettings({ deck, hide }) {
   return (
     <Settings hide={hideSettings}>
       <h3 className="modal-title">Deck Settings</h3>
-      <div className="decks-settings-item">
-        <label className="checkbox-container">
-          <input type="checkbox" className="sr-only checkbox-input"
-            data-name="useGlobalSettings"
-            onChange={handleChange}
-            defaultChecked={useGlobalSettings}/>
-          <div className="checkbox decks-settings-checkbox">
-            <div className="checkbox-tick"></div>
-          </div>
-          <span className="checkbox-label">Use global settings</span>
-        </label>
-      </div>
-      <div className={`decks-settings-item${useGlobalSettings ? " disabled" : ""}`}>
-        <label className="checkbox-container">
-          <input type="checkbox" className="sr-only checkbox-input"
-            data-name="randomize"
-            onChange={handleChange}
-            defaultChecked={settings.randomize.value}
-            disabled={useGlobalSettings}/>
-          <div className="checkbox decks-settings-checkbox">
-            <div className="checkbox-tick"></div>
-          </div>
-          <span className="checkbox-label">Randomize cards</span>
-        </label>
-      </div>
-      <div className={`decks-settings-item${useGlobalSettings ? " disabled" : ""}`}>
-        <label>
-          <span>Use</span>
-          <input type="text" className="input decks-settings-input"
-            inputMode="numeric"
-            data-name="cardCount"
-            pattern="[0-9]*$"
-            onChange={handleChange}
-            defaultValue={settings.cardCount.value}
-            disabled={useGlobalSettings}/>
-          <span>cards per study session</span>
-          <div className="decks-settings-message">Please provide a valid whole number.</div>
-        </label>
-      </div>
-      <div className={`decks-settings-item${useGlobalSettings ? " disabled" : ""}`}>
-        <label>
-          <span>Reveal answer after</span>
-          <input type="text" className="input decks-settings-input"
-            inputMode="numeric"
-            data-name="timeoutDuration"
-            pattern="^0*|0*([5-9][0-9]*|[1-9]+[0-9]+)$"
-            onChange={handleChange}
-            defaultValue={settings.timeoutDuration.value}
-            disabled={useGlobalSettings}/>
-          <span>seconds</span>
-          <div className="decks-settings-message">Please provide a valid whole number.<br/> Minimal accepted value is 5 seconds.</div>
-        </label>
-      </div>
+      <label className="decks-settings-item decks-settings-item-spaced checkbox-container">
+        <span>Use global settings</span>
+        <input type="checkbox" className="sr-only checkbox-input"
+          data-name="useGlobalSettings"
+          onChange={handleChange}
+          defaultChecked={useGlobalSettings}/>
+        <div className="checkbox decks-settings-checkbox">
+          <div className="checkbox-tick"></div>
+        </div>
+      </label>
+      <label className={`decks-settings-item decks-settings-item-spaced${useGlobalSettings ? " disabled" : ""}`}>
+        <span>Randomize cards</span>
+        <input type="checkbox" className="sr-only checkbox-input"
+          data-name="randomize"
+          onChange={handleChange}
+          checked={settings.randomize.value}
+          disabled={useGlobalSettings}/>
+        <div className="checkbox decks-settings-checkbox">
+          <div className="checkbox-tick"></div>
+        </div>
+      </label>
+      <label className={`decks-settings-item${useGlobalSettings ? " disabled" : ""}`}>
+        <span>Use</span>
+        <input type="text" className="input decks-settings-input"
+          inputMode="numeric"
+          data-name="cardCount"
+          onChange={handleChange}
+          pattern="[0-9]*$"
+          value={settings.cardCount.value}
+          disabled={useGlobalSettings}/>
+        <span>cards per study session</span>
+        <div className="decks-settings-message">Please provide a valid whole number.</div>
+      </label>
+      <label className={`decks-settings-item${useGlobalSettings ? " disabled" : ""}`}>
+        <span>Reveal answer after</span>
+        <input type="text" className="input decks-settings-input"
+          inputMode="numeric"
+          data-name="timeoutDuration"
+          onChange={handleChange}
+          pattern="^0*|0*([5-9][0-9]*|[1-9]+[0-9]+)$"
+          value={settings.timeoutDuration.value}
+          disabled={useGlobalSettings}/>
+        <span>seconds</span>
+        <div className="decks-settings-message">Please provide a valid whole number.<br/> Minimal accepted value is 5 seconds.</div>
+      </label>
     </Settings>
   );
 }

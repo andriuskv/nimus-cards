@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./upload-panel.scss";
 import Icon from "../../../Icon";
 
-export default function UploadPanel({ addAttachment }) {
+export default function UploadPanel({ addAttachment, errorMessage }) {
   const [message, setMessage] = useState("");
   const [visibleType, setVisibleType] = useState("image");
 
@@ -124,6 +124,7 @@ export default function UploadPanel({ addAttachment }) {
           <button className="btn upload-panel-form-btn">Upload</button>
         </form>
       </div>
+      {errorMessage && <div className="create-side-message">{errorMessage}</div>}
     </div>
   );
 }

@@ -81,7 +81,7 @@ export default function StudyCardFront({ id, attachmentId, side }) {
   }
 
   function renderText() {
-    return <div className="study-front-text" style={{ fontSize: `${side.textSize}px` }}>{side.text}</div>;
+    return <div className="study-front-text">{side.text}</div>;
   }
 
   function renderContent() {

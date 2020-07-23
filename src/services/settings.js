@@ -1,9 +1,15 @@
 import cloneDeep from "lodash.clonedeep";
 
-let settings = JSON.parse(localStorage.getItem("nimus-cards-settings")) || getDefault();
+let settings = {
+  ...getDefault(),
+  ...JSON.parse(localStorage.getItem("nimus-cards-settings"))
+};
 
 function getDefault() {
   return {
+    textSize: {
+      value: 1
+    },
     randomize: {
       value: true
     },

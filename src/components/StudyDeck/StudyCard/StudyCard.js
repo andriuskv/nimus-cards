@@ -3,7 +3,7 @@ import "./study-card.scss";
 import CardFront from "./StudyCardFront";
 import CardBack from "./StudyCardBack";
 
-export default function StudyCard({ card, selectOption, revealAnswer, nextStep, skipNextStepTimeout }) {
+export default function StudyCard({ card, settings, selectOption, revealAnswer, nextStep, skipNextStepTimeout }) {
   function handleExactTypeFormSubmit(event) {
     event.preventDefault();
     event.persist();
@@ -27,33 +27,29 @@ export default function StudyCard({ card, selectOption, revealAnswer, nextStep, 
     }, 1600);
   }
 
-  if (card.back.type === "text" && !card.revealed) {
-    return (
-      <div className="study-card">
-        <CardFront id={card.id} attachmentId={card.attachmentId} side={card.front}/>
+  return (
+    <div className="study-card" style={{ "--text-base-size": `${settings.textSize.value}rem` }}>
+      <CardFront id={card.id} attachmentId={card.attachmentId} side={card.front}/>
+      {card.back.type === "text" && !card.revealed ? (
         <button className="btn btn-invert study-card-text-btn"
           onClick={revealAnswer}>Check</button>
-      </div>
-    );
-  }
-  return (
-    <div className="study-card">
-      <CardFront id={card.id} attachmentId={card.attachmentId} side={card.front}/>
-      <CardBack card={card} selectOption={selectOption} handleSubmit={handleExactTypeFormSubmit}/>
-      {card.back.type === "text" && card.revealed && (
+      ) : (
         <>
-          {card.finished || card.timerReveal ? (
-            <button className="btn btn-invert study-card-text-btn"
-              onClick={skipNextStepTimeout}>Next</button>
-          ) : (
-            <div>
-              <button className="btn btn-negative study-card-text-btn"
-                disabled={card.finished}
-                onClick={() => nextStep(false)}>I Was Wrong</button>
-              <button className="btn btn-positive study-card-text-btn"
-                disabled={card.finished}
-                onClick={() => nextStep(true)}>I Got It Right</button>
-            </div>
+          <CardBack card={card} selectOption={selectOption} handleSubmit={handleExactTypeFormSubmit}/>
+          {card.back.type === "text" && card.revealed && (
+            card.finished || card.timerReveal ? (
+              <button className="btn btn-invert study-card-text-btn"
+                onClick={skipNextStepTimeout}>Next</button>
+            ) : (
+              <div>
+                <button className="btn btn-negative study-card-text-btn"
+                  disabled={card.finished}
+                  onClick={() => nextStep(false)}>I Was Wrong</button>
+                <button className="btn btn-positive study-card-text-btn"
+                  disabled={card.finished}
+                  onClick={() => nextStep(true)}>I Got It Right</button>
+              </div>
+            )
           )}
         </>
       )}
