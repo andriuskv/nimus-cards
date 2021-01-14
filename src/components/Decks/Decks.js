@@ -56,7 +56,7 @@ export default function Decks() {
   }
 
   async function exportDeck(deck) {
-    const [{ saveAs }, { default: JSZip }] = await Promise.all([
+    const [{ default: saveAs }, { default: JSZip }] = await Promise.all([
       import("file-saver"),
       import("jszip")
     ]);

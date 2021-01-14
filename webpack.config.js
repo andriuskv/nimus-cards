@@ -2,7 +2,7 @@ const path = require("path");
 const { DefinePlugin } = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const workboxPlugin = require("workbox-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
@@ -16,8 +16,7 @@ module.exports = function(env = {}) {
       }
     }),
     new MiniCssExtractPlugin({
-      filename: "main.css",
-      ignoreOrder: true
+      filename: "main.css"
     }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
@@ -38,12 +37,18 @@ module.exports = function(env = {}) {
 
   return {
     mode,
+    target: "browserslist",
     entry: {
       main: "./src/index.js"
     },
     output: {
       path: path.resolve(__dirname, "./dist"),
       filename: "[name].js"
+    },
+    resolve: {
+      fallback: {
+        "stream": false
+      }
     },
     optimization: {
       splitChunks: {
@@ -55,15 +60,25 @@ module.exports = function(env = {}) {
           }
         }
       },
-      minimizer: [new TerserPlugin({
-        parallel: true,
-        terserOptions: {
-          ecma: 8,
-          output: {
-            comments: false
+      minimizer: [
+        new TerserPlugin({
+          parallel: true,
+          terserOptions: {
+            ecma: 2019,
+            output: {
+              comments: false
+            }
           }
-        }
-      }), new OptimizeCSSAssetsPlugin({})]
+        }),
+        new CssMinimizerPlugin({
+          minimizerOptions: {
+            preset: [
+              "default",
+              { discardComments: { removeAll: true } }
+            ]
+          }
+        })
+      ]
     },
     module: {
       rules: [
@@ -87,11 +102,10 @@ module.exports = function(env = {}) {
               loader: "postcss-loader",
               options: {
                 sourceMap: !env.prod,
-                plugins() {
-                  return [
-                    require("autoprefixer")(),
-                    require("css-mqpacker")()
-                  ];
+                postcssOptions: {
+                  plugins: [
+                    require("autoprefixer")()
+                  ]
                 }
               }
             },
@@ -105,16 +119,18 @@ module.exports = function(env = {}) {
         },
         {
           test: /\.js$/,
-          loader: "babel-loader",
           exclude: /node_modules/,
-          options: {
-            presets: [["@babel/preset-env", {
-              modules: false,
-              loose: true,
-              bugfixes: true,
-              useBuiltIns: "usage",
-              corejs: 3
-            }], "@babel/react"]
+          use: {
+            loader: "babel-loader",
+            options: {
+              presets: [["@babel/preset-env", {
+                modules: false,
+                loose: true,
+                bugfixes: true,
+                useBuiltIns: "usage",
+                corejs: 3
+              }], "@babel/react"]
+            }
           }
         }
       ]
