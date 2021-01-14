@@ -315,9 +315,6 @@ export default function StudyDeck() {
     }
     return (
       <div className={`study-header${state.settings.timeoutDuration.value > 0 ? " has-timer" : ""}`}>
-        <div className="study-progress" style={{
-          transform: `scaleX(${(state.cardCount - state.cards.length) / state.cardCount})`
-        }}></div>
         <button className="btn btn-icon study-exit-btn" onClick={handleStudyExit} title="Exit">
           <Icon name="close"/>
         </button>
@@ -367,6 +364,9 @@ export default function StudyDeck() {
           {state.card.notes?.value && <StudyNotes notes={state.card.notes}/>}
         </>
       )}
+      <div className="study-progress" style={{
+        transform: `scaleX(${(state.cardCount - state.cards.length) / state.cardCount})`
+      }}></div>
       {state.exitModalVisible && (
         <Modal hide={hideExitModal}>
           <h3 className="modal-title">Do you want to save your progress?</h3>
