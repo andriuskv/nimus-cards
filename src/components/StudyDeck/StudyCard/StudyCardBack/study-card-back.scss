@@ -108,13 +108,13 @@
 }
 
 .study-multi-short-type {
-  --cell-size: 96px;
+  --cell-size: 128px;
 
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(auto-fit, var(--cell-size));
   grid-gap: var(--space-md);
-  max-width: 408px;
+  max-width: 536px;
 }
 
 .study-multi-short-type-item {

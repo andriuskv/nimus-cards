@@ -6,7 +6,6 @@ import "./styles/base.scss";
 import React, { lazy, Suspense } from "react";
 import { render } from "react-dom";
 import { HashRouter, Route, Switch } from "react-router-dom";
-import Header from "./components/Header";
 import Home from "./components/Home";
 import ServiceWorkerPopup from "./components/ServiceWorkerPopup";
 import NoMatch from "./components/NoMatch";
@@ -20,21 +19,18 @@ const DeckStatus = lazy(() => import("./components/DeckStatus"));
 
 render(
   <HashRouter>
-    <Header/>
-    <main className="container">
-      <Suspense fallback={<div></div>}>
-        <Switch>
-          <Route path="/" exact component={Home}/>
-          <Route path="/decks" exact component={Decks}/>
-          <Route path="/decks/create" component={CreateDeck} key="create"/>
-          <Route path="/decks/:id" exact component={DeckStatus}/>
-          <Route path="/decks/:id/(learn|review|practice|preview)" exact component={StudyDeck}/>
-          <Route path="/decks/:id/edit" component={CreateDeck} key="edit"/>
-          <Route component={NoMatch}/>
-        </Switch>
-      </Suspense>
-      <ServiceWorkerPopup/>
-    </main>
+    <Suspense fallback={<div></div>}>
+      <Switch>
+        <Route path="/" exact component={Home}/>
+        <Route path="/decks" exact component={Decks}/>
+        <Route path="/decks/create" component={CreateDeck} key="create"/>
+        <Route path="/decks/:id" exact component={DeckStatus}/>
+        <Route path="/decks/:id/(learn|review|practice|preview)" exact component={StudyDeck}/>
+        <Route path="/decks/:id/edit" component={CreateDeck} key="edit"/>
+        <Route component={NoMatch}/>
+      </Switch>
+    </Suspense>
+    <ServiceWorkerPopup/>
   </HashRouter>,
   document.getElementById("app")
 );

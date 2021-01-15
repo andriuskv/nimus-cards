@@ -64,7 +64,7 @@ module.exports = function(env = {}) {
         new TerserPlugin({
           parallel: true,
           terserOptions: {
-            ecma: 2019,
+            ecma: 2020,
             output: {
               comments: false
             }
