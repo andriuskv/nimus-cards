@@ -23,7 +23,7 @@ export default function StudyDeckScore({ score, deck, startTime, ids }) {
   }
 
   return (
-    <>
+    <div className="container max-width-limit">
       <div className="study-score-container">
         <h3 className="study-score-title">Session Results</h3>
         <div className="study-score-stats">
@@ -77,6 +77,6 @@ export default function StudyDeckScore({ score, deck, startTime, ids }) {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }

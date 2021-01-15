@@ -344,7 +344,7 @@ export default function StudyDeck() {
           startTime={state.sessionStartedAt}
           ids={state.sessionCardIds}/>
       ) : (
-        <>
+        <div className="container max-width-limit">
           <StudyDeckHeader score={state.score}/>
           {state.mode === "preview" && (
             <ul className="study-card-select">
@@ -362,7 +362,7 @@ export default function StudyDeck() {
             skipNextStepTimeout={skipNextStepTimeout}
             nextStep={nextStep}/>
           {state.card.notes?.value && <StudyNotes notes={state.card.notes}/>}
-        </>
+        </div>
       )}
       <div className="study-progress" style={{
         transform: `scaleX(${(state.cardCount - state.cards.length) / state.cardCount})`

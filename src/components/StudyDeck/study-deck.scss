@@ -1,12 +1,14 @@
 @import "../../styles/mixins.scss";
 
 .study-header {
-  position: relative;
   overflow: hidden;
-  padding: var(--space-xl);
-  margin-bottom: var(--space-xl);
-  border-radius: 999px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--header-height);
   background-color: var(--color-grey-70);
+  box-shadow: 0 1px 4px 0 var(--color-black-10);
 
   &.has-timer {
     .study-header-title {
@@ -62,7 +64,7 @@
 }
 
 .study-progress {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;

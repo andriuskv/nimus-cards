@@ -6,7 +6,7 @@ import Icon from "../Icon";
 export default function Header() {
   return (
     <header className="header">
-      <nav className="container header-nav">
+      <nav className="max-width-limit header-nav">
         <Link to="/" className="header-logo-link">
           <Icon name="cards" className="header-logo-icon"/>
           <span>NimusCards</span>
