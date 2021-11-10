@@ -1,11 +1,11 @@
-import React from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./home.scss";
 import Header from "../Header";
 import Icon from "../Icon";
+import "./home.scss";
 
 export default function Home() {
-  React.useEffect(() => {
+  useEffect(() => {
     document.title = "NimusCards";
   }, []);
 

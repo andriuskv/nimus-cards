@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function CreateCardNotes({ value, handleChange }) {
   return (
     <div className="create-card-notes-container">

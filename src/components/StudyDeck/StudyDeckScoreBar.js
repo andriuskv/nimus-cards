@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function StudyScoreBar({ score, name, className }) {
   const style = {
     "--width": `${score.total ? score[name] / score.total * 100 : 50}%`

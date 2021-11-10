@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./study-deck.scss";
 import { shuffleArray, setDocumentTitle, getCardsToLearn, getCardsToReview, getRandomString } from "../../helpers";
 import { fetchDeck, saveDeck } from "../../services/db";
@@ -13,22 +13,21 @@ import StudyNotes from "./StudyNotes";
 import Card from "./StudyCard";
 import Timer from "./Timer";
 
-export default function StudyDeck() {
-  const history = useHistory();
-  const match = useRouteMatch();
+export default function StudyDeck({ mode }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = useParams();
   const [state, setState] = useState(null);
   const nextStepTimeout = useRef(0);
-  const { location } = history;
 
   useEffect(() => {
     const reload = new URLSearchParams(location.search).get("reload");
 
     if (reload === "1") {
-      history.replace({
+      navigate({
         pathname: location.pathname,
-        search: "",
-        state: { reloaded: true }
-      });
+        search: ""
+      }, { replace: true, state: { reloaded: true } });
       init();
     }
     else if (!location.state?.reloaded) {
@@ -37,18 +36,16 @@ export default function StudyDeck() {
   }, [location.pathname + location.search]);
 
   function init() {
-    const mode = match.url.split("/")[3];
-
     if (mode === "preview") {
       if (location.state?.title) {
-        initDeck(location.state, "preview");
+        initDeck(location.state);
       }
       else {
         setState({ error: true });
       }
       return;
     }
-    fetchDeck(match.params.id).then(deck => {
+    fetchDeck(params.id).then(deck => {
       if (deck) {
         initDeck(deck);
       }
@@ -77,7 +74,7 @@ export default function StudyDeck() {
     };
   }
 
-  function initDeck(deck, mode = match.url.split("/")[3]) {
+  function initDeck(deck) {
     let { cards } = deck;
 
     if (mode === "learn") {
@@ -277,13 +274,10 @@ export default function StudyDeck() {
       setState({ ...state, exitModalVisible: true });
     }
     else if (state.mode === "preview") {
-      history.push({
-        pathname: state.deck.type === "edit" ? `/decks/${state.deck.id}/${state.deck.type}` : "/decks/create",
-        state: state.deck
-      });
+      navigate(state.deck.type === "edit" ? `/decks/${state.deck.id}/${state.deck.type}` : "/decks/create", { state: state.deck });
     }
     else {
-      history.push("/decks");
+      navigate("/decks");
     }
   }
 
@@ -291,7 +285,7 @@ export default function StudyDeck() {
     if (save) {
       saveDeck(state.deck);
     }
-    history.push("/decks");
+    navigate("/decks");
   }
 
   function hideExitModal() {

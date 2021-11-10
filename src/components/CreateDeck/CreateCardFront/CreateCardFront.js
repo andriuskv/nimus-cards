@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import UploadPanel from "./UploadPanel";
 import Attachment from "./CreateCardAttachment";
 import Icon from "../../Icon";

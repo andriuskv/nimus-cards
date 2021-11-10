@@ -1,9 +1,13 @@
 {
   "root": true,
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 2020,
     "sourceType": "module",
+    "requireConfigFile": false,
+    "babelOptions": {
+        "presets": ["@babel/preset-react"]
+    },
+    "ecmaVersion": "latest",
     "ecmaFeatures": {
       "modules": true,
       "jsx": true
@@ -19,8 +23,12 @@
     "react",
     "react-hooks"
   ],
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "rules": {
+    "react/react-in-jsx-scope": 0,
     "react/prop-types": 0,
     "react/display-name": 0,
     "react/no-unescaped-entities": 0,
@@ -37,9 +45,11 @@
     "dot-notation": 2,
     "eqeqeq": 2,
     "indent": [2, 2, {
-      "SwitchCase": 1
+      "SwitchCase": 1,
+      "ignoreComments": true
     }],
     "no-const-assign": 2,
+    "no-constant-condition": 0,
     "no-var": 2,
     "no-console": 0,
     "no-case-declarations": 0,
@@ -67,8 +77,6 @@
     "no-useless-concat": 2,
     "no-undef": 2,
     "no-unused-vars": 2,
-    "no-lonely-if": 2,
-    "no-confusing-arrow": 2,
     "no-useless-constructor": 2,
     "no-dupe-class-members": 2,
     "no-unneeded-ternary": 2,
@@ -80,8 +88,7 @@
     "prefer-spread": 2,
     "prefer-rest-params": 2,
     "prefer-arrow-callback": 2,
-    "prefer-template": 2,
-    "quotes": [2, "double",{
+    "quotes": [2, "double", {
       "avoidEscape": true,
       "allowTemplateLiterals": true
     }],

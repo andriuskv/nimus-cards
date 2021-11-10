@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import "./dropdown.scss";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { getRandomString } from "../../helpers";
 import Icon from "../Icon";
+import "./dropdown.scss";
 
 export default function Dropdown({ children }) {
   const [{ id, visible }, setDropdownState] = useState({ id: "", visible: false });

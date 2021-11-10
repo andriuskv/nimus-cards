@@ -1,4 +1,3 @@
-import React from "react";
 import { getRandomString } from "../../../helpers";
 import Icon from "../../Icon";
 
