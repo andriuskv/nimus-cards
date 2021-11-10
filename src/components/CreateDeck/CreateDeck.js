@@ -4,7 +4,6 @@ import "./create-deck.scss";
 import cloneDeep from "lodash.clonedeep";
 import { getRandomString, setDocumentTitle } from "../../helpers";
 import { fetchDeck, saveDeck } from "../../services/db";
-import Header from "../Header";
 import Icon from "../Icon";
 import NoMatch from "../NoMatch";
 import CardFront from "./CreateCardFront";
@@ -425,79 +424,76 @@ export default function CreateDeck() {
   const card = state.cards[index];
 
   return (
-    <>
-      <Header/>
-      <div className="container max-width-limit">
-        <label className="create-field">
-          <div className="create-field-title">Title</div>
-          <input className="input create-field-input"
-            name="title" value={state.title}
-            onChange={handleChange}/>
-          {state.missingTitle && <div className="create-field-input-message">Please provide title for your deck.</div>}
-        </label>
-        <label className="create-field">
-          <div className="create-field-title">Description</div>
-          <input className="input create-field-input"
-            name="description" value={state.description}
-            onChange={handleChange}/>
-        </label>
-        <ul className="create-card-select">
-          {state.cards.map((card, index) => (
-            <li className="create-card-select-item" key={index}>
-              <button className={`btn btn-text create-card-select-btn${index === state.selectedCardIndex ? " active": ""}${card.invalid ? " invalid": ""}${card.valid ? " valid": ""}`} onClick={() => selectCard(index)}>{index + 1}</button>
-            </li>
-          ))}
-          <li className="create-card-select-item">
-            <button onClick={addCard} className="btn btn-icon create-card-select-btn" title="Add Card">
-              <Icon name="plus"/>
-            </button>
+    <div className="container max-width-limit">
+      <label className="create-field">
+        <div className="create-field-title">Title</div>
+        <input className="input create-field-input"
+          name="title" value={state.title}
+          onChange={handleChange}/>
+        {state.missingTitle && <div className="create-field-input-message">Please provide title for your deck.</div>}
+      </label>
+      <label className="create-field">
+        <div className="create-field-title">Description</div>
+        <input className="input create-field-input"
+          name="description" value={state.description}
+          onChange={handleChange}/>
+      </label>
+      <ul className="create-card-select">
+        {state.cards.map((card, index) => (
+          <li className="create-card-select-item" key={index}>
+            <button className={`btn btn-text create-card-select-btn${index === state.selectedCardIndex ? " active": ""}${card.invalid ? " invalid": ""}${card.valid ? " valid": ""}`} onClick={() => selectCard(index)}>{index + 1}</button>
           </li>
-        </ul>
-        <div className="create-card">
-          <div className="create-card-header">
-            <div className="create-card-index-container">
-              <button className="btn btn-icon create-card-header-item" onClick={() => swapCard(index, -1)}
-                title="Swap with the left card" disabled={index === 0}>
-                <Icon name="chevron-left"/>
-              </button>
-              <div className="create-card-index">{index + 1}</div>
-              <button className="btn btn-icon create-card-header-item" onClick={() => swapCard(index, 1)}
-                title="Swap with the right card" disabled={index === length - 1}>
-                <Icon name="chevron-right"/>
-              </button>
-            </div>
-            <button className="btn btn-icon" title="Clone card" onClick={() => cloneCard(index)}>
-              <Icon name="clone"/>
+        ))}
+        <li className="create-card-select-item">
+          <button onClick={addCard} className="btn btn-icon create-card-select-btn" title="Add Card">
+            <Icon name="plus"/>
+          </button>
+        </li>
+      </ul>
+      <div className="create-card">
+        <div className="create-card-header">
+          <div className="create-card-index-container">
+            <button className="btn btn-icon create-card-header-item" onClick={() => swapCard(index, -1)}
+              title="Swap with the left card" disabled={index === 0}>
+              <Icon name="chevron-left"/>
             </button>
-            {length > 1 && (
-              <button className="btn btn-icon create-card-remove-card-btn" title="Remove card" onClick={() => removeCard(index)}>
-                <Icon name="remove"/>
-              </button>
-            )}
+            <div className="create-card-index">{index + 1}</div>
+            <button className="btn btn-icon create-card-header-item" onClick={() => swapCard(index, 1)}
+              title="Swap with the right card" disabled={index === length - 1}>
+              <Icon name="chevron-right"/>
+            </button>
           </div>
-          <div className="create-card-main" key={card.id}>
-            <CardFront side={card.front}
-              addAttachment={addAttachment}
-              removeAttachment={removeAttachment}
-              updateAttachmentDescription={updateAttachmentDescription}
-              handleChange={handleCardFrontTextChange}/>
-            <CardBack side={card.back} updateCardBack={updateCardBack}/>
-          </div>
-          <CardNotes value={card.notes.value} handleChange={handleCardNotesChange}/>
+          <button className="btn btn-icon" title="Clone card" onClick={() => cloneCard(index)}>
+            <Icon name="clone"/>
+          </button>
+          {length > 1 && (
+            <button className="btn btn-icon create-card-remove-card-btn" title="Remove card" onClick={() => removeCard(index)}>
+              <Icon name="remove"/>
+            </button>
+          )}
         </div>
-        {pendingCards.length > 0 && (
-          <div className="create-undo-dialog">
-            <span>Removed {pendingCards.length} card{pendingCards.length > 1 ? "s" : ""}</span>
-            <button className="btn btn-text create-dialog-undo-btn" onClick={undoCardRemoval}>UNDO</button>
-          </div>
-        )}
-        <div className="create-footer">
-          {state.globalMessage && <span className="create-message">{state.globalMessage}</span>}
-          <button className="btn create-footer-btn" onClick={previewDeck}>Preview</button>
-          <button className="btn create-footer-btn" onClick={handleSubmit}>{state.makingEdit ? "Update" : "Create" }</button>
+        <div className="create-card-main" key={card.id}>
+          <CardFront side={card.front}
+            addAttachment={addAttachment}
+            removeAttachment={removeAttachment}
+            updateAttachmentDescription={updateAttachmentDescription}
+            handleChange={handleCardFrontTextChange}/>
+          <CardBack side={card.back} updateCardBack={updateCardBack}/>
         </div>
+        <CardNotes value={card.notes.value} handleChange={handleCardNotesChange}/>
       </div>
-    </>
+      {pendingCards.length > 0 && (
+        <div className="create-undo-dialog">
+          <span>Removed {pendingCards.length} card{pendingCards.length > 1 ? "s" : ""}</span>
+          <button className="btn btn-text create-dialog-undo-btn" onClick={undoCardRemoval}>UNDO</button>
+        </div>
+      )}
+      <div className="create-footer">
+        {state.globalMessage && <span className="create-message">{state.globalMessage}</span>}
+        <button className="btn create-footer-btn" onClick={previewDeck}>Preview</button>
+        <button className="btn create-footer-btn" onClick={handleSubmit}>{state.makingEdit ? "Update" : "Create" }</button>
+      </div>
+    </div>
   );
 }
 
