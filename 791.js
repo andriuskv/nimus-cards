@@ -1,1 +1,0 @@
-(globalThis.webpackChunknimus_cards=globalThis.webpackChunknimus_cards||[]).push([[791],{791:()=>{}}]);
