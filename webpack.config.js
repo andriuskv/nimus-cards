@@ -19,10 +19,13 @@ module.exports = function(env = {}) {
       filename: "main.css"
     }),
     new HtmlWebpackPlugin({
-      template: "./public/index.html",
-      cache: false
+      template: "./public/index.html"
     }),
-    new CopyPlugin({ patterns: [{ from: "./public" }]})
+    new CopyPlugin({ patterns: [
+      { from: "./public", globOptions: {
+        ignore: ["**/index.html"]
+      }}
+    ]})
   ];
 
   if (env.prod) {
@@ -42,13 +45,8 @@ module.exports = function(env = {}) {
       main: "./src/index.js"
     },
     output: {
-      path: path.resolve(__dirname, "./dist"),
+      path: path.resolve(__dirname, "./build"),
       filename: "[name].js"
-    },
-    resolve: {
-      fallback: {
-        "stream": false
-      }
     },
     optimization: {
       splitChunks: {
@@ -64,7 +62,7 @@ module.exports = function(env = {}) {
         new TerserPlugin({
           parallel: true,
           terserOptions: {
-            ecma: 2020,
+            ecma: 2021,
             output: {
               comments: false
             }
@@ -99,17 +97,6 @@ module.exports = function(env = {}) {
               }
             },
             {
-              loader: "postcss-loader",
-              options: {
-                sourceMap: !env.prod,
-                postcssOptions: {
-                  plugins: [
-                    require("autoprefixer")()
-                  ]
-                }
-              }
-            },
-            {
               loader: "sass-loader",
               options: {
                 sourceMap: !env.prod
@@ -129,7 +116,9 @@ module.exports = function(env = {}) {
                 bugfixes: true,
                 useBuiltIns: "usage",
                 corejs: 3
-              }], "@babel/react"]
+              }], ["@babel/preset-react", {
+                runtime: "automatic"
+              }]]
             }
           }
         }

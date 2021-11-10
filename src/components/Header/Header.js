@@ -1,9 +1,16 @@
-import React from "react";
 import { Link, NavLink } from "react-router-dom";
-import "./header.scss";
 import Icon from "../Icon";
+import "./header.scss";
 
 export default function Header() {
+  function getLinkClassName({ isActive }) {
+    let className = "header-link";
+
+    if (isActive) {
+      className += " active";
+    }
+    return className;
+  }
   return (
     <header className="header">
       <nav className="max-width-limit header-nav">
@@ -13,10 +20,10 @@ export default function Header() {
         </Link>
         <ul className="header-nav-items">
           <li>
-            <NavLink to="/decks" exact className="header-link" activeClassName="active">Decks</NavLink>
+            <NavLink to="/decks" end className={getLinkClassName}>Decks</NavLink>
           </li>
           <li>
-            <NavLink to="/decks/create" className="header-link" activeClassName="active">Create</NavLink>
+            <NavLink to="/decks/create" className={getLinkClassName}>Create</NavLink>
           </li>
         </ul>
       </nav>

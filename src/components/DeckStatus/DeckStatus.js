@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import "./deck-status.scss";
-import { useLocation, useRouteMatch } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { fetchDeck } from "../../services/db";
 import NoMatch from "../NoMatch";
+import "./deck-status.scss";
 
 export default function DeckStatus() {
   const location = useLocation();
-  const match = useRouteMatch();
+  const params = useParams();
   const [state, setState] = useState(null);
 
   useEffect(() => {
-    fetchDeck(match.params.id).then(deck => {
+    fetchDeck(params.id).then(deck => {
       if (deck) {
         const learnedCards = deck.cards.filter(card => card.level > 1);
         deck.learnedCardCount = learnedCards.length;

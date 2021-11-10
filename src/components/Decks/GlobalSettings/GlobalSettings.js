@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { getGlobalSettings, saveSettings } from "../../../services/settings";
 import Settings from "../Settings";
 

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./timer.scss";
+import { useState, useEffect, useRef } from "react";
 import { formatTime } from "../../../helpers";
+import "./timer.scss";
 
 export default function Timer({ revealed, initDuration, callback }) {
   const [duration, setDuration] = useState(initDuration);

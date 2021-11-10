@@ -1,6 +1,6 @@
-import React from "react";
+import { memo } from "react";
 
-export default React.memo(({ attachment }) => {
+export default memo(({ attachment }) => {
   const { blob, url, type } = attachment;
   const src = blob ? URL.createObjectURL(blob) : url;
 

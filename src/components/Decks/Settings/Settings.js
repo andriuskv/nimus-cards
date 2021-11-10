@@ -1,4 +1,3 @@
-import React from "react";
 import "./settings.scss";
 import Modal from "../../Modal";
 

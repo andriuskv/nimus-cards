@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import cloneDeep from "lodash.clonedeep";
 import { getGlobalSettings } from "../../../services/settings";
 import { saveDeck } from "../../../services/db";

@@ -1,4 +1,3 @@
-import React from "react";
 import StudyScoreBar from "./StudyDeckScoreBar";
 
 export default function StudyDeckHeader({ score }) {

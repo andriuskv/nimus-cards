@@ -1,4 +1,3 @@
-import React from "react";
 import "./study-card.scss";
 import CardFront from "./StudyCardFront";
 import CardBack from "./StudyCardBack";

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import "./create-deck.scss";
 import cloneDeep from "lodash.clonedeep";
 import { getRandomString, setDocumentTitle } from "../../helpers";
@@ -12,16 +12,14 @@ import CardBack from "./CreateCardBack";
 import CardNotes from "./CardNotes";
 
 export default function CreateDeck() {
-  const history = useHistory();
+  const location = useLocation();
+  const navigate = useNavigate();
   const params = useParams();
   const [state, setState] = useState(null);
   const [pendingCards, setPendingCards] = useState([]);
-  const { location } = history;
   let undoTimeout = 0;
 
   useEffect(() => {
-    const { id } = params;
-
     if (location.state) {
       const deck = location.state;
       deck.cards = parseCards(deck.cards);
@@ -33,8 +31,8 @@ export default function CreateDeck() {
       setState(getInitialDeck());
       setDocumentTitle("Create a new deck");
     }
-    else if (id) {
-      fetchDeck(id).then(deck => {
+    else if (params.id) {
+      fetchDeck(params.id).then(deck => {
         if (!deck) {
           setState({ error: true });
           return;
@@ -389,10 +387,7 @@ export default function CreateDeck() {
       state.cards = cleanupCards(state.cards);
 
       if (type === "preview") {
-        history.push({
-          pathname: `/decks/${state.id}/preview`,
-          state
-        });
+        navigate(`/decks/${state.id}/preview`, { state });
       }
       else {
         const currentDate = Date.now();
@@ -406,7 +401,7 @@ export default function CreateDeck() {
         else {
           state.createdAt = currentDate;
         }
-        history.push("/decks");
+        navigate("/decks");
         saveDeck(state);
       }
     }

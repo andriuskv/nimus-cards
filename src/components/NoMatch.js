@@ -1,8 +1,8 @@
-import React from "react";
+import { useEffect } from "react";
 import { setDocumentTitle } from "../helpers";
 
 export default function NoMatch({ message }) {
-  React.useEffect(() => {
+  useEffect(() => {
     setDocumentTitle("Page not found");
   }, [message]);
 
