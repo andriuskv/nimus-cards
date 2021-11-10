@@ -313,11 +313,12 @@ export default function StudyDeck({ mode }) {
           <Icon name="close"/>
         </button>
         <h1 className="study-header-title">{state.deck.title}</h1>
-        {state.mode === "preview" && <Icon name="preview" className="study-preview-icon" title="In preview mode"/>}
-        {!state.card.finished && state.settings.timeoutDuration.value > 0 && (
-          <Timer revealed={state.card.revealed}
-            initDuration={state.settings.timeoutDuration.value}
-            callback={timerRevealAnswer}/>
+        {state.mode === "preview" ? <Icon name="preview" className="study-preview-icon" title="In preview mode"/> : (
+          !state.card.finished && state.settings.timeoutDuration.value > 0 && (
+            <Timer revealed={state.card.revealed}
+              initDuration={state.settings.timeoutDuration.value}
+              callback={timerRevealAnswer}/>
+          )
         )}
       </div>
     );

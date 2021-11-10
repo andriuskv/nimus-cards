@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "./decks.scss";
 import { getRandomString, setDocumentTitle, getCardsToLearn, getCardsToReview } from "../../helpers";
 import { fetchDecks, deleteDeck, saveDeck } from "../../services/db";
-import Header from "../Header";
 import Icon from "../Icon";
 import DeckRemoveModal from "./DeckRemoveModal";
 import GlobalSettings from "./GlobalSettings";
@@ -149,32 +148,29 @@ export default function Decks() {
   }
 
   return (
-    <>
-      <Header/>
-      <div className="container max-width-limit">
-        <div className="decks-header">
-          <h1 className="decks-title">Your Decks</h1>
-          <Link to="/decks/create" className="btn deck-create-link">Create</Link>
-        </div>
-        <div className="decks-top-bar">
-          <label className="btn btn-icon-text decks-top-bar-item deck-import-input-container">
-            <Icon name="import"/>
-            <span>Import</span>
-            <input type="file" className="sr-only" onChange={importDeck}/>
-          </label>
-          <button className="btn btn-icon-text decks-top-bar-item" onClick={showSettingsModal}>
-            <Icon name="settings"/>
-            <span>Settings</span>
-          </button>
-        </div>
-        {loading ? "" : decks.length ?
-          <ul className="decks">{renderDecks(decks)}</ul> :
-          <h2 className="decks-message">You have no decks</h2>
-        }
-        {modal.deckRemoveModalVisible && <DeckRemoveModal removeDeck={removeDeck} cancelRemoval={hideModal}/>}
-        {modal.settingsVisible && <GlobalSettings hide={hideModal}/>}
-        {modal.deckSettingsVisible && <DeckSettings hide={hideModal} deck={modal.deck}/>}
+    <div className="container max-width-limit">
+      <div className="decks-header">
+        <h1 className="decks-title">Your Decks</h1>
+        <Link to="/decks/create" className="btn deck-create-link">Create</Link>
       </div>
-    </>
+      <div className="decks-top-bar">
+        <label className="btn btn-icon-text decks-top-bar-item deck-import-input-container">
+          <Icon name="import"/>
+          <span>Import</span>
+          <input type="file" className="sr-only" onChange={importDeck}/>
+        </label>
+        <button className="btn btn-icon-text decks-top-bar-item" onClick={showSettingsModal}>
+          <Icon name="settings"/>
+          <span>Settings</span>
+        </button>
+      </div>
+      {loading ? "" : decks.length ?
+        <ul className="decks">{renderDecks(decks)}</ul> :
+        <h2 className="decks-message">You have no decks</h2>
+      }
+      {modal.deckRemoveModalVisible && <DeckRemoveModal removeDeck={removeDeck} cancelRemoval={hideModal}/>}
+      {modal.settingsVisible && <GlobalSettings hide={hideModal}/>}
+      {modal.deckSettingsVisible && <DeckSettings hide={hideModal} deck={modal.deck}/>}
+    </div>
   );
 }
