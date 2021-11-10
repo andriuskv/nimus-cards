@@ -61,7 +61,7 @@ export default function DeckStatus() {
     return <NoMatch/>;
   }
   return (
-    <div className="deck-status">
+    <div className="container max-width-limit deck-status">
       <div className="deck-status-header">
         <h2 className="deck-status-title">{state.title}</h2>
         <div className="deck-status-progress">Learned {state.learnedCardCount} out of {state.cards.length} cards, {state.memorizedCardCount} memorized</div>

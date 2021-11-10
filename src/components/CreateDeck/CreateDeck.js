@@ -405,6 +405,9 @@ export default function CreateDeck() {
       }
     }
     else {
+      const firstInvalidCardIndex = state.cards.findIndex(card => !card.valid);
+      state.selectedCardIndex = firstInvalidCardIndex;
+
       setState({ ...state });
     }
   }
