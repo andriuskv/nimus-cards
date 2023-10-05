@@ -15,10 +15,6 @@ function getRandomString() {
   return Math.random().toString(32).slice(2, 10);
 }
 
-function classNames(...classNames) {
-  return classNames.join(" ");
-}
-
 function setDocumentTitle(title) {
   document.title = `${title} | NimusCards`;
 }
@@ -58,7 +54,6 @@ function formatTime(time) {
 export {
   shuffleArray,
   getRandomString,
-  classNames,
   setDocumentTitle,
   getCardsToLearn,
   getCardsToReview,

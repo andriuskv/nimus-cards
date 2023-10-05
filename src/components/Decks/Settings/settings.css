@@ -51,7 +51,7 @@
 }
 
 .decks-settings-hide-btn {
-  &:hover, &.focus-visible {
+  &:hover, &:focus-visible {
     background-color: var(--color-grey-40);
   }
 }

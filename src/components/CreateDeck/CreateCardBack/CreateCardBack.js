@@ -1,5 +1,5 @@
-import { getRandomString } from "../../../helpers";
-import Icon from "../../Icon";
+import { getRandomString } from "helpers";
+import Icon from "components/Icon";
 
 export default function CreateCardBack({ side, updateCardBack }) {
   const { type, textOptions, multiOptions, exactOptions } = side;

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Icon from "../Icon";
-import "./home.scss";
+import Icon from "components/Icon";
+import "./home.css";
 
 export default function Home() {
   useEffect(() => {

@@ -5,7 +5,7 @@
     "sourceType": "module",
     "requireConfigFile": false,
     "babelOptions": {
-        "presets": ["@babel/preset-react"]
+      "presets": ["@babel/preset-react"]
     },
     "ecmaVersion": "latest",
     "ecmaFeatures": {

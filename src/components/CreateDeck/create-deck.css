@@ -1,5 +1,3 @@
-@import "../../styles/mixins.scss";
-
 .create-field {
   margin-bottom: var(--space-xl);
 }
@@ -32,7 +30,7 @@
 }
 
 .create-card-select-item {
-  --space:  var(--space-md);
+  --space: var(--space-md);
 
   margin-bottom: var(--space);
 
@@ -40,8 +38,8 @@
     margin-right: var(--space);
   }
 
-  @include breakpoint-smallest {
-     --space:  var(--space-sm);
+  @media (width <= 672px) {
+    --space: var(--space-sm);
   }
 }
 
@@ -130,7 +128,7 @@
   display: flex;
   border-bottom: 1px solid var(--color-grey-60);
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     display: block;
   }
 }
@@ -165,7 +163,7 @@
     color: var(--color-white);
   }
 
-  &.focus-visible + .create-option-type-icon {
+  &:focus-visible + .create-option-type-icon {
     box-shadow: 0 0 0 1px var(--color-accent);
   }
 }
@@ -187,7 +185,7 @@
   flex-direction: column;
   height: 276px;
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     height: 200px;
   }
 }
@@ -195,7 +193,7 @@
 .create-front-side-content {
   box-shadow: 1px 0 0 0 var(--color-grey-60);
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     box-shadow:0 1px 0 0 var(--color-grey-60);
   }
 }
@@ -206,7 +204,7 @@
   border-radius: 0;
   background-color: inherit;
 
-  &.focus-visible {
+  &:focus-visible {
     box-shadow: none;
     border-color: var(--color-accent);
   }
@@ -362,7 +360,7 @@
   font-size: var(--text-sm);
   font-weight: bold;
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     position: absolute;
     bottom: calc(100% + 8px);
     right: 0;

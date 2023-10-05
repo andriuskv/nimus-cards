@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import "./create-deck.scss";
-import cloneDeep from "lodash.clonedeep";
-import { getRandomString, setDocumentTitle } from "../../helpers";
-import { fetchDeck, saveDeck } from "../../services/db";
-import Icon from "../Icon";
-import NoMatch from "../NoMatch";
+import { getRandomString, setDocumentTitle } from "helpers";
+import { fetchDeck, saveDeck } from "services/db";
+import Icon from "components/Icon";
+import NoMatch from "components/NoMatch";
+import "./create-deck.css";
 import CardFront from "./CreateCardFront";
 import CardBack from "./CreateCardBack";
-import CardNotes from "./CardNotes";
 
 export default function CreateDeck() {
   const location = useLocation();
@@ -151,7 +149,7 @@ export default function CreateDeck() {
   }
 
   function cloneCard(index) {
-    const cloneCard = cloneDeep(state.cards[index]);
+    const cloneCard = structuredClone(state.cards[index]);
     cloneCard.id = getRandomString();
     state.selectedCardIndex = index;
 
@@ -406,8 +404,10 @@ export default function CreateDeck() {
     }
     else {
       const firstInvalidCardIndex = state.cards.findIndex(card => !card.valid);
-      state.selectedCardIndex = firstInvalidCardIndex;
 
+      if (firstInvalidCardIndex >= 0) {
+        state.selectedCardIndex = firstInvalidCardIndex;
+      }
       setState({ ...state });
     }
   }
@@ -483,7 +483,13 @@ export default function CreateDeck() {
             handleChange={handleCardFrontTextChange}/>
           <CardBack side={card.back} updateCardBack={updateCardBack}/>
         </div>
-        <CardNotes value={card.notes.value} handleChange={handleCardNotesChange}/>
+        <div className="create-card-notes-container">
+          <textarea className="input create-card-notes-input"
+            placeholder="Notes..."
+            value={card.notes.value}
+            onChange={handleCardNotesChange}
+          ></textarea>
+        </div>
       </div>
       {pendingCards.length > 0 && (
         <div className="create-undo-dialog">
@@ -499,4 +505,3 @@ export default function CreateDeck() {
     </div>
   );
 }
-

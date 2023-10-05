@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "react";
-import "./modal.scss";
+import "./modal.css";
 
 export default function Modal({ className, hide, children }) {
   const memoizedKeyDownHandler = useCallback(handleKeydown, []);

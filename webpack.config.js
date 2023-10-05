@@ -6,6 +6,7 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const workboxPlugin = require("workbox-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const postcssPresetEnv = require("postcss-preset-env");
 
 module.exports = function(env = {}) {
   const mode = env.prod ? "production" : "development";
@@ -39,6 +40,18 @@ module.exports = function(env = {}) {
   }
 
   return {
+    devServer: {
+      static: {
+        directory: path.join(__dirname, "public")
+      },
+      client: {
+        logging: "error"
+      },
+      open: true,
+      hot: false,
+      compress: true,
+      port: 8080
+    },
     mode,
     target: "browserslist",
     entry: {
@@ -47,6 +60,14 @@ module.exports = function(env = {}) {
     output: {
       path: path.resolve(__dirname, "./build"),
       filename: "[name].js"
+    },
+    resolve: {
+      alias: {
+        components: path.resolve(__dirname, "src/components"),
+        contexts: path.resolve(__dirname, "src/contexts"),
+        services: path.resolve(__dirname, "src/services"),
+        helpers$: path.resolve(__dirname, "src/helpers.js")
+      }
     },
     optimization: {
       splitChunks: {
@@ -81,7 +102,7 @@ module.exports = function(env = {}) {
     module: {
       rules: [
         {
-          test: /\.s?css$/,
+          test: /\.css$/,
           use: [
             {
               loader: MiniCssExtractPlugin.loader,
@@ -92,14 +113,20 @@ module.exports = function(env = {}) {
             {
               loader: "css-loader",
               options: {
-                sourceMap: !env.prod,
+                esModule: true,
+                importLoaders: 1,
                 url: false
               }
             },
             {
-              loader: "sass-loader",
+              loader: "postcss-loader",
               options: {
-                sourceMap: !env.prod
+                postcssOptions: {
+                  plugins: [
+                    "postcss-import",
+                    postcssPresetEnv({ stage: 0 })
+                  ]
+                }
               }
             }
           ]

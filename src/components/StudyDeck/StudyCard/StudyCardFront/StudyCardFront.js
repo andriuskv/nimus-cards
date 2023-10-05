@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import Icon from "../../../Icon";
-import "./study-card-front.scss";
+import Icon from "components/Icon";
+import "./study-card-front.css";
 
 export default function StudyCardFront({ id, attachmentId, side }) {
   const [attachment, setAttachment] = useState(null);
