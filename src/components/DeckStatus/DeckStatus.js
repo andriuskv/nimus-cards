@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { fetchDeck } from "../../services/db";
-import NoMatch from "../NoMatch";
-import "./deck-status.scss";
+import { fetchDeck } from "services/db";
+import NoMatch from "components/NoMatch";
+import "./deck-status.css";
 
 export default function DeckStatus() {
   const location = useLocation();

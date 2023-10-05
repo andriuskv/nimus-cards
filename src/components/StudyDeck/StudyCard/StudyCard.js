@@ -1,4 +1,4 @@
-import "./study-card.scss";
+import "./study-card.css";
 import CardFront from "./StudyCardFront";
 import CardBack from "./StudyCardBack";
 

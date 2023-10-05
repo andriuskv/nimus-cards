@@ -1,7 +1,6 @@
 import { useState } from "react";
-import cloneDeep from "lodash.clonedeep";
-import { getGlobalSettings } from "../../../services/settings";
-import { saveDeck } from "../../../services/db";
+import { getGlobalSettings } from "services/settings";
+import { saveDeck } from "services/db";
 import Settings from "../Settings";
 
 export default function DeckSettings({ deck, hide }) {
@@ -11,7 +10,7 @@ export default function DeckSettings({ deck, hide }) {
       value: true
     }
   };
-  const [settings, setState] = useState(cloneDeep(initialSettings));
+  const [settings, setState] = useState(() => structuredClone(initialSettings));
   const useGlobalSettings = settings.useGlobalSettings.value;
 
   function hideSettings() {

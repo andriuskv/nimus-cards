@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./decks.scss";
-import { getRandomString, setDocumentTitle, getCardsToLearn, getCardsToReview } from "../../helpers";
-import { fetchDecks, deleteDeck, saveDeck } from "../../services/db";
-import Icon from "../Icon";
+import { getRandomString, setDocumentTitle, getCardsToLearn, getCardsToReview } from "helpers";
+import { fetchDecks, deleteDeck, saveDeck } from "services/db";
+import Icon from "components/Icon";
+import "./decks.css";
 import DeckRemoveModal from "./DeckRemoveModal";
 import GlobalSettings from "./GlobalSettings";
 import DeckSettings from "./DeckSettings";

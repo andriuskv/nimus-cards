@@ -1,5 +1,5 @@
-import "./settings.scss";
-import Modal from "../../Modal";
+import Modal from "components/Modal";
+import "./settings.css";
 
 export default function Settings({ children, hide }) {
   return (

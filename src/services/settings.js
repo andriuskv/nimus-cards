@@ -1,5 +1,3 @@
-import cloneDeep from "lodash.clonedeep";
-
 let settings = {
   ...getDefault(),
   ...JSON.parse(localStorage.getItem("nimus-cards-settings"))
@@ -23,7 +21,7 @@ function getDefault() {
 }
 
 function getGlobalSettings() {
-  return cloneDeep(settings);
+  return structuredClone(settings);
 }
 
 function saveSettings(newSettings) {

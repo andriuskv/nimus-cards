@@ -1,10 +1,8 @@
-import { classNames } from "../../../../helpers";
-import Icon from "../../../Icon";
-import "./study-card-back.scss";
+import Icon from "components/Icon";
+import "./study-card-back.css";
 
 export default function StudyCardBack({ card, selectOption, handleSubmit }) {
-  const { back, revealed } = card;
-  const { type, typeOptions } = back;
+  const { back: { type, typeOptions }, revealed } = card;
 
   function renderTextTypeContent() {
     return <div className="study-card-text-content">{typeOptions.value}</div>;
@@ -21,7 +19,7 @@ export default function StudyCardBack({ card, selectOption, handleSubmit }) {
         <label>
           <div className="study-exact-top">
             <div className="study-exact-title">Your Answer:</div>
-            {back.typeOptions.caseSensitive ? (
+            {typeOptions.caseSensitive ? (
               <div className="study-exact-notice">
                 <Icon name="info" className="study-exact-notice-icon"/>
                 <span>Answer is case sensitive</span>
@@ -37,20 +35,11 @@ export default function StudyCardBack({ card, selectOption, handleSubmit }) {
 
   function renderMultiTypeContent() {
     return (
-      <ul className={
-        classNames(
-          "study-multi",
-          `study-multi-${back.typeOptions.layout}-type`,
-          `${revealed ? "revealed" : ""}`
-        )}>
+      <ul className={`study-multi study-multi-${typeOptions.layout}-type ${revealed ? "revealed" : ""}`}>
         {typeOptions.options.map(({ id, value }, index) => (
           <li key={id + index}>
             <button onClick={() => selectOption(id)}
-              className={classNames(
-                "btn study-multi-item",
-                `study-multi-${back.typeOptions.layout}-type-item`,
-                revealed && typeOptions.correctId === id ? "correct" : ""
-              )}>{value}</button>
+              className={`btn study-multi-item" study-multi-${typeOptions.layout}-type-item ${revealed && typeOptions.correctId === id ? "correct" : ""}`}>{value}</button>
           </li>
         ))}
       </ul>

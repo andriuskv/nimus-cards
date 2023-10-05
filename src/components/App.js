@@ -1,14 +1,14 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
-import Header from "./Header";
-import Home from "./Home";
-import ServiceWorkerPopup from "./ServiceWorkerPopup";
-import NoMatch from "./NoMatch";
+import Header from "components/Header";
+import Home from "components/Home";
+import ServiceWorkerPopup from "components/ServiceWorkerPopup";
+import NoMatch from "components/NoMatch";
 
-const Decks = lazy(() => import("./Decks"));
-const CreateDeck = lazy(() => import("./CreateDeck"));
-const StudyDeck = lazy(() => import("./StudyDeck"));
-const DeckStatus = lazy(() => import("./DeckStatus"));
+const Decks = lazy(() => import("components/Decks"));
+const CreateDeck = lazy(() => import("components/CreateDeck"));
+const StudyDeck = lazy(() => import("components/StudyDeck"));
+const DeckStatus = lazy(() => import("components/DeckStatus"));
 
 export default function App() {
   const location = useLocation();

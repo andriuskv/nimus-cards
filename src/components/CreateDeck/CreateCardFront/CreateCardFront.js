@@ -1,7 +1,7 @@
 import { useState } from "react";
+import Icon from "components/Icon";
 import UploadPanel from "./UploadPanel";
 import Attachment from "./CreateCardAttachment";
-import Icon from "../../Icon";
 
 export default function CreateCardFront({ side, addAttachment, removeAttachment, updateAttachmentDescription, handleChange }) {
   const { text, attachment } = side;

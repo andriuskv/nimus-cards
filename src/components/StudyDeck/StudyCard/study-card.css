@@ -1,5 +1,3 @@
-@import "../../../styles/mixins.scss";
-
 .study-card {
   --max-content-width: 620px;
   --text-size: calc(1 * var(--text-base-size));
@@ -13,7 +11,7 @@
   width: 100%;
   margin-bottom: var(--space-xl);
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     margin-bottom: 0;
   }
 }

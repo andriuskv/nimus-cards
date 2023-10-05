@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "./upload-panel.scss";
-import Icon from "../../../Icon";
+import "./upload-panel.css";
+import Icon from "components/Icon";
 
 export default function UploadPanel({ addAttachment, errorMessage }) {
   const [message, setMessage] = useState("");

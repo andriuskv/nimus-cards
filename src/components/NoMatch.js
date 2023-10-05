@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { setDocumentTitle } from "../helpers";
+import { setDocumentTitle } from "helpers";
 
 export default function NoMatch({ message }) {
   useEffect(() => {

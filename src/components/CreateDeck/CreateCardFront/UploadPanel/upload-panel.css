@@ -1,5 +1,3 @@
-@import "../../../../styles/mixins.scss";
-
 .upload-panel {
   display: flex;
   flex-direction: column;
@@ -10,7 +8,7 @@
   display: flex;
   margin: var(--space-xl) var(--space-md);
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     margin: var(--space-md);
   }
 }
@@ -28,7 +26,7 @@
     --color: var(--color-white);
   }
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     padding: var(--space-sm) var(--space-lg);
   }
 }
@@ -43,7 +41,7 @@
   margin: auto;
 }
 
-.upload-panel-import-input-container:focus-within {
+.upload-panel-import-input-container:has(:focus-visible) {
   --background-color: var(--color-grey-40);
 
   box-shadow: 0 0 0 1px var(--color-accent);
@@ -62,7 +60,7 @@
   margin-bottom: var(--space-xl);
   border-radius: 8px;
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     margin-bottom: var(--space-md);
   }
 }
@@ -70,7 +68,7 @@
 .upload-panel-form-input, .upload-panel-form-btn {
   border: 1px solid transparent;
 
-  &.focus-visible {
+  &:focus-visible {
     box-shadow: none;
     border: 1px solid var(--color-accent);
   }
@@ -97,7 +95,7 @@
   font-size: var(--text-sm);
   font-weight: bold;
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     margin-bottom: var(--space-sm);
     padding: var(--space-sm) var(--space-md);
   }

@@ -1,11 +1,10 @@
 @import "variables";
-@import "mixins";
 
-*, *:after, *:before {
+*, *::after, *::before {
   box-sizing: border-box;
 }
 
-html, body, #app {
+html, body, #root {
   height: 100%;
 }
 
@@ -24,11 +23,6 @@ body {
 
 a {
   text-decoration: none;
-
-  &.focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 1px var(--color-accent);
-  }
 }
 
 ul {
@@ -62,12 +56,8 @@ textarea {
   resize: none;
 }
 
-.js-focus-visible :focus:not(.focus-visible) {
-  outline: 0;
-}
-
-.js-focus-visible .focus-visible {
-  outline: 0;
+:focus-visible {
+  outline: none;
   box-shadow: 0 0 0 1px var(--color-accent);
 }
 
@@ -77,7 +67,7 @@ textarea {
   min-height: calc(100% - var(--header-height));
   padding: var(--space-xl);
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     padding: var(--space-xl) var(--space-md);
   }
 }
@@ -114,7 +104,7 @@ textarea {
   transition: 0.1s background-color, 0.1s color;
   cursor: pointer;
 
-  &:hover, &.focus-visible {
+  &:hover, &:focus-visible {
     --background-color: var(--color-grey-40);
   }
 
@@ -130,7 +120,7 @@ textarea {
   --background-color: var(--color-white);
   --color: var(--color-grey-50);
 
-  &:hover, &.focus-visible {
+  &:hover, &:focus-visible {
     --background-color: var(--color-grey-10);
     --color: var(--color-grey-90);
   }
@@ -140,7 +130,7 @@ textarea {
   --background-color: transparent;
   --color: var(--color-grey-20);
 
-  &:hover, &.focus-visible {
+  &:hover, &:focus-visible {
     --background-color: var(--color-grey-50);
     --color: var(--color-white);
   }
@@ -171,20 +161,19 @@ textarea {
 .btn-positive {
   --background-color: var(--color-positive-50);
 
-  &:hover, &.focus-visible {
+  &:hover, &:focus-visible {
     --background-color: var(--color-positive-40);
   }
 
   &:disabled {
     --background-color: var(--color-positive-50);
-
   }
 }
 
 .btn-negative {
   --background-color: var(--color-negative-50);
 
-  &:hover, &.focus-visible {
+  &:hover, &:focus-visible {
     --background-color: var(--color-negative-40);
   }
 
@@ -197,7 +186,7 @@ textarea {
   --background-color: transparent;
   --color: var(--color-negative-40);
 
-  &:hover, &.focus-visible {
+  &:hover, &:focus-visible {
     --background-color: var(--color-negative-50);
   }
 }
@@ -212,7 +201,7 @@ textarea {
     display: block;
   }
 
-  &.focus-visible + .checkbox {
+  &:focus-visible + .checkbox {
     box-shadow: 0 0 0 1px var(--color-accent);
   }
 }
@@ -250,7 +239,7 @@ textarea {
     background-color: var(--color-accent);
   }
 
-  &.focus-visible + .radio {
+  &:focus-visible + .radio {
     box-shadow: 0 0 0 1px var(--color-accent);
   }
 }

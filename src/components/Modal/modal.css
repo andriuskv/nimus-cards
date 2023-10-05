@@ -35,6 +35,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -44,6 +45,7 @@
   from {
     transform: translateY(-8%);
   }
+
   to {
     transform: translateY(0);
   }

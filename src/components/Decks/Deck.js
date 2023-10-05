@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import Icon from "../Icon";
-import Dropdown from "../Dropdown";
+import Icon from "components/Icon";
+import Dropdown from "components/Dropdown";
 
 export default function Deck({ deck, showDialog, showDeckSettings, exportDeck }) {
   function renderDateDiffString() {

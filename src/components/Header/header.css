@@ -1,5 +1,3 @@
-@import "../../styles/mixins.scss";
-
 .header {
   height: var(--header-height);
   padding: 0 var(--space-xl);
@@ -21,7 +19,7 @@
   font-size: var(--text-sm);
   font-weight: bold;
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     margin-right: var(--space-md);
   };
 }
@@ -32,7 +30,7 @@
   margin-right: var(--space-md);
   color: var(--color-primary-50);
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     width: 24px;
     height: 24px;
   };
@@ -56,7 +54,7 @@
   font-weight: bold;
   transition: 0.1s background-color, 0.1s color;
 
-  &:hover, &.focus-visible {
+  &:hover, &:focus-visible {
     color: var(--color-white);
     background-color: var(--color-grey-50);
   }
@@ -81,7 +79,7 @@
     }
   }
 
-  @include breakpoint-smallest {
+  @media (width <= 672px) {
     min-width: 60px;
     padding: 0 var(--space-lg);
   };

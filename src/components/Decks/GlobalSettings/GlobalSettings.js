@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { getGlobalSettings, saveSettings } from "../../../services/settings";
+import { getGlobalSettings, saveSettings } from "services/settings";
 import Settings from "../Settings";
 
 export default function GlobalSettings({ hide }) {
-  const [settings, setState] = useState(getGlobalSettings());
+  const [settings, setState] = useState(() => getGlobalSettings());
 
   function hideSettings() {
     const initialSettings = getGlobalSettings();

@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
-import Icon from "../Icon";
-import "./header.scss";
+import Icon from "components/Icon";
+import "./header.css";
 
 export default function Header() {
   function getLinkClassName({ isActive }) {
