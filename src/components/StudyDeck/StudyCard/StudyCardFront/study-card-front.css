@@ -1,5 +1,17 @@
 .study-front-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 40vh;
+  padding: var(--space-md);
   margin-bottom: var(--space-xl);
+  border-radius: 8px;
+  background-color: var(--color-grey-60);
+
+  @media (height <= 512px) {
+    height: 28vh;
+  }
 }
 
 .study-attachment-btn {
@@ -9,6 +21,7 @@
 .study-image-btn, .study-video-btn {
   overflow: hidden;
   padding: 0;
+  margin: 0 auto;
   border-radius: 8px;
   transition: none;
 }
@@ -41,7 +54,6 @@
 }
 
 .study-front-text {
-  max-width: var(--max-content-width);
   text-align: center;
   font-weight: bold;
   font-size: var(--text-size);

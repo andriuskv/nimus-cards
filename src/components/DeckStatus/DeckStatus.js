@@ -74,15 +74,15 @@ export default function DeckStatus() {
       </div>
       <ul className="deck-status-items">
         <li className="deck-status-item">
-          <div className="deck-status-item-column deck-status-items-header-item deck-status-item-column-1">Front</div>
-          <div className="deck-status-item-column deck-status-items-header-item deck-status-item-column-2">Back</div>
-          <div className="deck-status-item-column deck-status-items-header-item deck-status-item-column-3">Status</div>
+          <div className="deck-status-item-column deck-status-items-header-item">Front</div>
+          <div className="deck-status-item-column deck-status-items-header-item">Back</div>
+          <div className="deck-status-item-column deck-status-items-header-item">Status</div>
         </li>
         {state.cards.map((card, index) => (
           <li className="deck-status-item" key={index}>
-            <div className="deck-status-item-column deck-status-item-column-1">{card.front.attachment?.description || card.front.text}</div>
-            <div className="deck-status-item-column deck-status-item-column-2">{getBackSideValue(card.back)}</div>
-            <div className="deck-status-item-column deck-status-item-column-3">{getCardStatus(card)}</div>
+            <div className="deck-status-item-column">{card.front.attachment?.description || card.front.text}</div>
+            <div className="deck-status-item-column">{getBackSideValue(card.back)}</div>
+            <div className="deck-status-item-column">{getCardStatus(card)}</div>
           </li>
         ))}
       </ul>

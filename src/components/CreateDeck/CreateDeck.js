@@ -298,6 +298,10 @@ export default function CreateDeck() {
       delete card.invalid;
       delete card.valid;
 
+      if (card.front.text) {
+        card.front.text = card.front.text.trim();
+      }
+
       if (back.type === "multi") {
         back.typeOptions.options = card.back.multiOptions.options.filter(({ value }) => value);
       }

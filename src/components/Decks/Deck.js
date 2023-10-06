@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
+import { getCardsToReview } from "helpers";
 import Icon from "components/Icon";
 import Dropdown from "components/Dropdown";
 
 export default function Deck({ deck, showDialog, showDeckSettings, exportDeck }) {
+  const cardsToReviewCount = getCardsToReview(deck.cards).length;
+  const learnedCardsCount = deck.cards.filter(card => card.level > 1).length;
+
   function renderDateDiffString() {
     const verb = deck.modifiedAt ? "Modified" : "Created";
     const elapsed = Date.now() - (deck.modifiedAt || deck.createdAt);
@@ -43,13 +47,12 @@ export default function Deck({ deck, showDialog, showDeckSettings, exportDeck })
   return (
     <li className="deck">
       <div className="deck-body">
-        <div>
+        <div className="deck-main-content">
           <h2 className="deck-title">{deck.title}</h2>
           {deck.description && <p className="deck-description">{deck.description}</p>}
+          {cardsToReviewCount ? <div className="deck-info">{cardsToReviewCount} card{cardsToReviewCount > 1? "s" : ""} to review</div> : null}
           <div className="deck-info">
-            <div className="deck-info-item">
-              {deck.cards.length} card{deck.cards.length > 1 && "s"}
-            </div>
+            <div className="deck-info-item">{learnedCardsCount} / {deck.cards.length} card{deck.cards.length > 1 && "s"} learned</div>
             <div className="deck-info-item">{renderDateDiffString()}</div>
           </div>
         </div>
